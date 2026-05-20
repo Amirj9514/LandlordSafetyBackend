@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instant Quote — Landlord Safety Inspection Ltd</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --navy-mid: #1a3057;
+    --navy-light: #243d6b;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5edd8;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --slate: #4a5568;
+    --slate-light: #718096;
+    --border: #e2d9c8;
+    --green: #1a6b3c;
+    --green-light: #d6f0e0;
+    --red: #8b1a1a;
+    --red-light: #fde8e8;
+    --shadow-sm: 0 1px 3px rgba(15,31,61,0.08);
+    --shadow-md: 0 4px 16px rgba(15,31,61,0.12);
+    --shadow-lg: 0 12px 40px rgba(15,31,61,0.18);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .header-icon {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header-brand {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .header-brand span {
+    display: block;
+    color: var(--gold);
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e4a7a 100%);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.12) 0%, transparent 60%);
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    color: var(--white);
+    font-weight: 700;
+    line-height: 1.18;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    position: relative;
+  }
+  .hero-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .hero-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .hero-pill::before { content: '✓'; color: var(--gold); font-weight: 700; }
+
+  /* ── STEP PROGRESS ── */
+  .progress-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 72px;
+    z-index: 90;
+    box-shadow: var(--shadow-sm);
+  }
+  .progress-steps {
+    display: flex;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .step-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 12px;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0.45;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .step-tab.active { border-color: var(--gold); opacity: 1; }
+  .step-tab.done { opacity: 0.7; pointer-events: all; cursor: pointer; }
+  .step-tab.done:hover { opacity: 1; }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--slate);
+    font-size: 12px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+  .step-tab.active .step-num { background: var(--gold); color: var(--navy); }
+  .step-tab.done .step-num { background: var(--green); color: var(--white); }
+  .step-label { font-size: 13px; font-weight: 500; }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--gold-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; }
+  .card-subtitle { font-size: 13px; color: var(--slate-light); margin-top: 2px; }
+  .card-body { padding: 28px; }
+
+  /* ── STEP PANELS ── */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  /* ── FORM ELEMENTS ── */
+  .field-group {
+    margin-bottom: 22px;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 7px;
+  }
+  label .req { color: var(--gold); margin-left: 2px; }
+  input[type=text], input[type=email], input[type=tel], input[type=number],
+  select, textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+    transition: var(--transition);
+    outline: none;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .field-error,
+  .subq-row.field-error select,
+  .subq-row.field-error input,
+  .subq-row.field-error textarea {
+    border-color: #c0392b !important;
+    box-shadow: 0 0 0 2px rgba(192,57,43,0.15);
+  }
+  .radio-opt.field-error {
+    border-color: #c0392b !important;
+    background: var(--red-light);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5568' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* ── PROPERTY TYPE CARDS ── */
+  .prop-type-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .prop-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    position: relative;
+  }
+  .prop-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .prop-card.selected { border-color: var(--gold); background: var(--gold-pale); }
+  .prop-card .prop-icon { font-size: 28px; margin-bottom: 8px; }
+  .prop-card .prop-name { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .prop-card .prop-desc { font-size: 11px; color: var(--slate-light); margin-top: 3px; }
+  .prop-card .prop-check {
+    position: absolute; top: 8px; right: 10px;
+    width: 18px; height: 18px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: none;
+    align-items: center; justify-content: center;
+    font-size: 10px;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .prop-card.selected .prop-check { display: flex; }
+
+  /* ── SERVICE ACCORDION ── */
+  .service-section { margin-bottom: 8px; }
+  .service-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    padding: 16px 0 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .service-section-title::before {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    display: none;
+  }
+  .service-item {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+  .service-item.selected { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+  .service-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+  }
+  .service-toggle:hover { background: var(--cream); }
+  .service-item.selected .service-toggle { background: var(--gold-pale); }
+  .service-checkbox {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition);
+    font-size: 11px;
+  }
+  .service-item.selected .service-checkbox {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .service-info { flex: 1; }
+  .service-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .service-desc { font-size: 12px; color: var(--slate-light); margin-top: 2px; }
+  .service-price-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy-mid);
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .service-item.selected .service-price-badge {
+    background: var(--white);
+    border-color: var(--gold);
+    color: var(--green);
+  }
+  .service-sub {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--gold-pale);
+    background: rgba(245,237,216,0.3);
+  }
+  .service-item.selected .service-sub { display: block; }
+  .sub-field { margin-top: 14px; }
+  .sub-field label { font-size: 12px; color: var(--slate); }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radio-opt {
+    display: flex; align-items: center; gap: 7px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 13px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: var(--transition);
+    white-space: nowrap;
+  }
+  .radio-opt:hover { border-color: var(--gold); }
+  .radio-opt input { display: none; }
+  .radio-dot {
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-opt.checked { border-color: var(--gold); background: var(--gold-pale); color: var(--navy); font-weight: 500; }
+  .radio-opt.checked .radio-dot {
+    border-color: var(--gold);
+    background: var(--gold);
+  }
+  .radio-opt.checked .radio-dot::after {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--white);
+    border-radius: 50%;
+  }
+
+  /* ── ADDON INFO ── */
+  .addon-note {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--slate);
+    margin-top: 10px;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .addon-note::before { content: 'ℹ'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+  .warning-note {
+    background: var(--red-light);
+    border: 1px solid rgba(139,26,26,0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 10px;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .warning-note::before { content: '⚠'; flex-shrink: 0; }
+
+  /* ── STEP 3 — BOOKING DETAILS ── */
+  .zone-toggle {
+    display: flex; gap: 10px;
+  }
+  .zone-opt {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .zone-opt:hover { border-color: var(--gold); }
+  .zone-opt.selected { border-color: var(--gold); background: var(--gold-pale); }
+  .zone-opt .zone-charge { font-size: 11px; color: var(--slate-light); margin-top: 3px; font-weight: 400; }
+  .zone-opt.selected .zone-charge { color: var(--gold); }
+
+  /* ── DATE/TIME ── */
+  .time-slots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .time-slot {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .time-slot:hover { border-color: var(--gold); }
+  .time-slot.selected { border-color: var(--gold); background: var(--gold-pale); }
+  .time-slot .slot-label { font-size: 13px; font-weight: 600; }
+  .time-slot .slot-range { font-size: 11px; color: var(--slate-light); margin-top: 2px; }
+  .time-slot.selected .slot-range { color: var(--gold); }
+
+  /* ── STEP NAVIGATION ── */
+  .step-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: 13px 28px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    outline: none;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn-secondary {
+    background: var(--cream);
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    padding: 13px 20px;
+  }
+  .btn-secondary:hover { border-color: var(--navy); background: var(--white); }
+  .btn-book {
+    background: var(--green);
+    color: var(--white);
+    flex: 1;
+    font-size: 15px;
+    padding: 16px 28px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-book:hover { background: #155832; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(26,107,60,0.3); }
+  .btn-arrow { font-size: 16px; }
+  .btn:disabled { opacity: 0.72; cursor: not-allowed; transform: none !important; }
+  .btn-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: bn-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  .btn-secondary .btn-spinner {
+    border-color: rgba(15,31,61,0.2);
+    border-top-color: var(--navy);
+  }
+  @keyframes bn-spin { to { transform: rotate(360deg); } }
+
+  /* ── QUOTE PANEL ── */
+  .quote-panel {
+    position: sticky;
+    top: 140px;
+  }
+  .quote-card {
+    background: var(--navy);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .quote-card.is-updating .quote-body { opacity: 0.55; pointer-events: none; }
+  .quote-loading-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .quote-loading-bar.visible { display: flex; }
+  .quote-loading-bar .btn-spinner {
+    width: 14px; height: 14px;
+    border-width: 2px;
+    border-color: rgba(201,168,76,0.25);
+    border-top-color: var(--gold);
+  }
+  .quote-header {
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+    padding: 22px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .quote-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .quote-subtitle { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .quote-body { padding: 20px 24px; }
+  .quote-empty {
+    text-align: center;
+    padding: 28px 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+  }
+  .quote-empty-icon { font-size: 36px; margin-bottom: 10px; display: block; opacity: 0.4; }
+  .quote-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    gap: 12px;
+  }
+  .quote-line:last-child { border-bottom: none; }
+  .quote-line-name { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.4; flex: 1; }
+  .quote-line-name .line-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .quote-line-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .quote-discount .quote-line-price { color: #6be09a; }
+  .quote-totals {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+  .quote-subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .quote-vat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 14px;
+  }
+  .quote-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+  }
+  .quote-total-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .quote-total-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--gold);
+  }
+  .quote-note {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .quote-perks {
+    margin-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 16px;
+  }
+  .quote-perk {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .quote-perk::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+  /* ── BILLING SUMMARY ── */
+  .billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .billing-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    border-bottom: 2px solid var(--border);
+    background: var(--cream);
+  }
+  .billing-table th:last-child { text-align: right; }
+  .billing-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .billing-table td:last-child { text-align: right; font-family: 'DM Mono', monospace; font-weight: 500; }
+  .billing-table .desc-cell { color: var(--navy); font-weight: 500; }
+  .billing-table .desc-sub { font-size: 11px; color: var(--slate-light); margin-top: 2px; font-weight: 400; }
+  .billing-table .qty-cell { color: var(--slate); text-align: center; }
+  .billing-table .price-cell { color: var(--slate); font-family: 'DM Mono', monospace; }
+  .billing-table .discount-row td { color: var(--green); font-style: italic; }
+  .billing-table .charge-row td { color: var(--slate); }
+  .billing-totals { max-width: 320px; margin-left: auto; }
+  .billing-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .billing-row.total {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: none;
+    padding-top: 14px;
+    border-top: 2px solid var(--navy);
+  }
+  .billing-row.total span:last-child { font-family: 'DM Mono', monospace; }
+  .billing-row.vat { color: var(--slate-light); font-size: 12px; }
+  .payment-note {
+    background: var(--gold-pale);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--slate);
+    margin-top: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .payment-note strong { color: var(--navy); }
+  .edit-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--slate);
+    transition: var(--transition);
+  }
+  .edit-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .step-panel.active { animation: fadeUp 0.3s ease; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  .quote-total-amount { animation: pulse 2s ease infinite; }
+
+  /* ── HIDDEN ── */
+  .hidden { display: none !important; }
+
+  /* ── CONFIRM SCREEN ── */
+  .confirm-screen {
+    text-align: center;
+    padding: 48px 28px;
+  }
+  .confirm-icon {
+    width: 72px; height: 72px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 24px;
+  }
+  .confirm-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  .confirm-screen p { color: var(--slate); font-size: 14px; max-width: 360px; margin: 0 auto 28px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .quote-panel { position: static; }
+    .field-row { grid-template-columns: 1fr; }
+    .prop-type-grid { grid-template-columns: 1fr; }
+    .hero { padding: 36px 20px 32px; }
+    .header { padding: 0 20px; }
+    .progress-wrap { padding: 0 16px; }
+    .step-label { display: none; }
+    .main { padding: 24px 16px 60px; }
+  }
+
+  /* ── SERVICE GRID (Step 2 new layout) ── */
+  .svc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+  }
+  .svc-col {}
+  .svc-cat-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin: 0 0 10px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--navy);
+  }
+  .svc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 7px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--navy);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .svc-row:hover { border-color: var(--navy); background: var(--cream); }
+  .svc-row.selected { border-color: var(--navy); background: var(--navy); color: var(--white); }
+  .svc-row.selected .svc-cb { background: var(--gold); border-color: var(--gold); }
+  .svc-row.selected .svc-cb::after { content: "\2713"; color: var(--navy); font-weight: 800; font-size: 11px; }
+  .bundle-row { border-style: solid; }
+  .bundle-row:hover { border-color: #8b1a1a; }
+  .bundle-row.selected { background: #1a0a0a; border-color: #8b1a1a; }
+  .svc-cb {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition);
+    background: var(--white);
+  }
+  .svc-row.selected:not(.bundle-row) .svc-cb { background: var(--gold); border-color: var(--gold); }
+  .save-ribbon {
+    position: absolute;
+    bottom: -1px; right: -1px;
+    background: #cc0000;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px 3px 14px;
+    clip-path: polygon(12px 0%, 100% 0%, 100% 100%, 0% 100%);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  /* Sub-question panel rendered dynamically */
+  .subq-panel {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    animation: fadeUp 0.2s ease;
+  }
+  .subq-panel-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .subq-panel-title::before { content: ""; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+  .subq-row { margin-bottom: 14px; }
+  .subq-row:last-child { margin-bottom: 0; }
+  .subq-row label { font-size: 12px; font-weight: 500; color: var(--slate); margin-bottom: 6px; display: block; }
+  @media (max-width: 600px) { .svc-grid { grid-template-columns: 1fr; } }
+
+  /* ── FLOATING QUOTE BAR ── */
+  .float-quote {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--navy);
+    border-top: 2px solid var(--gold);
+    z-index: 200;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.25);
+  }
+  .float-quote.hidden { transform: translateY(100%); }
+  .float-quote-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .float-left { display: flex; flex-direction: column; gap: 2px; }
+  .float-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 600; }
+  .float-services { font-size: 13px; color: rgba(255,255,255,0.8); max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .float-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+  .float-total { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--gold); transition: opacity 0.2s; }
+  .float-total.is-pending { opacity: 0.45; }
+  .float-vat { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+  /* ── BOOKING DETAILS BLOCK (Step 4) ── */
+  .booking-details-block {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 22px;
+    margin-bottom: 24px;
+  }
+  .bd-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+  .bd-item { display: flex; flex-direction: column; gap: 2px; }
+  .bd-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--slate-light); }
+  .bd-val { font-size: 13px; color: var(--navy); font-weight: 500; }
+  .bd-section-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--slate-light); margin-bottom: 12px;
+  }
+  /* ── SUBQ SLOT ── */
+  .subq-slot { overflow: hidden; }
+  .subq-slot:empty { display: none; }
+  .subq-slot .subq-panel {
+    margin-top: 0;
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    border-color: var(--navy);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    animation: slideDown 0.2s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SUBQ SECTION (within bundle panels) ── */
+  .subq-section { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .subq-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .subq-section-title {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--accent-blue, #2e75b6);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .subq-section-title::before { content: ""; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="header-icon">🏠</div>
+    <div class="header-brand">
+      Landlord Safety Inspection Ltd
+      <span>London & M25 Corridor</span>
+    </div>
+  </div>
+  <div class="header-badge">Instant Quote</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Residential Property Services</div>
+  <h1>Get Your Instant Quote<br>in Under 2 Minutes</h1>
+  <p>Select your services, answer a few questions, and receive your exact price — no waiting, no callbacks.</p>
+  <div class="hero-pills">
+    <div class="hero-pill">Same-day appointments</div>
+    <div class="hero-pill">Certified engineers</div>
+    <div class="hero-pill">All London & M25</div>
+    <div class="hero-pill">Bank transfer only</div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-tab active" data-step="1" onclick="goToStep(1)">
+      <div class="step-num">1</div>
+      <div class="step-label">Your Details</div>
+    </div>
+    <div class="step-tab" data-step="2">
+      <div class="step-num">2</div>
+      <div class="step-label">Services</div>
+    </div>
+    <div class="step-tab" data-step="3">
+      <div class="step-num">3</div>
+      <div class="step-label">Booking</div>
+    </div>
+    <div class="step-tab" data-step="4">
+      <div class="step-num">4</div>
+      <div class="step-label">Summary</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="form-area">
+
+    <!-- STEP 1 — LEAD CAPTURE -->
+    <div class="step-panel active" id="step1">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">👤</div>
+          <div>
+            <div class="card-title">Your Details</div>
+            <div class="card-subtitle">We'll use this to pre-fill your booking</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="field-row">
+            <div class="field-group">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" id="firstName" placeholder="e.g. James" oninput="syncField('firstName')">
+            </div>
+            <div class="field-group">
+              <label>Last Name <span class="req">*</span></label>
+              <input type="text" id="lastName" placeholder="e.g. Smith" oninput="syncField('lastName')">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Mobile / Phone <span class="req">*</span></label>
+              <input type="tel" id="phone" placeholder="07700 900000" maxlength="11" oninput="syncField('phone')">
+            </div>
+            <div class="field-group">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" id="email" placeholder="james@email.com" oninput="syncField('email')">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Postcode <span class="req">*</span></label>
+            <input type="text" id="postcode" placeholder="e.g. SW1A 1AA" style="max-width:200px" oninput="syncField('postcode')">
+            <div class="addon-note" style="margin-top:8px">London &amp; M25 postcodes get instant prices (e.g. <strong>SW1A 1AA</strong>, <strong>E1 6AN</strong>, <strong>NW1 2AA</strong>).</div>
+          </div>
+
+          <div class="field-group" style="margin-top:28px">
+            <label>Property Type <span class="req">*</span></label>
+            <div class="prop-type-grid">
+              <div class="prop-card" onclick="selectPropType('residential')">
+                <div class="prop-check">✓</div>
+                <div class="prop-icon">🏠</div>
+                <div class="prop-name">Residential</div>
+                <div class="prop-desc">Instant price & book now</div>
+              </div>
+              <div class="prop-card" onclick="selectPropType('commercial')">
+                <div class="prop-check">✓</div>
+                <div class="prop-icon">🏢</div>
+                <div class="prop-name">Commercial</div>
+                <div class="prop-desc">Get a custom quote</div>
+              </div>
+              <div class="prop-card" onclick="selectPropType('installation')">
+                <div class="prop-check">✓</div>
+                <div class="prop-icon">🔧</div>
+                <div class="prop-name">Installation/Repair</div>
+                <div class="prop-desc">Get a custom quote</div>
+              </div>
+            </div>
+            <div id="commercial-note" class="addon-note hidden" style="margin-top:14px">
+              Commercial and Installation/Repair services use our Get a Quote form. A team member will send you a custom quotation within 1 hour during working hours.
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-primary" onclick="goToStep(2)">
+              Continue to Services <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 — SERVICES -->
+    <div class="step-panel" id="step2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">&#128295;</div>
+          <div>
+            <div class="card-title">Select Your Services</div>
+            <div class="card-subtitle">Choose individually or pick a bundle to save — questions appear after selection</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:20px 28px 28px">
+
+          <div class="svc-grid" id="catalog-services">
+            <p class="catalog-loading" style="grid-column:1/-1;text-align:center;color:var(--slate-light);padding:24px">Loading services…</p>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+            <button class="btn btn-primary" onclick="goToStep(3)">
+              Continue to Booking <span class="btn-arrow">&rarr;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 — BOOKING DETAILS -->
+    <div class="step-panel" id="step3">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📅</div>
+          <div>
+            <div class="card-title">Booking Details</div>
+            <div class="card-subtitle">Pre-filled from your details — just confirm the appointment</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="field-row">
+            <div class="field-group">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" id="b-firstName" placeholder="Pre-filled from Step 1">
+            </div>
+            <div class="field-group">
+              <label>Last Name <span class="req">*</span></label>
+              <input type="text" id="b-lastName" placeholder="Pre-filled from Step 1">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Mobile Number <span class="req">*</span></label>
+              <input type="tel" id="b-phone" placeholder="Pre-filled from Step 1">
+            </div>
+            <div class="field-group">
+              <label>Phone Number (optional)</label>
+              <input type="tel" id="b-phone2" placeholder="Secondary number">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="b-email" placeholder="Pre-filled from Step 1">
+          </div>
+          <div class="field-group">
+            <label>Appointment Address <span class="req">*</span></label>
+            <input type="text" id="b-address" placeholder="Full property address">
+          </div>
+          <div class="field-group">
+            <label>Postcode <span class="req">*</span></label>
+            <input type="text" id="b-postcode" placeholder="Pre-filled from Step 1" style="max-width:200px">
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label>Is your property in a congestion zone? <span class="req">*</span></label>
+              <div class="zone-toggle">
+                <div class="zone-opt" id="congestion-no" onclick="selectZone(false)">
+                  No
+                  <div class="zone-charge">No extra charge</div>
+                </div>
+                <div class="zone-opt" id="congestion-yes" onclick="selectZone(true)">
+                  Yes
+                  <div class="zone-charge">+£18.00 added</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Parking available at property? <span class="req">*</span></label>
+              <div class="zone-toggle">
+                <div class="zone-opt selected" id="parking-yes" onclick="selectParking(true)">
+                  Yes
+                  <div class="zone-charge">No extra charge</div>
+                </div>
+                <div class="zone-opt" id="parking-no" onclick="selectParking(false)">
+                  No
+                  <div class="zone-charge">+£5.00 added</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Preferred Date <span class="req">*</span></label>
+            <input type="date" id="b-date" min="">
+          </div>
+
+          <div class="field-group">
+            <label>Preferred Time Slot <span class="req">*</span></label>
+            <div class="time-slots">
+              <div class="time-slot" onclick="selectSlot('morning')">
+                <div class="slot-label">🌅 Morning</div>
+                <div class="slot-range">8:00am — 1:00pm</div>
+              </div>
+              <div class="time-slot" onclick="selectSlot('afternoon')">
+                <div class="slot-label">☀️ Afternoon</div>
+                <div class="slot-range">1:00pm — 6:00pm</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Who will provide access? <span class="req">*</span></label>
+            <select id="access-provider" onchange="toggleAccessArrangements()">
+              <option value="me">Me</option>
+              <option value="tenant">Tenant</option>
+              <option value="agent">Agent</option>
+              <option value="porter">Porter</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="field-group hidden" id="access-arrangements-field">
+            <label>Access Arrangements <span class="req">*</span></label>
+            <textarea id="access-arrangements" placeholder="e.g. Key with concierge, tenant will be home after 10am, code is 1234..."></textarea>
+          </div>
+
+          <div class="field-group">
+            <label>Leave a Comment (optional)</label>
+            <textarea id="b-comment" placeholder="Any additional notes for the engineer..."></textarea>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+            <button class="btn btn-primary" onclick="goToStep(4)">
+              Review Summary <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 — BILLING SUMMARY -->
+    <div class="step-panel" id="step4">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📋</div>
+          <div>
+            <div class="card-title">Order Summary</div>
+            <div class="card-subtitle">Review your booking details and services</div>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <!-- BOOKING DETAILS BLOCK -->
+          <div class="booking-details-block" id="booking-details-block">
+            <div class="bd-title">Booking Details</div>
+            <div class="bd-grid">
+              <div class="bd-item"><span class="bd-label">&#128100; Name</span><span class="bd-val" id="bd-name">—</span></div>
+              <div class="bd-item"><span class="bd-label">&#128205; Address</span><span class="bd-val" id="bd-address">—</span></div>
+              <div class="bd-item"><span class="bd-label">&#128222; Contact</span><span class="bd-val" id="bd-contact">—</span></div>
+              <div class="bd-item"><span class="bd-label">&#9993; Email</span><span class="bd-val" id="bd-email-disp">—</span></div>
+              <div class="bd-item"><span class="bd-label">&#128197; Preferred Date</span><span class="bd-val" id="bd-date">—</span></div>
+              <div class="bd-item"><span class="bd-label">&#9201; Time Slot</span><span class="bd-val" id="bd-slot">—</span></div>
+            </div>
+          </div>
+
+          <div class="bd-section-label">Services &amp; Pricing</div>
+          <table class="billing-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th style="text-align:center">Qty</th>
+                <th style="text-align:right">Unit Price</th>
+                <th style="text-align:right">Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="billing-tbody"></tbody>
+          </table>
+
+          <div class="billing-totals">
+            <div class="billing-row"><span>Subtotal</span><span id="summary-subtotal">£0.00</span></div>
+            <div class="billing-row vat"><span>VAT (No VAT — registration pending)</span><span>£0.00</span></div>
+            <div class="billing-row total"><span>Total</span><span id="summary-total">£0.00</span></div>
+          </div>
+
+          <div class="payment-note">
+            💳 <span><strong>Payment: Bank Transfer Only.</strong> Invoice will be sent to your email upon booking confirmation.</span>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+            <button class="btn btn-book" onclick="submitBooking()">
+              🏠 Book Now — Confirm Appointment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRMATION -->
+    <div class="step-panel" id="step-confirm">
+      <div class="card">
+        <div class="confirm-screen">
+          <div class="confirm-icon" style="background:var(--green-light);font-size:28px">&#10003;</div>
+          <h2>Request Submitted!</h2>
+          <p style="max-width:460px">Your booking request has been received. We have sent a <strong>confirmation email</strong> to <strong id="confirm-email"></strong>.</p>
+
+          <div style="background:var(--gold-pale);border:1px solid rgba(201,168,76,0.35);border-radius:var(--radius);padding:18px 20px;text-align:left;margin-top:20px;font-size:13px;color:var(--slate);line-height:1.7">
+            <div style="font-weight:700;color:var(--navy);margin-bottom:10px;font-size:14px">What happens next?</div>
+            <div style="display:flex;gap:10px;margin-bottom:8px"><span style="color:var(--gold);font-weight:700;flex-shrink:0">1.</span><span>We will verify your property is within our coverage area (London &amp; M25 corridor).</span></div>
+            <div style="display:flex;gap:10px;margin-bottom:8px"><span style="color:var(--gold);font-weight:700;flex-shrink:0">2.</span><span>A team member will send you an <strong>invoice for payment</strong> via bank transfer.</span></div>
+            <div style="display:flex;gap:10px;margin-bottom:8px"><span style="color:var(--gold);font-weight:700;flex-shrink:0">3.</span><span>Once payment is received, we will send your <strong>official booking confirmation</strong> with engineer details and arrival window.</span></div>
+          </div>
+
+          <div style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 20px;text-align:left;margin-top:16px;font-size:13px;color:var(--slate)">
+            <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128100;</span><span id="confirm-name" style="color:var(--navy);font-weight:500"></span></div>
+            <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128205;</span><span id="confirm-address"></span></div>
+            <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128197;</span><span id="confirm-date"></span></div>
+            <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#9201;</span><span id="confirm-slot"></span></div>
+            <div style="display:flex;gap:12px"><span style="color:var(--gold);width:16px">&#163;</span><span id="confirm-total" style="font-weight:600;color:var(--navy)"></span></div>
+          </div>
+
+          <div style="background:var(--red-light);border:1px solid rgba(139,26,26,0.15);border-radius:var(--radius-sm);padding:12px 16px;margin-top:14px;font-size:12px;color:var(--red);text-align:left">
+            &#9888; If your property is outside our coverage area (London &amp; M25), a team member will contact you within 1 working hour.
+          </div>
+
+          <button class="btn btn-primary" style="margin-top:24px;width:100%;justify-content:center" onclick="location.reload()">
+            Start a New Quote
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /form-area -->
+
+  <!-- QUOTE PANEL -->
+  <div class="quote-panel">
+    <div class="quote-card">
+      <div class="quote-header">
+        <div class="quote-title">Your Quote</div>
+        <div class="quote-subtitle" id="quote-region">Enter postcode in step 1, then select services</div>
+        <div class="quote-loading-bar" id="quote-loading">
+          <span class="btn-spinner"></span>
+          <span>Updating quote…</span>
+        </div>
+      </div>
+      <div class="quote-body" id="quote-body">
+        <div id="quote-empty" class="quote-empty">
+          <span class="quote-empty-icon">🏠</span>
+          Select services to see your instant price
+        </div>
+        <div id="quote-lines"></div>
+        <div id="quote-totals" class="quote-totals hidden">
+          <div class="quote-subtotal"><span>Subtotal</span><span id="q-subtotal">£0.00</span></div>
+          <div class="quote-vat"><span>VAT (No VAT)</span><span>£0.00</span></div>
+          <div class="quote-total">
+            <div class="quote-total-label">Total</div>
+            <div class="quote-total-amount" id="q-total">£0.00</div>
+          </div>
+          <div class="quote-note">All prices exc. VAT · Bank transfer only · M25 & London area</div>
+        </div>
+        <div class="quote-perks">
+          <div class="quote-perk">Certified Gas Safe & NICEIC engineers</div>
+          <div class="quote-perk">Certificates issued same day</div>
+          <div class="quote-perk">No hidden fees — price locked on booking</div>
+          <div class="quote-perk">Covering all London & M25 areas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FLOATING QUOTE BAR — visible on scroll when side panel out of view -->
+<div id="float-quote" class="float-quote hidden">
+  <div class="float-quote-inner">
+    <div class="float-left">
+      <span class="float-label">Your Quote</span>
+      <span class="float-services" id="float-services">No services selected</span>
+    </div>
+    <div class="float-right">
+      <span class="float-total" id="float-total">£0.00</span>
+      <span class="float-vat">exc. VAT</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+const state = {
+  propType: '',
+  services: new Set(),
+  activeBundles: new Set(),
+  radios: {},
+  congestion: false,
+  parking: true,
+  slot: '',
+};
+
+// ═══════════════════════════════════════════════════
+// STEP NAVIGATION
+// ═══════════════════════════════════════════════════
+let currentStep = 1;
+
+function goToStep(n) {
+  if (n === 2 && !validateStep1()) return;
+  if (n === 3 && state.services.size === 0) {
+    alert('Please select at least one service to continue.');
+    return;
+  }
+  if (n === 4) {
+    buildBillingTable();
+    fillBookingDetails();
+  }
+
+  // Hide all panels
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+
+  // Update tabs
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.remove('active', 'done');
+    const sn = i + 1;
+    if (sn < n) t.classList.add('done');
+    if (sn === n) t.classList.add('active');
+  });
+
+  // Sync pre-filled fields
+  if (n === 3) syncBookingFields();
+
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep1() {
+  const fields = ['firstName','lastName','phone','email','postcode'];
+  let ok = true;
+  fields.forEach(f => {
+    const el = document.getElementById(f);
+    if (!el.value.trim()) { el.style.borderColor = '#c0392b'; ok = false; }
+    else el.style.borderColor = '';
+  });
+  if (!state.propType) { alert('Please select a property type.'); return false; }
+  if (state.propType !== 'residential') {
+    alert('Commercial and Installation/Repair services use our Get a Quote form. A team member will provide a custom quotation within 1 hour.');
+    return false;
+  }
+  return ok;
+}
+
+function syncBookingFields() {
+  ['firstName','lastName','phone','email','postcode'].forEach(f => {
+    const src = document.getElementById(f);
+    const dst = document.getElementById('b-' + f);
+    if (src && dst) dst.value = src.value;
+  });
+}
+
+function syncField(f) {}
+
+// Set min date to today
+(function() {
+  const d = new Date();
+  const ds = d.toISOString().split('T')[0];
+  const el = document.getElementById('b-date');
+  if (el) el.min = ds;
+})();
+
+// ═══════════════════════════════════════════════════
+// PROPERTY TYPE
+// ═══════════════════════════════════════════════════
+function selectPropType(type) {
+  state.propType = type;
+  document.querySelectorAll('.prop-card').forEach((c, i) => {
+    const types = ['residential','commercial','installation'];
+    c.classList.toggle('selected', types[i] === type);
+  });
+  const note = document.getElementById('commercial-note');
+  note.classList.toggle('hidden', type === 'residential');
+}
+
+// ═══════════════════════════════════════════════════
+// BUNDLE MEMBERSHIP MAP
+// Each bundle id -> which individual service ids it covers
+// ═══════════════════════════════════════════════════
+const BUNDLES = {
+  'bundle-gsc-boiler':   { services: ['gsc','boiler'],        discount: 20, label: 'GSC + Boiler Service' },
+  'bundle-fsc-elc':      { services: ['fsc','elc'],           discount: 20, label: 'FSC + ELC' },
+  'bundle-fsc-elc-fra':  { services: ['fsc','elc','fra'],     discount: 40, label: 'FSC + ELC + FRA' },
+  'bundle-eicr-pat':     { services: ['eicr','pat'],          discount: 20, label: 'EICR + PAT' },
+  'bundle-epc-fp':       { services: ['epc','floorplan'],     discount: 20, label: 'EPC + Floor Plan' },
+};
+
+// Track which bundles are active
+state.activeBundles = new Set();
+
+// Services that are covered by an active bundle (hidden from individual selection)
+function coveredByBundle(svcId) {
+  for (const bid of state.activeBundles) {
+    if (BUNDLES[bid].services.includes(svcId)) return true;
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════════════
+// SERVICE TOGGLES
+// ═══════════════════════════════════════════════════
+function toggleService(id) {
+  // If this service is covered by an active bundle, ignore individual click
+  if (coveredByBundle(id)) return;
+
+  const row = document.getElementById('svc-' + id);
+  const isOn = state.services.has(id);
+  if (isOn) {
+    state.services.delete(id);
+    row.classList.remove('selected');
+  } else {
+    state.services.add(id);
+    row.classList.add('selected');
+  }
+  renderSubQuestions();
+  calcAll();
+}
+
+// ═══════════════════════════════════════════════════
+// BUNDLE TOGGLE — selects bundle row, hides individual rows,
+// adds all component services to state
+// ═══════════════════════════════════════════════════
+function toggleBundle(bundleId, svcIds) {
+  const bundleRow = document.getElementById('svc-' + bundleId);
+  const isOn = state.activeBundles.has(bundleId);
+
+  if (isOn) {
+    // Deactivate bundle
+    state.activeBundles.delete(bundleId);
+    bundleRow.classList.remove('selected');
+    // Remove services (unless selected individually — they won't be since rows were hidden)
+    svcIds.forEach(id => {
+      state.services.delete(id);
+      const r = document.getElementById('svc-' + id);
+      if (r) { r.classList.remove('selected'); r.style.display = ''; }
+    });
+  } else {
+    // Check for conflicting bundles that share services
+    for (const [bid, bdef] of Object.entries(BUNDLES)) {
+      if (bid === bundleId) continue;
+      if (state.activeBundles.has(bid)) {
+        const overlap = bdef.services.some(s => svcIds.includes(s));
+        if (overlap) {
+          // Deactivate conflicting bundle
+          state.activeBundles.delete(bid);
+          document.getElementById('svc-' + bid).classList.remove('selected');
+          bdef.services.forEach(id => {
+            state.services.delete(id);
+            const r = document.getElementById('svc-' + id);
+            if (r) { r.classList.remove('selected'); r.style.display = ''; }
+          });
+        }
+      }
+    }
+    // Activate bundle
+    state.activeBundles.add(bundleId);
+    bundleRow.classList.add('selected');
+    // Add all component services and hide their individual rows
+    svcIds.forEach(id => {
+      state.services.add(id);
+      const r = document.getElementById('svc-' + id);
+      if (r) { r.classList.remove('selected'); r.style.display = 'none'; }
+    });
+  }
+
+  renderSubQuestions();
+  calcAll();
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER SUB-QUESTIONS below the grid
+// Renders one panel per active service, in logical order
+// ═══════════════════════════════════════════════════
+const SVC_ORDER = ['gsc','boiler','eicr','pat','fsc','elc','fra','epc','floorplan','asbestos'];
+
+function renderSubQuestions() {
+  // Save all current input values before re-rendering
+  const saved = {};
+  document.querySelectorAll('.subq-slot [id]').forEach(el => {
+    if (el.value !== undefined && el.value !== '') saved[el.id] = el.value;
+  });
+
+  // Map: slotId -> array of service ids to render in that slot
+  // For individual services: slot = subq-{svcId}
+  // For bundles: slot = subq-bundle-{bundleId}, renders all component services merged
+  const BUNDLE_DEFS = {
+    'bundle-gsc-boiler':   ['gsc','boiler'],
+    'bundle-fsc-elc':      ['fsc','elc'],
+    'bundle-fsc-elc-fra':  ['fsc','elc','fra'],
+    'bundle-eicr-pat':     ['eicr','pat'],
+    'bundle-epc-fp':       ['epc','floorplan'],
+  };
+
+  // Clear all slots first
+  document.querySelectorAll('.subq-slot').forEach(s => { s.innerHTML = ''; });
+
+  // Render bundle slots
+  for (const [bid, svcs] of Object.entries(BUNDLE_DEFS)) {
+    if (!state.activeBundles.has(bid)) continue;
+    const slot = document.getElementById('subq-' + bid);
+    if (!slot) continue;
+    let combined = '';
+    svcs.forEach(id => {
+      const def = getSubqDef(id);
+      if (def) combined += `<div class="subq-section"><div class="subq-section-title">${def.title}</div>${def.html}</div>`;
+    });
+    slot.innerHTML = `<div class="subq-panel">${combined}</div>`;
+  }
+
+  // Render individual service slots (only if not covered by active bundle)
+  SVC_ORDER.forEach(id => {
+    if (!state.services.has(id)) return;
+    if (coveredByBundle(id)) return; // bundle slot handles it
+    const slot = document.getElementById('subq-' + id);
+    if (!slot) return;
+    const def = getSubqDef(id);
+    if (!def) return;
+    slot.innerHTML = `<div class="subq-panel"><div class="subq-panel-title">${def.title}</div>${def.html}</div>`;
+  });
+
+  // Restore saved values
+  Object.entries(saved).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el && val) el.value = val;
+  });
+
+  // Restore radio states
+  Object.entries(state.radios).forEach(([group, val]) => {
+    if (!val) return;
+    document.querySelectorAll('[onclick*="selectRadio"]').forEach(el => {
+      const match = el.getAttribute('onclick') && el.getAttribute('onclick').match(/selectRadio\('([^']+)','([^']+)'/);
+      if (match && match[1] === group) el.classList.toggle('checked', match[2] === val);
+    });
+  });
+
+  // Restore CO install field visibility
+  if (state.radios['co-alarm'] === 'no') {
+    const f = document.getElementById('co-install-field');
+    if (f) f.classList.remove('hidden');
+  }
+
+  // Restore FRA flat note
+  checkFraType();
+
+  // Update float bar and recalc
+  calcAll();
+  updateFloatBar();
+}
+
+function getSubqDef(id) {
+  const defs = {
+    gsc: {
+      title: 'Gas Safety Certificate (CP12)',
+      html: `
+        <div class="subq-row">
+          <label>Number of appliances <span class="req">*</span></label>
+          <select id="gsc-appliances" onchange="calcAll()">
+            <option value="">Select appliance count</option>
+            <option value="59.99">Meter &amp; 1 appliance &mdash; &pound;59.99</option>
+            <option value="74.99">Meter &amp; 2 appliances &mdash; &pound;74.99</option>
+            <option value="89.99">Meter &amp; 3 appliances &mdash; &pound;89.99</option>
+            <option value="104.99">Meter &amp; 4 appliances &mdash; &pound;104.99</option>
+            <option value="119.99">Meter &amp; 5 appliances &mdash; &pound;119.99</option>
+          </select>
+        </div>
+        <div class="subq-row">
+          <label>CO Alarm present at property? <span class="req">*</span></label>
+          <div class="radio-group">
+            <div class="radio-opt" onclick="selectRadio('co-alarm','yes')"><div class="radio-dot"></div> Yes</div>
+            <div class="radio-opt" onclick="selectRadio('co-alarm','no')"><div class="radio-dot"></div> No</div>
+          </div>
+          <div class="addon-note" style="margin-top:8px">A CO alarm is mandatory where a boiler is installed.</div>
+        </div>
+        <div class="subq-row hidden" id="co-install-field">
+          <label>Add CO Alarm installation? (+&pound;35) <span class="req">*</span></label>
+          <div class="radio-group">
+            <div class="radio-opt" onclick="selectRadio('co-install','yes',calcAll)"><div class="radio-dot"></div> Yes</div>
+            <div class="radio-opt" onclick="selectRadio('co-install','no',calcAll)"><div class="radio-dot"></div> No</div>
+          </div>
+        </div>`
+    },
+    boiler: {
+      title: 'Boiler Service',
+      html: `
+        <div class="subq-row">
+          <label>Service type <span class="req">*</span></label>
+          <div class="radio-group">
+            <div class="radio-opt" onclick="selectRadio('boiler-type','basic',calcAll)"><div class="radio-dot"></div> Basic Service &mdash; &pound;65</div>
+            <div class="radio-opt" onclick="selectRadio('boiler-type','full',calcAll)"><div class="radio-dot"></div> Full Service &mdash; &pound;150</div>
+          </div>
+        </div>`
+    },
+    eicr: {
+      title: 'EICR &mdash; Electrical Installation Condition Report',
+      html: `
+        <div class="subq-row">
+          <label>Number of bedrooms <span class="req">*</span></label>
+          <select id="eicr-beds" onchange="calcAll()">
+            <option value="">Select bedrooms</option>
+            <option value="99.99">Studio &mdash; &pound;99.99</option>
+            <option value="110.00">1&ndash;3 Bedrooms &mdash; &pound;110.00</option>
+            <option value="130.00">4 Bedrooms &mdash; &pound;130.00</option>
+            <option value="150.00">5 Bedrooms &mdash; &pound;150.00</option>
+            <option value="170.00">6 Bedrooms &mdash; &pound;170.00</option>
+            <option value="190.00">7 Bedrooms &mdash; &pound;190.00</option>
+            <option value="210.00">8 Bedrooms &mdash; &pound;210.00</option>
+          </select>
+        </div>
+        <div class="subq-row">
+          <label>Number of fuse boards <span class="req">*</span></label>
+          <select id="eicr-boards" onchange="calcAll()">
+            <option value="0">1 fuse board (included)</option>
+            <option value="60">2 fuse boards (+&pound;60)</option>
+            <option value="120">3 fuse boards (+&pound;120)</option>
+            <option value="180">4 fuse boards (+&pound;180)</option>
+          </select>
+        </div>`
+    },
+    pat: {
+      title: 'PAT Testing &mdash; Portable Appliance Test',
+      html: `
+        <div class="subq-row">
+          <label>Number of appliances to test <span class="req">*</span></label>
+          <input type="number" id="pat-count" min="1" max="100" placeholder="e.g. 8" oninput="calcAll()">
+          <div class="addon-note" style="margin-top:8px">1&ndash;10 appliances: &pound;59.99 flat rate. Each above 10: +&pound;2 each.</div>
+        </div>`
+    },
+    fsc: {
+      title: 'Fire Alarm Certificate (FSC)',
+      html: `
+        <div class="subq-row">
+          <label>Property type <span class="req">*</span></label>
+          <select id="fsc-proptype" onchange="calcAll()">
+            <option value="standard">Flat / House / Small HMO (Grade D/LD2)</option>
+            <option value="premium">Large / Licensed HMO &mdash; Panel System (Grade A/L2)</option>
+            <option value="block">Block of Flats &mdash; per unit</option>
+          </select>
+        </div>
+        <div class="subq-row">
+          <label>Number of fire alarms <span class="req">*</span></label>
+          <select id="fsc-alarms" onchange="calcAll()">
+            <option value="">Select count</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
+            <option value="4">4 (+&pound;20)</option><option value="5">5 (+&pound;40)</option><option value="6">6 (+&pound;60)</option>
+            <option value="7">7 (+&pound;80)</option><option value="8">8 (+&pound;100)</option><option value="9">9 (+&pound;120)</option>
+            <option value="10">10 (+&pound;140)</option><option value="11">11 (+&pound;160)</option><option value="12">12+ (+&pound;180)</option>
+          </select>
+        </div>`
+    },
+    elc: {
+      title: 'Emergency Light Certificate (ELC)',
+      html: `
+        <div class="subq-row">
+          <label>Number of emergency lights <span class="req">*</span></label>
+          <select id="elc-lights" onchange="calcAll()">
+            <option value="">Select count</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
+            <option value="4">4 (+&pound;20)</option><option value="5">5 (+&pound;40)</option><option value="6">6 (+&pound;60)</option>
+            <option value="7">7 (+&pound;80)</option><option value="8">8 (+&pound;100)</option><option value="9">9 (+&pound;120)</option>
+            <option value="10">10 (+&pound;140)</option><option value="11">11 (+&pound;160)</option><option value="12">12+ (+&pound;180)</option>
+          </select>
+        </div>`
+    },
+    fra: {
+      title: 'Fire Safety Risk Assessment (FRA)',
+      html: `
+        <div class="subq-row">
+          <label>Property type <span class="req">*</span></label>
+          <select id="fra-proptype" onchange="checkFraType()">
+            <option value="house">House</option>
+            <option value="flat">Flat (single)</option>
+            <option value="hmo">HMO</option>
+            <option value="building">Building / Block</option>
+            <option value="sheltered">Sheltered / Care Home</option>
+          </select>
+          <div class="warning-note hidden" id="fra-flat-note">An FRA is not a legal requirement for a single flat. You may not need this service.</div>
+        </div>
+        <div class="subq-row">
+          <label>Number of bedrooms <span class="req">*</span></label>
+          <select id="fra-beds" onchange="calcAll()">
+            <option value="">Select</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
+            <option value="4">4 (+&pound;25)</option><option value="5">5 (+&pound;50)</option>
+            <option value="6">6 (+&pound;75)</option><option value="7">7 (+&pound;100)</option><option value="8">8 (+&pound;125)</option>
+          </select>
+        </div>
+        <div class="subq-row">
+          <label>Number of communal areas <span class="req">*</span></label>
+          <select id="fra-communal" onchange="calcAll()">
+            <option value="1">1 (included)</option>
+            <option value="2">2 (+&pound;60)</option>
+            <option value="3">3 (+&pound;120)</option>
+            <option value="4">4 (+&pound;180)</option>
+            <option value="5">5+ (+&pound;240)</option>
+          </select>
+        </div>`
+    },
+    epc: {
+      title: 'Energy Performance Certificate (EPC)',
+      html: `
+        <div class="subq-row">
+          <label>Number of bedrooms <span class="req">*</span></label>
+          <select id="epc-beds" onchange="calcAll()">
+            <option value="">Select bedrooms</option>
+            <option value="100.00">1&ndash;3 Bedrooms &mdash; &pound;100.00</option>
+            <option value="120.00">4 Bedrooms &mdash; &pound;120.00</option>
+            <option value="140.00">5 Bedrooms &mdash; &pound;140.00</option>
+            <option value="160.00">6 Bedrooms &mdash; &pound;160.00</option>
+          </select>
+        </div>`
+    },
+    floorplan: {
+      title: 'Floor Plan',
+      html: `
+        <div class="subq-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <label>Bedrooms <span class="req">*</span></label>
+            <select id="fp-beds" onchange="calcAll()">
+              <option value="">Select</option>
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option><option value="6">6+</option>
+            </select>
+          </div>
+          <div>
+            <label>Floors <span class="req">*</span></label>
+            <select id="fp-floors" onchange="calcAll()">
+              <option value="1">1 floor</option>
+              <option value="2">2 floors (+&pound;25)</option>
+              <option value="3">3 floors (+&pound;50)</option>
+            </select>
+          </div>
+        </div>`
+    },
+    asbestos: {
+      title: 'Asbestos Survey',
+      html: `
+        <div class="subq-row">
+          <label>Property configuration <span class="req">*</span></label>
+          <select id="asbestos-type" onchange="calcAll()">
+            <option value="650">House &mdash; up to 3 bedrooms (Full Test) &mdash; &pound;650.00</option>
+            <option value="0">Other configuration &mdash; quote required</option>
+          </select>
+          <div class="addon-note" style="margin-top:8px">Other configurations require a custom quote &mdash; our team will contact you.</div>
+        </div>`
+    },
+  };
+  return defs[id];
+}
+
+// ═══════════════════════════════════════════════════
+// RADIO HELPERS
+// ═══════════════════════════════════════════════════
+function selectRadio(group, val, cb) {
+  state.radios[group] = val;
+  document.querySelectorAll(`[onclick*="selectRadio('${group}'"]`).forEach(el => {
+    const elVal = el.getAttribute('onclick').match(/'([^']+)'\s*[,)]/g);
+    if (elVal) {
+      const v = elVal[1] ? elVal[1].replace(/['",)]/g,'').trim() : '';
+    }
+  });
+  // Toggle checked class based on value
+  const container = document.getElementById(group + '-group') ||
+    (document.querySelector(`[onclick="selectRadio('${group}','${val}')"]`) || document.querySelector(`[onclick*="selectRadio('${group}'"]`))?.parentElement;
+
+  document.querySelectorAll(`[onclick*="selectRadio('${group}'"]`).forEach(el => {
+    const match = el.getAttribute('onclick').match(/selectRadio\('[^']+','([^']+)'/);
+    if (match) el.classList.toggle('checked', match[1] === val);
+  });
+
+  // CO alarm logic
+  if (group === 'co-alarm') {
+    const field = document.getElementById('co-install-field');
+    if (field) field.classList.toggle('hidden', val !== 'no');
+    if (val === 'yes') { state.radios['co-install'] = null; }
+  }
+  if (cb) cb();
+  calcAll();
+}
+
+// ═══════════════════════════════════════════════════
+// FRA TYPE CHECK
+// ═══════════════════════════════════════════════════
+function checkFraType() {
+  const v = document.getElementById('fra-proptype').value;
+  const note = document.getElementById('fra-flat-note');
+  if (note) note.classList.toggle('hidden', v !== 'flat');
+  calcAll();
+}
+
+// ═══════════════════════════════════════════════════
+// ZONE / PARKING / SLOT
+// ═══════════════════════════════════════════════════
+function selectZone(val) {
+  state.congestion = val;
+  document.getElementById('congestion-yes').classList.toggle('selected', val);
+  document.getElementById('congestion-no').classList.toggle('selected', !val);
+  calcAll();
+}
+
+function selectParking(val) {
+  state.parking = val;
+  document.getElementById('parking-yes').classList.toggle('selected', val);
+  document.getElementById('parking-no').classList.toggle('selected', !val);
+  calcAll();
+}
+
+function selectSlot(s) {
+  state.slot = s;
+  document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+  document.querySelector(`[onclick="selectSlot('${s}')"]`).classList.add('selected');
+}
+
+function toggleAccessArrangements() {
+  const val = document.getElementById('access-provider').value;
+  document.getElementById('access-arrangements-field').classList.toggle('hidden', val === 'me');
+}
+
+// ═══════════════════════════════════════════════════
+// PRICING ENGINE
+// ═══════════════════════════════════════════════════
+function calcAll() {
+  const lines = [];
+
+  // GSC
+  if (state.services.has('gsc')) {
+    const sel = document.getElementById('gsc-appliances');
+    const price = sel && sel.value ? parseFloat(sel.value) : 0;
+    if (price > 0) {
+      const appText = sel.options[sel.selectedIndex]?.text.split('—')[0].trim() || 'Gas Safety Certificate';
+      lines.push({ name: 'Gas Safety Certificate (CP12)', sub: appText, price, id: 'gsc' });
+    }
+    // CO Alarm
+    if (state.radios['co-alarm'] === 'no' && state.radios['co-install'] === 'yes') {
+      lines.push({ name: 'CO Alarm Installation', sub: '', price: 35, id: 'co' });
+    }
+  }
+
+  // BOILER — always standalone price; bundle with GSC = separate discount line
+  if (state.services.has('boiler')) {
+    const type = state.radios['boiler-type'];
+    let price = 0, sub = '', discountAmt = 0;
+    if (type === 'basic') {
+      price = 65;
+      sub = 'Basic Boiler Service';
+      discountAmt = 20; // standalone £65, bundle £45 = save £20
+    } else if (type === 'full') {
+      price = 150;
+      sub = 'Full Boiler Service';
+      discountAmt = 30; // standalone £150, bundle £120 = save £30
+    }
+    if (price > 0) {
+      lines.push({ name: 'Boiler Service', sub, price, id: 'boiler' });
+      // Bundle discount only when bundle row was explicitly selected
+      if (state.activeBundles && state.activeBundles.has('bundle-gsc-boiler')) {
+        lines.push({ name: 'Bundle Discount — GSC + Boiler Service', sub: 'Bundle selected', price: -discountAmt, id: 'bundle-boiler', discount: true });
+      }
+    }
+  }
+
+  // EICR
+  if (state.services.has('eicr')) {
+    const beds = document.getElementById('eicr-beds');
+    const boards = document.getElementById('eicr-boards');
+    const basePrice = beds && beds.value ? parseFloat(beds.value) : 0;
+    const boardExtra = boards ? parseFloat(boards.value) : 0;
+    const total = basePrice + boardExtra;
+    if (total > 0) {
+      const bedsText = beds.options[beds.selectedIndex]?.text.split('—')[0].trim() || '';
+      const boardText = parseInt(boards.value) > 0 ? ` + ${parseInt(boards.value)/60+1} boards` : '';
+      lines.push({ name: 'EICR', sub: bedsText + boardText, price: total, id: 'eicr' });
+    }
+  }
+
+  // PAT
+  if (state.services.has('pat')) {
+    const count = parseInt(document.getElementById('pat-count').value) || 0;
+    if (count > 0) {
+      // Always charge standalone price — bundle discount applied as separate line
+      let price = count <= 10 ? 59.99 : 59.99 + (count - 10) * 2;
+      lines.push({ name: 'PAT Testing', sub: `${count} appliance${count > 1 ? 's' : ''}`, price, id: 'pat' });
+    }
+  }
+
+  // EICR+PAT bundle discount — only when bundle row explicitly selected
+  if (state.activeBundles && state.activeBundles.has('bundle-eicr-pat')) {
+    const count = parseInt(document.getElementById('pat-count') ? document.getElementById('pat-count').value : '0') || 0;
+    if (count > 0) {
+      lines.push({ name: 'Bundle Discount — EICR + PAT', sub: 'Bundle selected', price: -20, id: 'bundle-eicr-pat', discount: true });
+    }
+  }
+
+  // FSC
+  if (state.services.has('fsc')) {
+    const proptype = document.getElementById('fsc-proptype').value;
+    const alarms = parseInt(document.getElementById('fsc-alarms').value) || 0;
+    if (alarms > 0) {
+      const isPremium = proptype === 'premium';
+      const base = isPremium ? 119.99 : 79.99;
+      const extra = alarms > 3 ? (alarms - 3) * 20 : 0;
+      const price = base + extra;
+      const sub = `${alarms} alarm${alarms > 1 ? 's' : ''} — ${isPremium ? 'Grade A Panel System' : 'Grade D/LD2'}`;
+      lines.push({ name: 'Fire Alarm Certificate (FSC)', sub, price, id: 'fsc' });
+    }
+  }
+
+  // ELC — always full price
+  if (state.services.has('elc')) {
+    const lights = parseInt(document.getElementById('elc-lights').value) || 0;
+    if (lights > 0) {
+      const base = 79.99;
+      const extra = lights > 3 ? (lights - 3) * 20 : 0;
+      const price = base + extra;
+      lines.push({ name: 'Emergency Light Certificate (ELC)', sub: `${lights} light${lights > 1 ? 's' : ''}`, price, id: 'elc' });
+    }
+  }
+
+  // FRA — always full price
+  if (state.services.has('fra')) {
+    const beds = parseInt(document.getElementById('fra-beds').value) || 0;
+    const communal = parseInt(document.getElementById('fra-communal').value) || 1;
+    if (beds > 0) {
+      const base = 159.99;
+      const bedExtra = beds > 3 ? (beds - 3) * 25 : 0;
+      const commExtra = communal > 1 ? (communal - 1) * 60 : 0;
+      const price = base + bedExtra + commExtra;
+      lines.push({ name: 'Fire Safety Risk Assessment (FRA)', sub: `${beds} bed${beds > 1 ? 's' : ''}, ${communal} communal area${communal > 1 ? 's' : ''}`, price, id: 'fra' });
+    }
+  }
+
+  // Bundle discounts — only when bundle row was explicitly selected (activeBundles)
+  if (state.activeBundles && state.activeBundles.has('bundle-fsc-elc-fra')) {
+    lines.push({ name: 'Bundle Discount — FSC + ELC + FRA', sub: 'Bundle selected', price: -40, id: 'bundle-fire-all', discount: true });
+  } else if (state.activeBundles && state.activeBundles.has('bundle-fsc-elc')) {
+    lines.push({ name: 'Bundle Discount — FSC + ELC', sub: 'Bundle selected', price: -20, id: 'bundle-fire', discount: true });
+  }
+
+  // EPC
+  if (state.services.has('epc')) {
+    const sel = document.getElementById('epc-beds');
+    const price = sel && sel.value ? parseFloat(sel.value) : 0;
+    if (price > 0) {
+      const bedsText = sel.options[sel.selectedIndex]?.text.split('—')[0].trim() || '';
+      lines.push({ name: 'Energy Performance Certificate (EPC)', sub: bedsText, price, id: 'epc' });
+    }
+  }
+
+  // FLOOR PLAN — always full price; EPC bundle discount as separate line
+  if (state.services.has('floorplan')) {
+    const beds = parseInt(document.getElementById('fp-beds').value) || 0;
+    const floors = parseInt(document.getElementById('fp-floors').value) || 1;
+    if (beds > 0) {
+      const base = beds <= 2 ? 130 : 130 + (beds - 2) * 20;
+      const floorExtra = (floors - 1) * 25;
+      const price = base + floorExtra;
+      lines.push({ name: 'Floor Plan', sub: `${beds} bed${beds > 1 ? 's' : ''}, ${floors} floor${floors > 1 ? 's' : ''}`, price, id: 'floorplan' });
+      // Bundle discount only when bundle row explicitly selected
+      if (state.activeBundles && state.activeBundles.has('bundle-epc-fp')) {
+        lines.push({ name: 'Bundle Discount — EPC + Floor Plan', sub: 'Bundle selected', price: -20, id: 'bundle-epc-fp', discount: true });
+      }
+    }
+  }
+
+  // ASBESTOS
+  if (state.services.has('asbestos')) {
+    const sel = document.getElementById('asbestos-type');
+    const price = sel ? parseFloat(sel.value) : 0;
+    if (price > 0) {
+      lines.push({ name: 'Asbestos Survey', sub: 'House — up to 3 bedrooms (Full Test)', price, id: 'asbestos' });
+    } else if (sel && sel.value === '0') {
+      lines.push({ name: 'Asbestos Survey', sub: 'Custom configuration — quote required', price: 0, id: 'asbestos', quoteOnly: true });
+    }
+  }
+
+  // Congestion + Parking (Step 3)
+  if (state.congestion) lines.push({ name: 'Congestion Charge', sub: 'London Congestion Zone', price: 18, id: 'congestion' });
+  if (!state.parking) lines.push({ name: 'Parking Charge', sub: 'No parking available at property', price: 5, id: 'parking' });
+
+  renderQuotePanel(lines);
+  return lines;
+}
+
+// ═══════════════════════════════════════════════════
+// QUOTE PANEL RENDER
+// ═══════════════════════════════════════════════════
+function fmt(n) { return '£' + n.toFixed(2); }
+
+function renderQuotePanel(lines) {
+  const linesEl = document.getElementById('quote-lines');
+  const totalsEl = document.getElementById('quote-totals');
+  const emptyEl = document.getElementById('quote-empty');
+
+  const validLines = lines.filter(l => l.price !== 0 || l.quoteOnly);
+
+  if (validLines.length === 0) {
+    emptyEl.style.display = '';
+    linesEl.innerHTML = '';
+    totalsEl.classList.add('hidden');
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  totalsEl.classList.remove('hidden');
+
+  linesEl.innerHTML = validLines.map(l => `
+    <div class="quote-line ${l.discount ? 'quote-discount' : ''}">
+      <div class="quote-line-name">
+        ${l.name}
+        ${l.sub ? `<div class="line-sub">${l.sub}</div>` : ''}
+      </div>
+      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price))}</div>
+    </div>
+  `).join('');
+
+  const subtotal = validLines.reduce((s, l) => s + (l.quoteOnly ? 0 : l.price), 0);
+  document.getElementById('q-subtotal').textContent = fmt(subtotal);
+  document.getElementById('q-total').textContent = fmt(subtotal);
+}
+
+// ═══════════════════════════════════════════════════
+// BILLING TABLE
+// ═══════════════════════════════════════════════════
+function buildBillingTable() {
+  const lines = calcAll();
+  const tbody = document.getElementById('billing-tbody');
+
+  tbody.innerHTML = lines.map(l => `
+    <tr class="${l.discount ? 'discount-row' : l.id === 'congestion' || l.id === 'parking' ? 'charge-row' : ''}">
+      <td class="desc-cell">
+        ${l.name}
+        ${l.sub ? `<div class="desc-sub">${l.sub}</div>` : ''}
+      </td>
+      <td class="qty-cell" style="text-align:center">1</td>
+      <td class="price-cell" style="text-align:right">${l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
+      <td style="text-align:right">${l.quoteOnly ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price))}</td>
+      <td><button class="edit-btn" onclick="goToStep(2)">✎ Edit</button></td>
+    </tr>
+  `).join('');
+
+  const subtotal = lines.reduce((s, l) => s + (l.quoteOnly ? 0 : l.price), 0);
+  document.getElementById('summary-subtotal').textContent = fmt(subtotal);
+  document.getElementById('summary-total').textContent = fmt(subtotal);
+}
+
+// ═══════════════════════════════════════════════════
+// FLOAT BAR — updates sticky bottom bar
+// ═══════════════════════════════════════════════════
+function updateFloatBar() {
+  const bar = document.getElementById('float-quote');
+  const totalEl = document.getElementById('q-total');
+  const linesEl = document.getElementById('quote-lines');
+  if (!bar) return;
+
+  const hasServices = state.services.size > 0 || state.activeBundles.size > 0;
+  const quotePanel = document.querySelector('.quote-panel');
+  const panelVisible = quotePanel && isInViewport(quotePanel);
+
+  if (hasServices && !panelVisible) {
+    bar.classList.remove('hidden');
+    document.getElementById('float-total').textContent = totalEl ? totalEl.textContent : '£0.00';
+    // Build service names list
+    const names = [];
+    state.activeBundles.forEach(bid => {
+      const b = BUNDLES[bid];
+      if (b) names.push(b.label);
+    });
+    state.services.forEach(id => {
+      if (!coveredByBundle(id)) {
+        const labels = {gsc:'Gas Safety Cert',boiler:'Boiler Service',eicr:'EICR',pat:'PAT',fsc:'Fire Alarm Cert',elc:'Emergency Lights',fra:'Fire Risk Assessment',epc:'EPC',floorplan:'Floor Plan',asbestos:'Asbestos Survey'};
+        names.push(labels[id] || id);
+      }
+    });
+    document.getElementById('float-services').textContent = names.length ? names.join(' · ') : 'No services selected';
+  } else {
+    bar.classList.add('hidden');
+  }
+}
+
+function isInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom > 0;
+}
+
+window.addEventListener('scroll', updateFloatBar, { passive: true });
+
+// ═══════════════════════════════════════════════════
+// FILL BOOKING DETAILS (Step 4)
+// ═══════════════════════════════════════════════════
+function fillBookingDetails() {
+  const firstName = document.getElementById('b-firstName').value || document.getElementById('firstName').value;
+  const lastName = document.getElementById('b-lastName').value || document.getElementById('lastName').value;
+  const phone = document.getElementById('b-phone').value || document.getElementById('phone').value;
+  const email = document.getElementById('b-email').value || document.getElementById('email').value;
+  const address = document.getElementById('b-address').value || '';
+  const postcode = document.getElementById('b-postcode').value || document.getElementById('postcode').value;
+  const date = document.getElementById('b-date').value;
+  const slot = state.slot;
+
+  const fullName = [firstName, lastName].filter(Boolean).join(' ') || '—';
+  const fullAddress = [address, postcode].filter(Boolean).join(', ') || '—';
+  const dateStr = date ? new Date(date).toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) : '—';
+  const slotStr = slot === 'morning' ? 'Morning: 8:00am – 1:00pm' : slot === 'afternoon' ? 'Afternoon: 1:00pm – 6:00pm' : '—';
+
+  document.getElementById('bd-name').textContent = fullName;
+  document.getElementById('bd-address').textContent = fullAddress;
+  document.getElementById('bd-contact').textContent = phone || '—';
+  document.getElementById('bd-email-disp').textContent = email || '—';
+  document.getElementById('bd-date').textContent = dateStr;
+  document.getElementById('bd-slot').textContent = slotStr;
+}
+
+// ═══════════════════════════════════════════════════
+// SUBMIT
+// ═══════════════════════════════════════════════════
+function submitBooking() {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-confirm').classList.add('active');
+  document.querySelectorAll('.step-tab').forEach(t => { t.classList.remove('active'); t.classList.add('done'); });
+  document.getElementById('float-quote').classList.add('hidden');
+
+  const firstName = document.getElementById('b-firstName').value || document.getElementById('firstName').value;
+  const lastName = document.getElementById('b-lastName').value || document.getElementById('lastName').value;
+  const phone = document.getElementById('b-phone').value || document.getElementById('phone').value;
+  const email = document.getElementById('b-email').value || document.getElementById('email').value;
+  const address = document.getElementById('b-address').value || '';
+  const postcode = document.getElementById('b-postcode').value || document.getElementById('postcode').value;
+  const date = document.getElementById('b-date').value;
+  const slot = state.slot;
+  const total = document.getElementById('summary-total').textContent;
+
+  const fullName = [firstName, lastName].filter(Boolean).join(' ');
+  const fullAddress = [address, postcode].filter(Boolean).join(', ');
+  const dateStr = date ? new Date(date).toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) : 'Date to be confirmed';
+  const slotStr = slot === 'morning' ? 'Morning slot: 8:00am – 1:00pm' : slot === 'afternoon' ? 'Afternoon slot: 1:00pm – 6:00pm' : 'Time slot to be confirmed';
+
+  document.getElementById('confirm-email').textContent = email || 'your email';
+  document.getElementById('confirm-name').textContent = fullName;
+  document.getElementById('confirm-address').textContent = fullAddress || '—';
+  document.getElementById('confirm-date').textContent = 'Date: ' + dateStr;
+  document.getElementById('confirm-slot').textContent = 'Time: ' + slotStr;
+  document.getElementById('confirm-total').textContent = 'Estimated Total: ' + total + ' — invoice to follow by bank transfer';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+selectZone(false);
+selectParking(true);
+renderSubQuestions();
+calcAll();
+updateFloatBar();
+</script>
+<script src="/book-now/book-now-api.js"></script>
+</body>
+</html>
