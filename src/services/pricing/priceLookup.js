@@ -33,7 +33,17 @@ const getPrice = (priceMap, tierKey, noRegion) => {
   return { amount: entry.amount, isTbc: false, pricingTierId: entry.pricingTierId };
 };
 
-const lineFromPrice = ({ name, sub, amount, isTbc, pricingTierId, isDiscount = false, quoteOnly = false }) => ({
+const lineFromPrice = ({
+  name,
+  sub,
+  amount,
+  isTbc,
+  pricingTierId,
+  isDiscount = false,
+  quoteOnly = false,
+  serviceCode = null,
+  serviceName = null,
+}) => ({
   name,
   sub: sub || '',
   quantity: 1,
@@ -43,6 +53,8 @@ const lineFromPrice = ({ name, sub, amount, isTbc, pricingTierId, isDiscount = f
   isDiscount,
   quoteOnly,
   pricingTierId,
+  serviceCode: serviceCode ?? null,
+  serviceName: serviceName ?? null,
 });
 
 module.exports = {

@@ -5,6 +5,8 @@ const catalogRoutes = require('./catalog.routes');
 const quoteRoutes = require('./quote.routes');
 const bookingRoutes = require('./booking.routes');
 const regionRoutes = require('./region.routes');
+const quotationRoutes = require('./quotation.routes');
+const dashboardRoutes = require('./dashboard.routes');
 
 const router = express.Router();
 
@@ -13,6 +15,8 @@ router.use('/catalog', catalogRoutes);
 router.use('/quotes', quoteRoutes);
 router.use('/bookings', bookingRoutes);
 router.use('/regions', regionRoutes);
+router.use('/quotations', quotationRoutes);
 router.use('/users', userRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 module.exports = router;

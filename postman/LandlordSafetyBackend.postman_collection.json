@@ -1,0 +1,705 @@
+{
+  "info": {
+    "_postman_id": "landlord-safety-backend-api",
+    "name": "Landlord Safety Backend",
+    "description": "REST API for Landlord Safety Backend.\n\n**Setup**\n1. Import this collection (and optional environment).\n2. Set `baseUrl` (default `http://localhost:3000`).\n3. Run **Auth → Login** — the test script saves `token` automatically.\n4. Admin routes require role `admin` or `superAdmin`.\n\n**Response format:** `{ success, data, message, status }`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "regionId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "bookingId", "value": "" },
+    { "key": "quotationId", "value": "" },
+    { "key": "quotationLineId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Health & Auth",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/health",
+            "description": "Public health check."
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.data && json.data.token) {",
+                  "        pm.collectionVariables.set('token', json.data.token);",
+                  "        if (json.data.user && json.data.user.id) {",
+                  "            pm.collectionVariables.set('userId', json.data.user.id);",
+                  "        }",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"superadmin@landlordsafety.com\",\n  \"password\": \"ChangeMe123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Returns JWT in `data.token`. Test script stores it in collection variable `token`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public — Catalog & Quotes",
+      "item": [
+        {
+          "name": "Get Catalog (residential)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog?propertyType=residential&postcode=SW1A%201AA",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "catalog"],
+              "query": [
+                { "key": "propertyType", "value": "residential", "description": "residential | commercial | installation" },
+                { "key": "postcode", "value": "SW1A 1AA", "description": "Optional — enriches option prices" }
+              ]
+            },
+            "description": "Categories, services, questions, bundles. Optional postcode resolves region pricing on options."
+          }
+        },
+        {
+          "name": "Get Catalog (commercial)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog?propertyType=commercial",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "catalog"],
+              "query": [{ "key": "propertyType", "value": "commercial" }]
+            }
+          }
+        },
+        {
+          "name": "Get Catalog (installation)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog?propertyType=installation",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "catalog"],
+              "query": [{ "key": "propertyType", "value": "installation" }]
+            }
+          }
+        },
+        {
+          "name": "Quote Preview (residential)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"residential\",\n  \"postcode\": \"SW1A 1AA\",\n  \"services\": [\n    {\n      \"code\": \"gsc\",\n      \"answers\": { \"applianceCount\": \"2\", \"coAlarmPresent\": \"yes\" }\n    }\n  ],\n  \"activeBundleKeys\": [\"bundle-gsc-boiler\"],\n  \"congestionZone\": false,\n  \"parkingAvailable\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/quotes/preview",
+            "description": "Live quote for residential; quote-on-request lines for commercial/installation."
+          }
+        },
+        {
+          "name": "Quote Preview (commercial)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"commercial\",\n  \"postcode\": \"E1 6AN\",\n  \"services\": [\n    {\n      \"code\": \"cp17\",\n      \"answers\": { \"applianceCount\": \"3\", \"gasInterlock\": \"yes\" }\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/quotes/preview"
+          }
+        },
+        {
+          "name": "Get Region Prices by Postcode",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/quotes/region-prices?postcode=SW1A%201AA",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "quotes", "region-prices"],
+              "query": [{ "key": "postcode", "value": "SW1A 1AA" }]
+            },
+            "description": "Resolved region and price matrix for a postcode."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public — Bookings",
+      "item": [
+        {
+          "name": "Create Booking (residential)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"residential\",\n  \"firstName\": \"James\",\n  \"lastName\": \"Smith\",\n  \"email\": \"james@example.com\",\n  \"phone\": \"07700900000\",\n  \"postcode\": \"SW1A 1AA\",\n  \"appointmentAddress\": \"10 High Street, London\",\n  \"preferredDate\": \"2026-06-01\",\n  \"preferredTimeSlot\": \"morning\",\n  \"accessProvider\": \"tenant\",\n  \"accessArrangements\": \"Key with agent\",\n  \"services\": [\n    {\n      \"code\": \"gsc\",\n      \"answers\": { \"applianceCount\": \"1\", \"coAlarmPresent\": \"yes\" }\n    }\n  ],\n  \"congestionZone\": false,\n  \"parkingAvailable\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings",
+            "description": "BOOK NOW — persists booking, line items, and answers."
+          }
+        },
+        {
+          "name": "Create Quotation (residential TBC)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"residential\",\n  \"firstName\": \"Tbc\",\n  \"lastName\": \"User\",\n  \"email\": \"tbc@example.com\",\n  \"phone\": \"07700900003\",\n  \"postcode\": \"ZZ99 9ZZ\",\n  \"services\": [\n    {\n      \"code\": \"gsc\",\n      \"answers\": { \"applianceCount\": \"1\", \"coAlarmPresent\": \"yes\" }\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/quotations",
+            "description": "Any TBC line → quotation with line items (serviceCode, serviceName)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public — Quotations",
+      "item": [
+        {
+          "name": "Create Quotation (commercial)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.data && json.data.id) {",
+                  "        pm.collectionVariables.set('quotationId', json.data.id);",
+                  "        const lines = json.data.lineItems || [];",
+                  "        if (lines[0] && lines[0].id) pm.collectionVariables.set('quotationLineId', lines[0].id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"commercial\",\n  \"commercialPropertySubtype\": \"catering_hospitality\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"07700900001\",\n  \"postcode\": \"E1 6AN\",\n  \"services\": [\n    {\n      \"code\": \"cp17\",\n      \"answers\": { \"applianceCount\": \"3\", \"gasInterlock\": \"yes\" }\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/quotations"
+          }
+        },
+        {
+          "name": "Create Quotation (alias quote-requests)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyType\": \"commercial\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"07700900001\",\n  \"postcode\": \"E1 6AN\",\n  \"services\": [{ \"code\": \"cp17\", \"answers\": {} }]\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/quote-requests",
+            "description": "Deprecated alias → POST /api/quotations"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard (Admin)",
+      "description": "Requires Bearer token and role `admin`+.",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/dashboard/stats",
+            "description": "Active technicians, pending bookings, current month completed count and revenue."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "Authenticated. List/create/update require role `admin`. Delete requires `superAdmin`.",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/users/me"
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/users",
+            "description": "Requires role: admin+"
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "description": "Requires role: admin+"
+          }
+        },
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.data && json.data.id) {",
+                  "        pm.collectionVariables.set('userId', json.data.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"SecurePass1!\",\n  \"fullName\": \"Test Admin\",\n  \"role\": \"admin\",\n  \"phoneNumber\": \"07700900099\",\n  \"isActive\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/users",
+            "description": "Requires role: admin+. Roles: superAdmin, admin, technician"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"isActive\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "description": "Requires role: admin+"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "description": "Requires role: superAdmin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Regions (Admin)",
+      "description": "Requires Bearer token and role `admin`+.",
+      "item": [
+        {
+          "name": "List Regions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    const regions = json.data;",
+                  "    if (Array.isArray(regions) && regions.length > 0 && regions[0].id) {",
+                  "        pm.collectionVariables.set('regionId', regions[0].id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/regions"
+          }
+        },
+        {
+          "name": "Create Region",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.data && json.data.id) {",
+                  "        pm.collectionVariables.set('regionId', json.data.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Region\",\n  \"isActive\": true,\n  \"sortOrder\": 10\n}"
+            },
+            "url": "{{baseUrl}}/api/regions"
+          }
+        },
+        {
+          "name": "Get Region by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/regions/{{regionId}}"
+          }
+        },
+        {
+          "name": "Update Region",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Region Name\",\n  \"isActive\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/regions/{{regionId}}"
+          }
+        },
+        {
+          "name": "Replace Region Prefixes",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prefixes\": [\"SW1\", \"SW1A\", \"SW1W\"]\n}"
+            },
+            "url": "{{baseUrl}}/api/regions/{{regionId}}/prefixes"
+          }
+        },
+        {
+          "name": "Get Region Prices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/regions/{{regionId}}/prices",
+            "description": "Full pricing tier matrix for the region."
+          }
+        },
+        {
+          "name": "Upsert Region Prices",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prices\": [\n    { \"tierKey\": \"gsc_meter_1\", \"amount\": 59.99 },\n    { \"tierKey\": \"gsc_meter_2\", \"amount\": 74.99 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/regions/{{regionId}}/prices",
+            "description": "Use `amount: null` for TBC. Each item needs `tierKey` or `pricingTierId`."
+          }
+        },
+        {
+          "name": "Delete Region",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/regions/{{regionId}}",
+            "description": "Cannot delete the default region."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quotations (Admin)",
+      "description": "Requires Bearer token and role `admin`+. Line items include serviceCode and serviceName.",
+      "item": [
+        {
+          "name": "List Quotations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    const rows = json.data && json.data.quotations;",
+                  "    if (Array.isArray(rows) && rows[0] && rows[0].id) {",
+                  "        pm.collectionVariables.set('quotationId', rows[0].id);",
+                  "        if (rows[0].lineItems && rows[0].lineItems[0]) {",
+                  "            pm.collectionVariables.set('quotationLineId', rows[0].lineItems[0].id);",
+                  "        }",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/quotations?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "quotations"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Quotation by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/quotations/{{quotationId}}"
+          }
+        },
+        {
+          "name": "Update Quotation Line Prices",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lines\": [\n    {\n      \"id\": \"{{quotationLineId}}\",\n      \"unitPrice\": 59.99,\n      \"total\": 59.99,\n      \"isTbc\": false\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/quotations/{{quotationId}}/lines"
+          }
+        },
+        {
+          "name": "Update Quotation Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"priced\"\n}"
+            },
+            "url": "{{baseUrl}}/api/quotations/{{quotationId}}/status"
+          }
+        },
+        {
+          "name": "Convert Quotation to Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.data && json.data.id) pm.collectionVariables.set('bookingId', json.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/quotations/{{quotationId}}/convert",
+            "description": "All lines must be priced (no isTbc)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings (Admin)",
+      "description": "Requires Bearer token and role `admin`+.",
+      "item": [
+        {
+          "name": "List Bookings",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    const data = json.data;",
+                  "    const bookings = data && (data.bookings || data.items || data);",
+                  "    if (Array.isArray(bookings) && bookings.length > 0 && bookings[0].id) {",
+                  "        pm.collectionVariables.set('bookingId', bookings[0].id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "propertyType", "value": "residential", "disabled": true },
+                { "key": "status", "value": "pending", "disabled": true },
+                { "key": "paymentStatus", "value": "unpaid", "disabled": true }
+              ]
+            },
+            "description": "Lists bookings and recent quotations."
+          }
+        },
+        {
+          "name": "List Technicians",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (Array.isArray(json.data) && json.data[0] && json.data[0].id) {",
+                  "        pm.collectionVariables.set('technicianUserId', json.data[0].id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/bookings/technicians/list",
+            "description": "Active users with role technician."
+          }
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}",
+            "description": "Detail with line items, technician, statusHistory."
+          }
+        },
+        {
+          "name": "Update Booking (confirm + assign technician)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"technicianId\": \"{{technicianUserId}}\",\n  \"adminNotes\": \"Confirmed by admin\"\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}"
+          }
+        },
+        {
+          "name": "Update Booking (complete)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}"
+          }
+        },
+        {
+          "name": "Update Booking (cancel)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\",\n  \"adminNotes\": \"Cancelled by customer request\"\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}"
+          }
+        },
+        {
+          "name": "Update Booking (mark paid)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentStatus\": \"paid\"\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}",
+            "description": "Sets paymentStatus to paid and paidAt to now. Admin/superAdmin only."
+          }
+        },
+        {
+          "name": "Update Booking (mark unpaid)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentStatus\": \"unpaid\"\n}"
+            },
+            "url": "{{baseUrl}}/api/bookings/{{bookingId}}",
+            "description": "Clears paidAt. Admin/superAdmin only."
+          }
+        }
+      ]
+    }
+  ]
+}

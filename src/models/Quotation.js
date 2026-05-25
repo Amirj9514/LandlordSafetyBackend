@@ -1,12 +1,11 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 const { ALL_PROPERTY_TYPES, PRICING_STATUS } = require('../constants/propertyTypes');
-const { BOOKING_STATUS } = require('../constants/bookingStatus');
-const { PAYMENT_STATUS } = require('../constants/paymentStatus');
+const { ALL_QUOTATION_STATUSES, QUOTATION_STATUS } = require('../constants/quotationStatus');
 
-class Booking extends Model {}
+class Quotation extends Model {}
 
-Booking.init(
+Quotation.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -24,26 +23,15 @@ Booking.init(
       field: 'property_type',
     },
     status: {
-      type: DataTypes.ENUM(...Object.values(BOOKING_STATUS)),
+      type: DataTypes.ENUM(...ALL_QUOTATION_STATUSES),
       allowNull: false,
-      defaultValue: BOOKING_STATUS.PENDING,
+      defaultValue: QUOTATION_STATUS.PENDING,
     },
     pricingStatus: {
       type: DataTypes.ENUM(...Object.values(PRICING_STATUS)),
       allowNull: false,
       defaultValue: PRICING_STATUS.PRICED,
       field: 'pricing_status',
-    },
-    paymentStatus: {
-      type: DataTypes.ENUM(...Object.values(PAYMENT_STATUS)),
-      allowNull: false,
-      defaultValue: PAYMENT_STATUS.UNPAID,
-      field: 'payment_status',
-    },
-    paidAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: 'paid_at',
     },
     firstName: {
       type: DataTypes.STRING(100),
@@ -118,6 +106,11 @@ Booking.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    commercialPropertySubtype: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      field: 'commercial_property_subtype',
+    },
     subtotal: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
@@ -137,20 +130,10 @@ Booking.init(
       defaultValue: [],
       field: 'active_bundle_keys',
     },
-    technicianId: {
+    convertedBookingId: {
       type: DataTypes.UUID,
       allowNull: true,
-      field: 'technician_id',
-    },
-    assignedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: 'assigned_at',
-    },
-    adminNotes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: 'admin_notes',
+      field: 'converted_booking_id',
     },
     metadata: {
       type: DataTypes.JSONB,
@@ -160,11 +143,11 @@ Booking.init(
   },
   {
     sequelize,
-    modelName: 'Booking',
-    tableName: 'bookings',
+    modelName: 'Quotation',
+    tableName: 'quotations',
     underscored: true,
     timestamps: true,
   }
 );
 
-module.exports = Booking;
+module.exports = Quotation;

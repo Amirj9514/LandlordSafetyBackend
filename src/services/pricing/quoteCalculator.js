@@ -12,6 +12,19 @@ const hasService = (selections, code) => selections.some((s) => s.code === code)
 
 const getAnswers = (selection) => selection.answers || {};
 
+const SVC = {
+  gsc: 'Gas Safety Certificate (CP12)',
+  boiler: 'Boiler Service',
+  eicr: 'EICR',
+  pat: 'PAT Testing',
+  fsc: 'Fire Alarm Certificate (FSC)',
+  elc: 'Emergency Light Certificate (ELC)',
+  fra: 'Fire Safety Risk Assessment (FRA)',
+  epc: 'Energy Performance Certificate (EPC)',
+  floorplan: 'Floor Plan',
+  asbestos: 'Asbestos Survey',
+};
+
 const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) => {
   const lines = [];
   const sel = (code) => selections.find((s) => s.code === code);
@@ -21,7 +34,6 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
   const fscElcBundle = hasBundle(activeBundleKeys, 'bundle-fsc-elc');
   const epcFpBundle = hasBundle(activeBundleKeys, 'bundle-epc-fp');
 
-  // GSC
   if (hasService(selections, 'gsc')) {
     const a = getAnswers(sel('gsc'));
     const count = parseInt(a.applianceCount, 10) || 0;
@@ -29,11 +41,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
       const tierKey = `gsc_meter_${count}`;
       const p = getPrice(priceMap, tierKey, noRegion);
       lines.push(lineFromPrice({
-        name: 'Gas Safety Certificate (CP12)',
+        name: SVC.gsc,
         sub: `Meter & ${count} appliance${count > 1 ? 's' : ''}`,
         amount: p.amount,
         isTbc: p.isTbc,
         pricingTierId: p.pricingTierId,
+        serviceCode: 'gsc',
+        serviceName: SVC.gsc,
       }));
       if (a.coAlarmPresent === 'no' && a.coAlarmInstall === 'yes') {
         const co = getPrice(priceMap, 'co_alarm_install', noRegion);
@@ -43,12 +57,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
           amount: co.amount,
           isTbc: co.isTbc,
           pricingTierId: co.pricingTierId,
+          serviceCode: 'gsc',
+          serviceName: SVC.gsc,
         }));
       }
     }
   }
 
-  // Boiler — GSC+bundle: standalone boiler line + explicit discount (same as other bundles)
   if (hasService(selections, 'boiler')) {
     const a = getAnswers(sel('boiler'));
     const type = a.boilerType;
@@ -58,11 +73,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
       const sub = type === 'basic' ? 'Basic Boiler Service' : 'Full Boiler Service';
       const p = getPrice(priceMap, standaloneKey, noRegion);
       lines.push(lineFromPrice({
-        name: 'Boiler Service',
+        name: SVC.boiler,
         sub,
         amount: p.amount,
         isTbc: p.isTbc,
         pricingTierId: p.pricingTierId,
+        serviceCode: 'boiler',
+        serviceName: SVC.boiler,
       }));
 
       if (gscBundle && hasService(selections, 'gsc')) {
@@ -83,7 +100,6 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
     }
   }
 
-  // EICR
   if (hasService(selections, 'eicr')) {
     const a = getAnswers(sel('eicr'));
     const bedMap = {
@@ -107,16 +123,17 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         else total = round2(total + boardExtra.amount);
       }
       lines.push(lineFromPrice({
-        name: 'EICR',
+        name: SVC.eicr,
         sub: `${a.bedrooms} bedrooms${boards > 1 ? `, ${boards} fuse boards` : ''}`,
         amount: total,
         isTbc: base.isTbc || total === null,
         pricingTierId: base.pricingTierId,
+        serviceCode: 'eicr',
+        serviceName: SVC.eicr,
       }));
     }
   }
 
-  // PAT
   if (hasService(selections, 'pat')) {
     const a = getAnswers(sel('pat'));
     const count = parseInt(a.applianceCount, 10) || 0;
@@ -142,11 +159,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         }
       }
       lines.push(lineFromPrice({
-        name: 'PAT Testing',
+        name: SVC.pat,
         sub: `${count} appliance${count > 1 ? 's' : ''}`,
         amount: price,
         isTbc,
         pricingTierId: null,
+        serviceCode: 'pat',
+        serviceName: SVC.pat,
       }));
       if (eicrPatBundle && withEicr && count > 0 && !isTbc) {
         const disc = getPrice(priceMap, 'bundle_eicr_pat_total', noRegion);
@@ -164,7 +183,6 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
     }
   }
 
-  // FSC
   if (hasService(selections, 'fsc')) {
     const a = getAnswers(sel('fsc'));
     const alarms = parseInt(a.alarmCount, 10) || 0;
@@ -179,16 +197,17 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         else total = round2(total + (alarms - 3) * extra.amount);
       }
       lines.push(lineFromPrice({
-        name: 'Fire Alarm Certificate (FSC)',
+        name: SVC.fsc,
         sub: `${alarms} alarm${alarms > 1 ? 's' : ''}`,
         amount: total,
         isTbc: base.isTbc || total === null,
         pricingTierId: base.pricingTierId,
+        serviceCode: 'fsc',
+        serviceName: SVC.fsc,
       }));
     }
   }
 
-  // ELC
   if (hasService(selections, 'elc')) {
     const a = getAnswers(sel('elc'));
     const lights = parseInt(a.lightCount, 10) || 0;
@@ -201,16 +220,17 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         else total = round2(total + (lights - 3) * extra.amount);
       }
       lines.push(lineFromPrice({
-        name: 'Emergency Light Certificate (ELC)',
+        name: SVC.elc,
         sub: `${lights} light${lights > 1 ? 's' : ''}`,
         amount: total,
         isTbc: base.isTbc || total === null,
         pricingTierId: base.pricingTierId,
+        serviceCode: 'elc',
+        serviceName: SVC.elc,
       }));
     }
   }
 
-  // FRA
   if (hasService(selections, 'fra')) {
     const a = getAnswers(sel('fra'));
     const beds = parseInt(a.bedrooms, 10) || 0;
@@ -229,11 +249,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         else total = round2(total + (communal - 1) * commExtra.amount);
       }
       lines.push(lineFromPrice({
-        name: 'Fire Safety Risk Assessment (FRA)',
+        name: SVC.fra,
         sub: `${beds} bed${beds > 1 ? 's' : ''}, ${communal} communal area${communal > 1 ? 's' : ''}`,
         amount: total,
         isTbc: base.isTbc || total === null,
         pricingTierId: base.pricingTierId,
+        serviceCode: 'fra',
+        serviceName: SVC.fra,
       }));
     }
   }
@@ -264,7 +286,6 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
     }
   }
 
-  // EPC
   if (hasService(selections, 'epc')) {
     const a = getAnswers(sel('epc'));
     const bedMap = {
@@ -278,17 +299,18 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
     if (tierKey) {
       const p = getPrice(priceMap, tierKey, noRegion);
       lines.push(lineFromPrice({
-        name: 'Energy Performance Certificate (EPC)',
+        name: SVC.epc,
         sub: a.bedrooms === '7+' ? '7+ bedrooms' : `${a.bedrooms} bedrooms`,
         amount: p.amount,
         isTbc: p.isTbc || tierKey === 'epc_bed_7_plus',
         pricingTierId: p.pricingTierId,
         quoteOnly: tierKey === 'epc_bed_7_plus',
+        serviceCode: 'epc',
+        serviceName: SVC.epc,
       }));
     }
   }
 
-  // Floor plan
   if (hasService(selections, 'floorplan')) {
     const a = getAnswers(sel('floorplan'));
     const beds = parseInt(a.bedrooms, 10) || 0;
@@ -308,11 +330,13 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
         else total = round2(total + (floors - 1) * floorExtra.amount);
       }
       lines.push(lineFromPrice({
-        name: 'Floor Plan',
+        name: SVC.floorplan,
         sub: `${beds} bed${beds > 1 ? 's' : ''}, ${floors} floor${floors > 1 ? 's' : ''}`,
         amount: total,
         isTbc: base.isTbc || total === null,
         pricingTierId: base.pricingTierId,
+        serviceCode: 'floorplan',
+        serviceName: SVC.floorplan,
       }));
 
       if (epcFpBundle && hasService(selections, 'epc') && !base.isTbc && total !== null) {
@@ -331,26 +355,29 @@ const calcResidentialLines = (selections, activeBundleKeys, priceMap, noRegion) 
     }
   }
 
-  // Asbestos
   if (hasService(selections, 'asbestos')) {
     const a = getAnswers(sel('asbestos'));
     if (a.configuration === 'house_3bed') {
       const p = getPrice(priceMap, 'asbestos_house_3bed', noRegion);
       lines.push(lineFromPrice({
-        name: 'Asbestos Survey',
+        name: SVC.asbestos,
         sub: 'House — up to 3 bedrooms (Full Test)',
         amount: p.amount,
         isTbc: p.isTbc,
         pricingTierId: p.pricingTierId,
+        serviceCode: 'asbestos',
+        serviceName: SVC.asbestos,
       }));
     } else {
       lines.push(lineFromPrice({
-        name: 'Asbestos Survey',
+        name: SVC.asbestos,
         sub: 'Custom configuration — quote required',
         amount: null,
         isTbc: true,
         quoteOnly: true,
         pricingTierId: null,
+        serviceCode: 'asbestos',
+        serviceName: SVC.asbestos,
       }));
     }
   }
@@ -377,6 +404,8 @@ const calcQuoteOnlyLines = async (selections, priceMap, noRegion) => {
         isTbc: false,
         quoteOnly: true,
         pricingTierId: null,
+        serviceCode: svc.code,
+        serviceName: svc.name,
       }));
     } else if (svc.pricingMode === PRICING_MODES.STARTS_FROM) {
       const tierKey = meta.startsFromTierKey;
@@ -390,6 +419,8 @@ const calcQuoteOnlyLines = async (selections, priceMap, noRegion) => {
         quoteOnly: true,
         pricingTierId: p.pricingTierId ?? null,
         metadata: { startsFrom: amount },
+        serviceCode: svc.code,
+        serviceName: svc.name,
       }));
     }
   }
@@ -499,8 +530,13 @@ const inferActiveBundles = async (propertyType, selections, explicitBundles) => 
   return active;
 };
 
+/** True if any non-discount, non-quote-only line is TBC (residential should use quotation flow). */
+const quoteRequiresQuotation = (lines) =>
+  lines.some((l) => !l.isDiscount && !l.quoteOnly && l.isTbc);
+
 module.exports = {
   calculateQuote,
   inferActiveBundles,
   calcResidentialLines,
+  quoteRequiresQuotation,
 };

@@ -1311,7 +1311,7 @@
 
           <div class="step-nav">
             <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
-            <button class="btn btn-book" onclick="submitBooking()">
+            <button class="btn btn-book" id="btn-submit-booking" onclick="submitBooking()">
               🏠 Book Now — Confirm Appointment
             </button>
           </div>
@@ -1324,8 +1324,8 @@
       <div class="card">
         <div class="confirm-screen">
           <div class="confirm-icon" style="background:var(--green-light);font-size:28px">&#10003;</div>
-          <h2>Request Submitted!</h2>
-          <p style="max-width:460px">Your booking request has been received. We have sent a <strong>confirmation email</strong> to <strong id="confirm-email"></strong>.</p>
+          <h2 id="confirm-title">Request Submitted!</h2>
+          <p id="confirm-lead" style="max-width:460px">Your booking request has been received. We have sent a <strong>confirmation email</strong> to <strong id="confirm-email"></strong>.</p>
 
           <div style="background:var(--gold-pale);border:1px solid rgba(201,168,76,0.35);border-radius:var(--radius);padding:18px 20px;text-align:left;margin-top:20px;font-size:13px;color:var(--slate);line-height:1.7">
             <div style="font-weight:700;color:var(--navy);margin-bottom:10px;font-size:14px">What happens next?</div>
@@ -1335,6 +1335,7 @@
           </div>
 
           <div style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 20px;text-align:left;margin-top:16px;font-size:13px;color:var(--slate)">
+            <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--gold);width:16px">&#35;</span><span id="confirm-reference" style="font-weight:700;color:var(--navy);font-family:monospace;letter-spacing:0.05em"></span></div>
             <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128100;</span><span id="confirm-name" style="color:var(--navy);font-weight:500"></span></div>
             <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128205;</span><span id="confirm-address"></span></div>
             <div style="display:flex;gap:12px;margin-bottom:8px"><span style="color:var(--navy);width:16px">&#128197;</span><span id="confirm-date"></span></div>
@@ -2135,9 +2136,10 @@ function renderQuotePanel(lines) {
     <div class="quote-line ${l.discount ? 'quote-discount' : ''}">
       <div class="quote-line-name">
         ${l.name}
+        ${l.serviceCode ? `<div class="line-sub" style="opacity:0.75;font-size:11px">${l.serviceCode}${l.serviceName ? ' · ' + l.serviceName : ''}</div>` : ''}
         ${l.sub ? `<div class="line-sub">${l.sub}</div>` : ''}
       </div>
-      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price))}</div>
+      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : (l.price == null || l.price === undefined ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)))}</div>
     </div>
   `).join('');
 

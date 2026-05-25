@@ -24,7 +24,11 @@ const errorHandler = (err, req, res, _next) => {
   const status = err.status || httpStatus.INTERNAL_SERVER_ERROR;
   const message = err.message || 'Internal server error';
 
-  return sendError(res, { message, status });
+  return sendError(res, {
+    message,
+    status,
+    data: err.code ? { code: err.code } : null,
+  });
 };
 
 module.exports = { notFoundHandler, errorHandler };

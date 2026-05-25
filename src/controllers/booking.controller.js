@@ -29,6 +29,8 @@ const listBookings = asyncHandler(async (req, res) => {
     limit,
     propertyType: req.query.propertyType,
     status: req.query.status,
+    technicianId: req.query.technicianId,
+    paymentStatus: req.query.paymentStatus,
   });
   return sendSuccess(res, {
     data,
@@ -46,9 +48,60 @@ const getBooking = asyncHandler(async (req, res) => {
   });
 });
 
+const updateBooking = asyncHandler(async (req, res) => {
+  const data = await bookingService.updateBooking(req.params.id, req.body, req.user);
+  return sendSuccess(res, {
+    data,
+    message: 'Booking updated successfully',
+    status: httpStatus.OK,
+  });
+});
+
+const createBookingInvoice = asyncHandler(async (req, res) => {
+  const { invoice, generated } = await bookingService.createBookingInvoice(req.params.id, {
+    force: req.body.force === true,
+  });
+
+  return sendSuccess(res, {
+    data: invoice,
+    message: generated ? 'Invoice generated successfully' : 'Invoice already available',
+    status: generated ? httpStatus.CREATED : httpStatus.OK,
+  });
+});
+
+const getBookingInvoiceMeta = asyncHandler(async (req, res) => {
+  const data = await bookingService.getBookingInvoiceMeta(req.params.id);
+  return sendSuccess(res, {
+    data,
+    message: 'Invoice metadata fetched successfully',
+    status: httpStatus.OK,
+  });
+});
+
+const downloadBookingInvoice = asyncHandler(async (req, res) => {
+  const data = await bookingService.downloadBookingInvoice(req.params.id);
+  res.setHeader('Content-Type', data.contentType);
+  res.setHeader('Content-Disposition', `attachment; filename="${data.fileName}"`);
+  return res.status(httpStatus.OK).send(data.buffer);
+});
+
+const listTechnicians = asyncHandler(async (_req, res) => {
+  const data = await bookingService.listTechnicians();
+  return sendSuccess(res, {
+    data,
+    message: 'Technicians fetched successfully',
+    status: httpStatus.OK,
+  });
+});
+
 module.exports = {
   createBooking,
   createQuoteRequest,
   listBookings,
   getBooking,
+  updateBooking,
+  createBookingInvoice,
+  getBookingInvoiceMeta,
+  downloadBookingInvoice,
+  listTechnicians,
 };

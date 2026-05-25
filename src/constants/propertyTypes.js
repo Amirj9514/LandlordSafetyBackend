@@ -12,11 +12,7 @@ const PRICING_MODES = {
   STARTS_FROM: 'starts_from',
 };
 
-const BOOKING_STATUS = {
-  PENDING: 'pending',
-  CONFIRMED: 'confirmed',
-  CANCELLED: 'cancelled',
-};
+const { BOOKING_STATUS, ALL_BOOKING_STATUSES } = require('./bookingStatus');
 
 const PRICING_STATUS = {
   PRICED: 'priced',
@@ -29,5 +25,6 @@ module.exports = {
   ALL_PROPERTY_TYPES,
   PRICING_MODES,
   BOOKING_STATUS,
+  ALL_BOOKING_STATUSES,
   PRICING_STATUS,
 };

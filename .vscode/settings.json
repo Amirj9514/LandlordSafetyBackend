@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "postgresql://landlordsafety_user:dLdUaBH8qaiu3yKrg2cgZKBmKz8y7dJD@dpg-d86ufg19rddc739vpiag-a.oregon-postgres.render.com/landlordsafety",
+            "driver": "PostgreSQL",
+            "connectString": "postgresql://landlordsafety_user:dLdUaBH8qaiu3yKrg2cgZKBmKz8y7dJD@dpg-d86ufg19rddc739vpiag-a.oregon-postgres.render.com/landlordsafety",
+            "name": "DB Connections",
+            "database": "\t landlordsafety",
+            "username": "\t landlordsafety_user",
+            "password": "dLdUaBH8qaiu3yKrg2cgZKBmKz8y7dJD"
+        }
+    ]
+}

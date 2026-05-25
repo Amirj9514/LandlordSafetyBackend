@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 if (!process.env.JWT_SECRET) process.env.JWT_SECRET = 'test-secret-key-min-32-chars-long';
 
 const { sequelize } = require('../models');
-const { calculateQuote } = require('../services/pricing/quoteCalculator');
+const { calculateQuote, quoteRequiresQuotation } = require('../services/pricing/quoteCalculator');
 
 let dbAvailable = false;
 
@@ -118,5 +118,42 @@ describe('quoteCalculator', () => {
       parkingAvailable: false,
     });
     assert.equal(quote.total, 82.99);
+  });
+
+  it('GSC line includes serviceCode and serviceName', async (t) => {
+    if (!dbAvailable) return t.skip('DATABASE_URL not available');
+    const quote = await calculateQuote({
+      propertyType: 'residential',
+      postcode: 'SW1A 1AA',
+      services: [
+        { code: 'gsc', answers: { applianceCount: '1', coAlarmPresent: 'yes' } },
+      ],
+      activeBundleKeys: [],
+    });
+    const gsc = quote.lines.find((l) => l.serviceCode === 'gsc' && !l.isDiscount);
+    assert.ok(gsc);
+    assert.equal(gsc.serviceName, 'Gas Safety Certificate (CP12)');
+  });
+
+  it('quoteRequiresQuotation when any priced line is TBC', async (t) => {
+    if (!dbAvailable) return t.skip('DATABASE_URL not available');
+    const quote = await calculateQuote({
+      propertyType: 'residential',
+      postcode: 'ZZ99 9ZZ',
+      services: [
+        { code: 'gsc', answers: { applianceCount: '1', coAlarmPresent: 'yes' } },
+      ],
+      activeBundleKeys: [],
+    });
+    assert.equal(quoteRequiresQuotation(quote.lines), true);
+    const priced = await calculateQuote({
+      propertyType: 'residential',
+      postcode: 'SW1A 1AA',
+      services: [
+        { code: 'gsc', answers: { applianceCount: '1', coAlarmPresent: 'yes' } },
+      ],
+      activeBundleKeys: [],
+    });
+    assert.equal(quoteRequiresQuotation(priced.lines), false);
   });
 });

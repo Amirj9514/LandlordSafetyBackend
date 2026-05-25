@@ -1,3 +1,5 @@
+const path = require('path');
+
 require('dotenv').config();
 
 const required = ['DATABASE_URL', 'JWT_SECRET'];
@@ -25,4 +27,5 @@ module.exports = {
   vatRate: parseFloat(process.env.VAT_RATE || '0.2', 10),
   dbLogging: process.env.DB_LOGGING === 'true',
   dbSyncAlter: process.env.DB_SYNC_ALTER === 'true',
+  invoiceStorageDir: path.resolve(process.env.INVOICE_STORAGE_DIR || path.join(process.cwd(), 'storage')),
 };

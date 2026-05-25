@@ -1,19 +1,19 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class BookingLineItem extends Model {}
+class QuotationLineItem extends Model {}
 
-BookingLineItem.init(
+QuotationLineItem.init(
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    bookingId: {
+    quotationId: {
       type: DataTypes.UUID,
       allowNull: false,
-      field: 'booking_id',
+      field: 'quotation_id',
     },
     description: {
       type: DataTypes.STRING(500),
@@ -65,6 +65,11 @@ BookingLineItem.init(
       allowNull: true,
       field: 'service_name',
     },
+    adminNotes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: 'admin_notes',
+    },
     sortOrder: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -74,11 +79,11 @@ BookingLineItem.init(
   },
   {
     sequelize,
-    modelName: 'BookingLineItem',
-    tableName: 'booking_line_items',
+    modelName: 'QuotationLineItem',
+    tableName: 'quotation_line_items',
     underscored: true,
     timestamps: true,
   }
 );
 
-module.exports = BookingLineItem;
+module.exports = QuotationLineItem;

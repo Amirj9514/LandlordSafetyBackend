@@ -107,9 +107,11 @@ Live quote for residential; quote-on-request lines for commercial/installation.
 
 If postcode does not match any region prefix, all line items return `isTbc: true` and `pricingStatus` is `all_tbc`.
 
+Line items in quote preview and persisted records include `serviceCode` and `serviceName` linking each row to a catalog service (null for bundle discounts and surcharges).
+
 ### POST `/api/bookings`
 
-Residential **BOOK NOW** — persists booking, line items, and service answers.
+Residential **BOOK NOW** — persists booking, line items, and service answers. Each booking gets a unique reference (e.g. `BK-X7K9QP`). **Rejected with 422** (`data.code: REQUIRES_QUOTATION`) if any priced line has `isTbc: true` — use `/api/quotations` instead.
 
 Same body as quote preview plus contact and appointment fields:
 
@@ -130,9 +132,11 @@ Same body as quote preview plus contact and appointment fields:
 }
 ```
 
-### POST `/api/bookings/quote-requests`
+### POST `/api/quotations`
 
-Commercial or installation **SUBMIT QUOTE REQUEST**.
+Submit a **quotation** when any line is TBC (residential), or for commercial/installation. Each quotation gets a unique reference (e.g. `QT-M4R8HN`). Persists `quotations`, `quotation_line_items` (with `serviceCode`, `serviceName`, `isTbc`), and `quotation_answers`.
+
+Same body shape as booking (all `propertyType` values).
 
 ```json
 {
@@ -147,7 +151,48 @@ Commercial or installation **SUBMIT QUOTE REQUEST**.
 }
 ```
 
+### POST `/api/bookings/quote-requests`
+
+Deprecated alias for `POST /api/quotations`.
+
 ## Admin API (Bearer token, min role `admin`)
+
+### Dashboard
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/dashboard/stats` | Active technicians, pending/unpaid bookings, current-month completed bookings and paid revenue |
+
+**Response `data` excerpt:**
+
+```json
+{
+  "activeTechnicians": { "count": 3, "technicians": [{ "id": "...", "fullName": "..." }] },
+  "pendingBookings": 5,
+  "unpaidBookings": 8,
+  "currentMonth": {
+    "year": 2026,
+    "month": 5,
+    "label": "May 2026",
+    "completedBookings": 12,
+    "revenue": 4520.5,
+    "vat": 0,
+    "revenueIncludingVat": 4520.5
+  }
+}
+```
+
+Revenue sums `total` on bookings with `paymentStatus: paid` whose `paidAt` falls in the current calendar month (server local time). `unpaidBookings` counts non-cancelled bookings still marked unpaid.
+
+### Quotations
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/quotations` | List quotations (paginated) |
+| GET | `/api/quotations/:id` | Detail with line items and answers |
+| PUT | `/api/quotations/:id/lines` | Admin set prices: `{ "lines": [{ "id", "unitPrice", "total", "isTbc" }] }` |
+| PATCH | `/api/quotations/:id/status` | e.g. `pending` → `priced` |
+| POST | `/api/quotations/:id/convert` | Create booking when all lines priced |
 
 ### Regions
 
@@ -166,8 +211,27 @@ Commercial or installation **SUBMIT QUOTE REQUEST**.
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/api/bookings` | List bookings + recent quote requests |
-| GET | `/api/bookings/:id` | Booking detail with line items |
+| GET | `/api/bookings` | List bookings + recent quotations (`?status`, `?paymentStatus`, `?technicianId`) |
+| GET | `/api/bookings/technicians/list` | Active technicians for assignment dropdown |
+| GET | `/api/bookings/:id` | Full detail: line items, answers, region, assigned technician, `metadata.statusHistory` |
+| PATCH | `/api/bookings/:id` | Admin update: status, `paymentStatus`, technician, admin notes, appointment fields |
+
+**Booking statuses:** `pending` → `confirmed` → `completed`, or `cancelled` at any time (admins may set any status).
+
+**Payment status:** `unpaid` (default on create) or `paid`. Admin/super admin set via PATCH; marking paid sets `paidAt` (cleared when set back to unpaid). Changes are recorded in `metadata.paymentHistory`.
+
+**PATCH example:**
+
+```json
+{
+  "status": "confirmed",
+  "paymentStatus": "paid",
+  "technicianId": "uuid-of-technician-user",
+  "adminNotes": "Customer confirmed by phone"
+}
+```
+
+Set `"technicianId": null` to unassign. Status changes are recorded in `metadata.statusHistory`.
 
 ## Auth API (existing)
 
@@ -202,7 +266,7 @@ Implement the 4-step book-now flow against these endpoints (UI reference: `LSI_I
 1. Lead capture → `propertyType`, contact, postcode  
 2. Services → `GET /catalog` + `POST /api/quotes/preview` on each change  
 3. Booking details → congestion/parking/date/slot/access  
-4. Summary → `POST /api/bookings` or `POST /api/bookings/quote-requests`
+4. Summary → `POST /api/bookings` (fully priced) or `POST /api/quotations` (any TBC line)
 
 ## Response format
 

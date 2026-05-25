@@ -4,11 +4,18 @@ const {
   createQuoteRequest,
   listBookings,
   getBooking,
+  updateBooking,
+  createBookingInvoice,
+  getBookingInvoiceMeta,
+  downloadBookingInvoice,
+  listTechnicians,
 } = require('../controllers/booking.controller');
 const {
   createBookingValidator,
   createQuoteRequestValidator,
   listBookingsValidator,
+  updateBookingValidator,
+  createInvoiceValidator,
 } = require('../validators/booking.validator');
 const { bookingIdParam } = require('../validators/booking.validator');
 const validate = require('../middleware/validate.middleware');
@@ -24,7 +31,12 @@ router.post('/quote-requests', createQuoteRequestValidator, validate, createQuot
 router.use(authenticate);
 router.use(requireMinRole(ROLES.ADMIN));
 
+router.get('/technicians/list', listTechnicians);
 router.get('/', listBookingsValidator, validate, listBookings);
+router.post('/:id/invoice', createInvoiceValidator, validate, createBookingInvoice);
+router.get('/:id/invoice/meta', bookingIdParam, validate, getBookingInvoiceMeta);
+router.get('/:id/invoice', bookingIdParam, validate, downloadBookingInvoice);
+router.patch('/:id', updateBookingValidator, validate, updateBooking);
 router.get('/:id', bookingIdParam, validate, getBooking);
 
 module.exports = router;

@@ -594,9 +594,29 @@
       sub: l.sub || '',
       price: l.total,
       id: l.serviceCode,
+      serviceCode: l.serviceCode,
+      serviceName: l.serviceName,
       discount: l.isDiscount,
-      quoteOnly: l.isTbc,
+      quoteOnly: l.quoteOnly || l.isTbc,
     }));
+  }
+
+  function quoteNeedsQuotation(quote) {
+    if (!quote?.lines) return false;
+    return quote.lines.some((l) => !l.isDiscount && !l.quoteOnly && l.isTbc);
+  }
+
+  function updateSubmitCta(quote) {
+    const btn = document.getElementById('btn-submit-booking');
+    if (!btn) return;
+    const needsQuote = quoteNeedsQuotation(quote);
+    if (needsQuote) {
+      btn.innerHTML = '📋 Request Quote — Submit for Pricing';
+      btn.dataset.submitMode = 'quotation';
+    } else {
+      btn.innerHTML = '🏠 Book Now — Confirm Appointment';
+      btn.dataset.submitMode = 'booking';
+    }
   }
 
   function setButtonLoading(btn, loading, loadingText) {
@@ -677,6 +697,7 @@
     if (vatRow) vatRow.textContent = fmt(vat);
 
     updateFloatBar();
+    updateSubmitCta(quote);
   }
 
   async function refreshQuote() {
@@ -1028,21 +1049,43 @@
   window.submitBooking = async function submitBookingApi() {
     if (!validateBookingForm()) return;
 
-    const btn = document.querySelector('.btn-book');
-    setButtonLoading(btn, true, 'Submitting booking…');
+    const btn = document.getElementById('btn-submit-booking') || document.querySelector('.btn-book');
+    const isQuotation = btn?.dataset.submitMode === 'quotation';
+
+    setButtonLoading(btn, true, isQuotation ? 'Submitting quote request…' : 'Submitting booking…');
 
     try {
       if (previewInFlight) await previewInFlight;
       await refreshQuote();
 
-      const res = await fetch(`${API}/bookings`, {
+      const endpoint = isQuotation ? `${API}/quotations` : `${API}/bookings`;
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buildBookingPayload()),
       });
       const json = await res.json();
+      let submittedAsQuotation = isQuotation;
+      let submittedReference = json.data?.reference || null;
       if (!json.success) {
-        throw new Error(json.message || 'Booking failed');
+        if (json.data?.code === 'REQUIRES_QUOTATION') {
+          const retry = await fetch(`${API}/quotations`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(buildBookingPayload()),
+          });
+          const retryJson = await retry.json();
+          if (!retryJson.success) throw new Error(retryJson.message || 'Quote request failed');
+          submittedAsQuotation = true;
+          submittedReference = retryJson.data?.reference || submittedReference;
+        } else {
+          throw new Error(json.message || 'Submission failed');
+        }
+      } else {
+        submittedReference = json.data?.reference || submittedReference;
+        if (endpoint.includes('/quotations')) {
+          submittedAsQuotation = true;
+        }
       }
 
       document.querySelectorAll('.step-panel').forEach((p) => p.classList.remove('active'));
@@ -1083,13 +1126,38 @@
             ? 'Afternoon slot: 1:00pm – 6:00pm'
             : 'Time slot to be confirmed';
 
-      document.getElementById('confirm-email').textContent = email || 'your email';
+      submittedAsQuotation =
+        submittedAsQuotation || quoteNeedsQuotation(lastQuote);
+      const titleEl = document.getElementById('confirm-title');
+      const leadEl = document.getElementById('confirm-lead');
+      if (titleEl) {
+        titleEl.textContent = submittedAsQuotation
+          ? 'Quote Request Submitted!'
+          : 'Booking Request Submitted!';
+      }
+      if (leadEl) {
+        leadEl.innerHTML = submittedAsQuotation
+          ? `Thank you. Our team will review your services and email a <strong>custom quote</strong> to <strong id="confirm-email">${escapeHtml(email || 'your email')}</strong> shortly.`
+          : `Your booking request has been received. We have sent a <strong>confirmation email</strong> to <strong id="confirm-email">${escapeHtml(email || 'your email')}</strong>.`;
+      } else {
+        document.getElementById('confirm-email').textContent = email || 'your email';
+      }
+      const refEl = document.getElementById('confirm-reference');
+      if (refEl) {
+        if (submittedReference) {
+          refEl.textContent = `Reference: ${submittedReference}`;
+          refEl.parentElement.style.display = '';
+        } else {
+          refEl.parentElement.style.display = 'none';
+        }
+      }
       document.getElementById('confirm-name').textContent = fullName;
       document.getElementById('confirm-address').textContent = fullAddress || '—';
       document.getElementById('confirm-date').textContent = 'Date: ' + dateStr;
       document.getElementById('confirm-slot').textContent = 'Time: ' + slotStr;
-      document.getElementById('confirm-total').textContent =
-        'Estimated Total: ' + total + ' — invoice to follow by bank transfer';
+      document.getElementById('confirm-total').textContent = submittedAsQuotation
+        ? 'Pricing: To be confirmed — our team will send your quote by email'
+        : 'Estimated Total: ' + total + ' — invoice to follow by bank transfer';
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
