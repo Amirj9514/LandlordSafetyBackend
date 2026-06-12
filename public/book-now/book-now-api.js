@@ -570,6 +570,8 @@
       catalogPostcode = null;
     }
 
+    updateSubmitCta(lastQuote);
+    updateQuoteRegionLabel(lastQuote);
   };
 
   function buildQuotePayload() {
@@ -589,19 +591,84 @@
   }
 
   function mapApiLines(lines) {
-    return (lines || []).map((l) => ({
-      name: l.name,
-      sub: l.sub || '',
-      price: l.total,
-      id: l.serviceCode,
-      serviceCode: l.serviceCode,
-      serviceName: l.serviceName,
-      discount: l.isDiscount,
-      quoteOnly: l.quoteOnly || l.isTbc,
-    }));
+    return (lines || []).map((l) => {
+      const selectionSummary = l.serviceDetails?.summary || '';
+      const selectionDetails = formatLineSelectionDetails(l.serviceDetails);
+      return {
+        name: l.name,
+        sub: l.sub || selectionSummary || '',
+        selectionDetails,
+        serviceDetails: l.serviceDetails || null,
+        price: l.total,
+        id: l.serviceCode,
+        serviceCode: l.serviceCode,
+        serviceName: l.serviceName,
+        discount: l.isDiscount,
+        quoteOnly: l.quoteOnly || l.isTbc,
+      };
+    });
   }
 
+  function formatLineSelectionDetails(serviceDetails) {
+    if (!serviceDetails?.selections?.length) return '';
+    return serviceDetails.selections
+      .map((s) => `${s.label}: ${s.displayValue}`)
+      .join(' · ');
+  }
+
+  function formatLineDetailsHtml(line) {
+    if (line.selectionDetails) {
+      return `<div class="line-sub line-details">${escapeHtml(line.selectionDetails)}</div>`;
+    }
+    if (line.sub) {
+      return `<div class="line-sub">${escapeHtml(line.sub)}</div>`;
+    }
+    return '';
+  }
+
+  window.renderQuotePanel = function renderQuotePanelApi(lines) {
+    const linesEl = document.getElementById('quote-lines');
+    const totalsEl = document.getElementById('quote-totals');
+    const emptyEl = document.getElementById('quote-empty');
+
+    const validLines = lines.filter((l) => l.price !== 0 || l.quoteOnly);
+
+    if (validLines.length === 0) {
+      if (emptyEl) emptyEl.style.display = '';
+      if (linesEl) linesEl.innerHTML = '';
+      if (totalsEl) totalsEl.classList.add('hidden');
+      return;
+    }
+
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (totalsEl) totalsEl.classList.remove('hidden');
+
+    if (linesEl) {
+      linesEl.innerHTML = validLines
+        .map(
+          (l) => `
+    <div class="quote-line ${l.discount ? 'quote-discount' : ''}">
+      <div class="quote-line-name">
+        ${escapeHtml(l.name)}
+        ${formatLineDetailsHtml(l)}
+      </div>
+      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : l.price == null || l.price === undefined ? 'TBC' : l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)}</div>
+    </div>
+  `
+        )
+        .join('');
+    }
+
+    const subtotal = lastQuote?.subtotal ?? validLines.reduce((s, l) => s + (l.quoteOnly ? 0 : l.price), 0);
+    const total = lastQuote?.total ?? subtotal;
+    const subEl = document.getElementById('q-subtotal');
+    const totalEl = document.getElementById('q-total');
+    if (subEl) subEl.textContent = fmt(subtotal);
+    if (totalEl) totalEl.textContent = fmt(total);
+  };
+
   function quoteNeedsQuotation(quote) {
+    if (state.propType && state.propType !== 'residential') return true;
     if (!quote?.lines) return false;
     return quote.lines.some((l) => !l.isDiscount && !l.quoteOnly && l.isTbc);
   }
@@ -663,6 +730,10 @@
       el.textContent = 'Enter postcode in step 1, then select services';
       return;
     }
+    if (state.propType && state.propType !== 'residential') {
+      el.textContent = `Custom quote for ${pc} — team will confirm pricing`;
+      return;
+    }
     if (!quote) {
       el.textContent = `Postcode ${pc} — select services for your quote`;
       return;
@@ -722,14 +793,6 @@
       return [];
     }
 
-    if (payload.propertyType !== 'residential') {
-      setQuoteUpdating(false);
-      quoteLines = [];
-      lastQuote = null;
-      renderQuotePanel([]);
-      return [];
-    }
-
     setQuoteUpdating(true);
 
     try {
@@ -780,7 +843,6 @@
 
     return {
       ...quotePayload,
-      propertyType: 'residential',
       firstName,
       lastName,
       email:
@@ -932,8 +994,8 @@
         (l) => `
     <tr class="${l.discount ? 'discount-row' : l.id === 'congestion' || l.id === 'parking' ? 'charge-row' : ''}">
       <td class="desc-cell">
-        ${l.name}
-        ${l.sub ? `<div class="desc-sub">${l.sub}</div>` : ''}
+        ${escapeHtml(l.name)}
+        ${formatLineDetailsHtml(l)}
       </td>
       <td class="qty-cell" style="text-align:center">1</td>
       <td class="price-cell" style="text-align:right">${l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
@@ -975,7 +1037,7 @@
   window.goToStep = async function goToStepApi(n) {
     if (n === 2 && !validateStep1()) return;
 
-    if (n === 2 && state.propType === 'residential') {
+    if (n === 2) {
       if (!getPostcode()) {
         alert('Please enter your postcode in step 1 before selecting services.');
         return;
@@ -984,19 +1046,21 @@
       setButtonLoading(continueBtn, true, 'Loading services…');
       try {
         const pc = getPostcode();
+        const propType = state.propType || 'residential';
         const needsCatalog =
-          !catalog || catalogPropertyType !== 'residential' || catalogPostcode !== pc;
+          !catalog || catalogPropertyType !== propType || catalogPostcode !== pc;
         if (needsCatalog) {
           catalog = null;
           catalogPropertyType = null;
           catalogPostcode = null;
-          await ensureCatalogLoaded('residential');
+          await ensureCatalogLoaded(propType);
         }
-        if (catalog && catalog.hasPricing === false) {
+        if (propType === 'residential' && catalog && catalog.hasPricing === false) {
           alert(
             'This postcode is outside our London & M25 price area. You can continue, but prices will show as TBC until our team confirms.'
           );
         }
+        updateSubmitCta(lastQuote);
         updateQuoteRegionLabel(lastQuote);
         renderSubQuestions();
       } catch (err) {

@@ -72,6 +72,21 @@ describe('quoteCalculator', () => {
     assert.equal(quote.total, 179.99);
   });
 
+  it('EICR with extra fuse boards returns separate priced lines', async (t) => {
+    if (!dbAvailable) return t.skip('DATABASE_URL not available');
+    const quote = await calculateQuote({
+      propertyType: 'residential',
+      postcode: 'SW1A 1AA',
+      services: [{ code: 'eicr', answers: { bedrooms: '1-3', fuseBoards: '2' } }],
+      activeBundleKeys: [],
+    });
+    const eicrLines = quote.lines.filter((l) => l.serviceCode === 'eicr' && !l.isDiscount);
+    assert.equal(eicrLines.length, 2);
+    assert.ok(eicrLines.some((l) => l.sub === '1-3 bedrooms' && l.total === 110));
+    assert.ok(eicrLines.some((l) => l.sub.includes('2 fuse boards') && l.total === 60));
+    assert.equal(quote.subtotal, 170);
+  });
+
   it('EICR + PAT without bundle row does not apply bundle discount', async (t) => {
     if (!dbAvailable) return t.skip('DATABASE_URL not available');
     const quote = await calculateQuote({
@@ -84,7 +99,8 @@ describe('quoteCalculator', () => {
       activeBundleKeys: [],
     });
     assert.ok(!quote.lines.some((l) => l.isDiscount));
-    const pat = quote.lines.find((l) => l.name === 'PAT Testing');
+    const pat = quote.lines.find((l) => l.serviceCode === 'pat' && !l.isDiscount);
+    assert.ok(pat);
     assert.equal(pat.total, 59.99);
   });
 
@@ -99,7 +115,8 @@ describe('quoteCalculator', () => {
       ],
       activeBundleKeys: ['bundle-eicr-pat'],
     });
-    const pat = quote.lines.find((l) => l.name === 'PAT Testing');
+    const pat = quote.lines.find((l) => l.serviceCode === 'pat' && !l.isDiscount);
+    assert.ok(pat);
     assert.equal(pat.total, 49.99);
     const disc = quote.lines.find((l) => l.isDiscount);
     assert.equal(disc.total, -10);

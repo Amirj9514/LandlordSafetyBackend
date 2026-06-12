@@ -6,6 +6,7 @@ const ServiceQuestion = require('./ServiceQuestion');
 const PricingTier = require('./PricingTier');
 const PricingRule = require('./PricingRule');
 const Bundle = require('./Bundle');
+const CatalogTopQuestion = require('./CatalogTopQuestion');
 const Region = require('./Region');
 const RegionPostalPrefix = require('./RegionPostalPrefix');
 const RegionPrice = require('./RegionPrice');
@@ -27,7 +28,10 @@ Service.hasMany(ServiceQuestion, { foreignKey: 'serviceId', as: 'questions' });
 ServiceQuestion.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
 Service.hasMany(PricingTier, { foreignKey: 'serviceId', as: 'pricingTiers' });
 PricingTier.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+Service.hasMany(PricingRule, { foreignKey: 'serviceId', as: 'pricingRules' });
 PricingRule.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+Bundle.hasMany(PricingRule, { foreignKey: 'bundleId', as: 'pricingRules' });
+PricingRule.belongsTo(Bundle, { foreignKey: 'bundleId', as: 'bundle' });
 
 Region.hasMany(RegionPostalPrefix, { foreignKey: 'regionId', as: 'prefixes' });
 RegionPostalPrefix.belongsTo(Region, { foreignKey: 'regionId', as: 'region' });
@@ -64,6 +68,7 @@ const models = {
   PricingTier,
   PricingRule,
   Bundle,
+  CatalogTopQuestion,
   Region,
   RegionPostalPrefix,
   RegionPrice,
@@ -93,6 +98,7 @@ module.exports = {
   PricingTier,
   PricingRule,
   Bundle,
+  CatalogTopQuestion,
   Region,
   RegionPostalPrefix,
   RegionPrice,

@@ -27,6 +27,7 @@ const persistLineItems = async (bookingId, lines, transaction) => {
         pricingTierId: line.pricingTierId || null,
         serviceCode: line.serviceCode || null,
         serviceName: line.serviceName || null,
+        serviceDetails: line.serviceDetails || null,
         sortOrder: i,
       },
       { transaction }

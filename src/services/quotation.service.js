@@ -43,6 +43,7 @@ const persistQuotationLineItems = async (quotationId, lines, transaction) => {
         pricingTierId: line.pricingTierId || null,
         serviceCode: line.serviceCode || null,
         serviceName: line.serviceName || null,
+        serviceDetails: line.serviceDetails || null,
         sortOrder: i,
       },
       { transaction }
@@ -381,6 +382,7 @@ const convertQuotationToBooking = async (quotationId) => {
           pricingTierId: line.pricingTierId,
           serviceCode: line.serviceCode,
           serviceName: line.serviceName,
+          serviceDetails: line.serviceDetails || null,
           sortOrder: i,
         },
         { transaction }

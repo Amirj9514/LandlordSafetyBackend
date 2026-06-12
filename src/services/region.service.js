@@ -4,6 +4,7 @@ const {
   RegionPostalPrefix,
   RegionPrice,
   PricingTier,
+  Service,
 } = require('../models');
 
 const listRegions = async () => {
@@ -73,15 +74,28 @@ const replacePrefixes = async (regionId, prefixes = []) => {
 
 const getRegionPrices = async (regionId) => {
   await getRegion(regionId);
-  const tiers = await PricingTier.findAll({ order: [['sortOrder', 'ASC'], ['tierKey', 'ASC']] });
   const prices = await RegionPrice.findAll({ where: { regionId } });
   const priceByTierId = Object.fromEntries(prices.map((p) => [p.pricingTierId, p]));
+
+  const tiers = await PricingTier.findAll({
+    order: [['sortOrder', 'ASC'], ['tierKey', 'ASC']],
+    include: [
+      {
+        model: Service,
+        as: 'service',
+        attributes: ['id', 'code', 'name'],
+        required: false,
+      },
+    ],
+  });
 
   return tiers.map((tier) => ({
     pricingTierId: tier.id,
     tierKey: tier.tierKey,
     label: tier.label,
     serviceId: tier.serviceId,
+    serviceCode: tier.serviceCode ?? tier.service?.code ?? null,
+    serviceName: tier.serviceName ?? tier.service?.name ?? null,
     isTbcByDefault: tier.isTbcByDefault,
     amount: priceByTierId[tier.id]?.amount ?? null,
     regionPriceId: priceByTierId[tier.id]?.id ?? null,

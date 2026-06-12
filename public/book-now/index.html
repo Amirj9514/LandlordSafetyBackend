@@ -625,6 +625,7 @@
   .quote-line:last-child { border-bottom: none; }
   .quote-line-name { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.4; flex: 1; }
   .quote-line-name .line-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .quote-line-name .line-details { color: rgba(255,255,255,0.55); line-height: 1.35; }
   .quote-line-price {
     font-family: 'DM Mono', monospace;
     font-size: 13px;
@@ -717,6 +718,7 @@
   .billing-table td:last-child { text-align: right; font-family: 'DM Mono', monospace; font-weight: 500; }
   .billing-table .desc-cell { color: var(--navy); font-weight: 500; }
   .billing-table .desc-sub { font-size: 11px; color: var(--slate-light); margin-top: 2px; font-weight: 400; }
+  .billing-table .line-details { font-size: 11px; color: var(--slate-light); margin-top: 4px; font-weight: 400; line-height: 1.4; }
   .billing-table .qty-cell { color: var(--slate); text-align: center; }
   .billing-table .price-cell { color: var(--slate); font-family: 'DM Mono', monospace; }
   .billing-table .discount-row td { color: var(--green); font-style: italic; }
@@ -1098,7 +1100,7 @@
               </div>
             </div>
             <div id="commercial-note" class="addon-note hidden" style="margin-top:14px">
-              Commercial and Installation/Repair services use our Get a Quote form. A team member will send you a custom quotation within 1 hour during working hours.
+              Continue to select your services and submit a quote request — a team member will send you a custom quotation within 1 hour during working hours.
             </div>
           </div>
 
@@ -1466,10 +1468,6 @@ function validateStep1() {
     else el.style.borderColor = '';
   });
   if (!state.propType) { alert('Please select a property type.'); return false; }
-  if (state.propType !== 'residential') {
-    alert('Commercial and Installation/Repair services use our Get a Quote form. A team member will provide a custom quotation within 1 hour.');
-    return false;
-  }
   return ok;
 }
 
@@ -2136,7 +2134,6 @@ function renderQuotePanel(lines) {
     <div class="quote-line ${l.discount ? 'quote-discount' : ''}">
       <div class="quote-line-name">
         ${l.name}
-        ${l.serviceCode ? `<div class="line-sub" style="opacity:0.75;font-size:11px">${l.serviceCode}${l.serviceName ? ' · ' + l.serviceName : ''}</div>` : ''}
         ${l.sub ? `<div class="line-sub">${l.sub}</div>` : ''}
       </div>
       <div class="quote-line-price">${l.quoteOnly ? 'TBC' : (l.price == null || l.price === undefined ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)))}</div>

@@ -32,7 +32,8 @@ npm run dev
 | `npm run db:seed:catalog` | Services, questions, tiers, bundles |
 | `npm run db:seed:regions` | Default London & M25 region + prefixes |
 | `npm run db:seed:prices` | Full price matrix for default region |
-| `npm run db:seed:all` | All catalog/region seeds |
+| `npm run db:seed:pricing-rules` | Data-driven pricing rules for quote engine |
+| `npm run db:seed:all` | All catalog/region/pricing seeds |
 
 Optional: `VAT_ENABLED=true`, `VAT_RATE=0.2`
 
@@ -232,6 +233,35 @@ Revenue sums `total` on bookings with `paymentStatus: paid` whose `paidAt` falls
 ```
 
 Set `"technicianId": null` to unassign. Status changes are recorded in `metadata.statusHistory`.
+
+### Catalog admin (`/api/admin/catalog`)
+
+Manage the full service catalog (categories, services, questions, pricing tiers, bundles, pricing rules, commercial top questions). All routes require Bearer token with min role `admin`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/admin/catalog/tree?propertyType=` | Full editable tree (includes inactive records) |
+| GET/POST | `/api/admin/catalog/categories` | List / create categories |
+| PUT/DELETE | `/api/admin/catalog/categories/:id` | Update / delete category |
+| PATCH | `/api/admin/catalog/categories/reorder` | `{ "items": [{ "id", "displayOrder" }] }` |
+| GET/POST | `/api/admin/catalog/services` | List / create services |
+| GET/PUT/DELETE | `/api/admin/catalog/services/:id` | Get / update / delete service |
+| PATCH | `/api/admin/catalog/services/:id/active` | `{ "isActive": true \| false }` |
+| GET/POST | `/api/admin/catalog/services/:serviceId/questions` | List / create questions |
+| PUT/DELETE | `/api/admin/catalog/services/:serviceId/questions/:id` | Update / delete question |
+| PATCH | `/api/admin/catalog/services/:serviceId/questions/reorder` | Reorder questions |
+| GET/POST | `/api/admin/catalog/pricing-tiers` | List / create tiers (auto-seeds null region prices) |
+| PUT/DELETE | `/api/admin/catalog/pricing-tiers/:id` | Update / delete tier |
+| GET/POST | `/api/admin/catalog/bundles` | List / create bundles |
+| PUT/DELETE | `/api/admin/catalog/bundles/:id` | Update / delete bundle |
+| GET/POST | `/api/admin/catalog/pricing-rules` | List / create pricing rules |
+| PUT/DELETE | `/api/admin/catalog/pricing-rules/:id` | Update / delete rule |
+| GET/POST | `/api/admin/catalog/top-questions` | Property-type top questions (commercial) |
+| PUT/DELETE | `/api/admin/catalog/top-questions/:id` | Update / delete top question |
+
+**Pricing rule types** (`ruleType` + JSON `config`): `option_tier_lookup`, `tier_key_template`, `base_plus_increment`, `multi_field_sum`, `flat_plus_extra_units`, `conditional_addon`, `tier_range_map`, `bundle_discount`, `booking_surcharge`, `quote_only`, `starts_from`, `force_tbc`.
+
+Set tier amounts per region via existing `PUT /api/regions/:id/prices`. Run `npm run db:seed:pricing-rules` after catalog seed to populate default rules.
 
 ## Auth API (existing)
 

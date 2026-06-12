@@ -1,4 +1,5 @@
 const PDFDocument = require('pdfkit');
+const { formatServiceDetailsText } = require('./lineItemDetails');
 
 const COLORS = {
   ink: '#0f172a',
@@ -206,7 +207,18 @@ const drawTableHeader = (doc, x, y, columnXs, widths) => {
   return y + 22;
 };
 
-const getLineSubtitle = (line) => line.subDescription || line.serviceName || '';
+const getLineSubtitle = (line) => {
+  const parts = [];
+  if (line.subDescription) parts.push(line.subDescription);
+  else if (line.serviceName) parts.push(line.serviceName);
+
+  const selectionText = formatServiceDetailsText(line.serviceDetails);
+  if (selectionText && !parts.includes(selectionText)) {
+    parts.push(selectionText);
+  }
+
+  return parts.join(' — ');
+};
 
 const drawTableRows = (doc, x, startY, data, bounds) => {
   const totalWidth = bounds.width - PAGE.padding * 2;

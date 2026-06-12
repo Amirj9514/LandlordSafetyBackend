@@ -76,6 +76,12 @@ QuotationLineItem.init(
       defaultValue: 0,
       field: 'sort_order',
     },
+    serviceDetails: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: null,
+      field: 'service_details',
+    },
   },
   {
     sequelize,

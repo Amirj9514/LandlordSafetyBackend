@@ -106,8 +106,8 @@ const boilerQuestions = [
 ];
 
 const eicrQuestions = [
-  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: 'studio', tierKey: 'eicr_studio' }, { value: '1-3', tierKey: 'eicr_bed_1_3' }, { value: '4', tierKey: 'eicr_bed_4' }, { value: '5', tierKey: 'eicr_bed_5' }, { value: '6', tierKey: 'eicr_bed_6' }, { value: '7', tierKey: 'eicr_bed_7' }, { value: '8', tierKey: 'eicr_bed_8' }], validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'fuseBoards', inputType: 'select', label: 'Number of fuse boards', options: [{ value: '1', tierKey: null }, { value: '2', tierKey: 'eicr_board_2' }, { value: '3', tierKey: 'eicr_board_3' }, { value: '4', tierKey: 'eicr_board_4' }], validation: { required: true }, sortOrder: 2 },
+  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: 'studio', label: 'Studio', tierKey: 'eicr_studio' }, { value: '1-3', label: '1-3 bedrooms', tierKey: 'eicr_bed_1_3' }, { value: '4', label: '4 bedrooms', tierKey: 'eicr_bed_4' }, { value: '5', label: '5 bedrooms', tierKey: 'eicr_bed_5' }, { value: '6', label: '6 bedrooms', tierKey: 'eicr_bed_6' }, { value: '7', label: '7 bedrooms', tierKey: 'eicr_bed_7' }, { value: '8', label: '8 bedrooms', tierKey: 'eicr_bed_8' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'fuseBoards', inputType: 'select', label: 'Number of fuse boards', options: [{ value: '1', label: '1 fuse board (included)', tierKey: null }, { value: '2', label: '2 fuse boards', tierKey: 'eicr_board_2' }, { value: '3', label: '3 fuse boards', tierKey: 'eicr_board_3' }, { value: '4', label: '4 fuse boards', tierKey: 'eicr_board_4' }], validation: { required: true }, sortOrder: 2 },
 ];
 
 const patQuestions = [

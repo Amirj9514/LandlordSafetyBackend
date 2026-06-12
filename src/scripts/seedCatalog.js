@@ -6,6 +6,7 @@ const {
   ServiceQuestion,
   PricingTier,
   Bundle,
+  CatalogTopQuestion,
   syncModels,
 } = require('../models');
 const catalogData = require('./seed/catalogData');
@@ -65,13 +66,18 @@ const seedQuestions = async (serviceId, questions) => {
 
 const seedTiers = async (serviceByCode) => {
   for (const tier of catalogData.pricingTiers) {
-    const serviceId = tier.serviceCode ? serviceByCode[tier.serviceCode]?.id ?? null : null;
+    const linked = tier.serviceCode ? serviceByCode[tier.serviceCode] : null;
+    const serviceId = linked?.id ?? null;
+    const serviceCode = linked?.code ?? null;
+    const serviceName = linked?.name ?? null;
     const [row] = await PricingTier.findOrCreate({
       where: { tierKey: tier.tierKey },
       defaults: {
         tierKey: tier.tierKey,
         label: tier.label,
         serviceId,
+        serviceCode,
+        serviceName,
         sortOrder: tier.sortOrder ?? 0,
         isTbcByDefault: tier.isTbcByDefault ?? false,
         metadata: tier.metadata ?? {},
@@ -80,6 +86,8 @@ const seedTiers = async (serviceByCode) => {
     await row.update({
       label: tier.label,
       serviceId,
+      serviceCode,
+      serviceName,
       sortOrder: tier.sortOrder ?? 0,
       isTbcByDefault: tier.isTbcByDefault ?? false,
     });
@@ -94,6 +102,27 @@ const seedBundles = async () => {
     });
     await row.update(b);
   }
+};
+
+const seedTopQuestions = async () => {
+  const { PROPERTY_TYPES } = require('../constants/propertyTypes');
+  const commercialTop = {
+    propertyType: PROPERTY_TYPES.COMMERCIAL,
+    fieldKey: 'commercialPropertyType',
+    inputType: 'radio',
+    label: 'Property Type',
+    options: [
+      { value: 'catering_hospitality', label: 'Catering & Hospitality' },
+      { value: 'institutional_commercial', label: 'Institutional & Commercial' },
+    ],
+    validation: { required: true },
+    sortOrder: 1,
+  };
+  const existing = await CatalogTopQuestion.findOne({
+    where: { propertyType: commercialTop.propertyType, fieldKey: commercialTop.fieldKey },
+  });
+  if (existing) await existing.update(commercialTop);
+  else await CatalogTopQuestion.create(commercialTop);
 };
 
 const run = async () => {
@@ -129,6 +158,7 @@ const run = async () => {
 
   await seedTiers(serviceByCode);
   await seedBundles();
+  await seedTopQuestions();
 
   console.log('Catalog seed complete:', {
     categories: catalogData.categories.length,

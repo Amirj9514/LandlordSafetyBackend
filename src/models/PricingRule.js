@@ -21,15 +21,37 @@ PricingRule.init(
       allowNull: false,
       field: 'rule_type',
     },
+    scope: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      defaultValue: 'service_line',
+    },
     serviceId: {
       type: DataTypes.UUID,
       allowNull: true,
       field: 'service_id',
     },
+    bundleId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'bundle_id',
+    },
     config: {
       type: DataTypes.JSONB,
       allowNull: false,
       defaultValue: {},
+    },
+    sortOrder: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      field: 'sort_order',
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      field: 'is_active',
     },
   },
   {

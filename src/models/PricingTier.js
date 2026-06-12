@@ -15,6 +15,16 @@ PricingTier.init(
       allowNull: true,
       field: 'service_id',
     },
+    serviceCode: {
+      type: DataTypes.STRING(80),
+      allowNull: true,
+      field: 'service_code',
+    },
+    serviceName: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      field: 'service_name',
+    },
     tierKey: {
       type: DataTypes.STRING(100),
       allowNull: false,
