@@ -1,6 +1,7 @@
 const { PROPERTY_TYPES, PRICING_STATUS } = require('../../constants/propertyTypes');
 const { vatEnabled, vatRate } = require('../../config/env');
 const { Bundle } = require('../../models');
+const { getZoneBySortOrder } = require('../../constants/londonZones');
 const { resolveRegionByPostcode } = require('./regionResolver');
 const { loadRegionPriceMap } = require('./priceLookup');
 const {
@@ -60,6 +61,14 @@ const calculateQuote = async ({
   const region = await resolveRegionByPostcode(postcode);
   const noRegion = !region;
   const priceMap = await loadRegionPriceMap(region?.id ?? null);
+  const zoneConfig = region ? getZoneBySortOrder(region.sortOrder) : null;
+
+  let effectiveCongestion = congestionZone;
+  let effectiveParking = parkingAvailable;
+  if (zoneConfig?.autoCongestionParking) {
+    effectiveCongestion = true;
+    effectiveParking = false;
+  }
 
   const serviceCodes = selections.map((s) => s.code);
   const context = await loadPricingContext(propertyType, serviceCodes);
@@ -80,7 +89,12 @@ const calculateQuote = async ({
 
   if (propertyType === PROPERTY_TYPES.RESIDENTIAL) {
     lines.push(
-      ...evaluateBookingSurcharges(context.rules, { congestionZone, parkingAvailable }, priceMap, noRegion)
+      ...evaluateBookingSurcharges(
+        context.rules,
+        { congestionZone: effectiveCongestion, parkingAvailable: effectiveParking },
+        priceMap,
+        noRegion
+      )
     );
   }
 

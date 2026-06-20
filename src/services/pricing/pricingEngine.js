@@ -52,6 +52,15 @@ const resolveWhen = (when, answers, selections, activeBundleKeys) => {
   return true;
 };
 
+const resolveExtraTierKey = (config, answers) => {
+  if (config.extraTierKeyWhen?.length) {
+    for (const clause of config.extraTierKeyWhen) {
+      if (answers[clause.field] === clause.equals) return clause.tierKey;
+    }
+  }
+  return config.extraTierKey;
+};
+
 const resolveBaseTierKey = (config, answers) => {
   if (config.baseTierKeyWhen?.length) {
     for (const clause of config.baseTierKeyWhen) {
@@ -189,13 +198,16 @@ const evaluateBasePlusIncrement = (rule, ctx) => {
   let isTbc = base.isTbc;
 
   const included = config.includedUnits ?? 0;
-  if (!isTbc && total !== null && count > included && config.extraTierKey) {
-    const extra = evaluateAmountFromTier(ctx.priceMap, config.extraTierKey, ctx.noRegion);
-    if (extra.isTbc) {
-      isTbc = true;
-      total = null;
-    } else {
-      total = round2(total + (count - included) * extra.amount);
+  if (!isTbc && total !== null && count > included) {
+    const extraTierKey = resolveExtraTierKey(config, answers);
+    if (extraTierKey) {
+      const extra = evaluateAmountFromTier(ctx.priceMap, extraTierKey, ctx.noRegion);
+      if (extra.isTbc) {
+        isTbc = true;
+        total = null;
+      } else {
+        total = round2(total + (count - included) * extra.amount);
+      }
     }
   }
 
@@ -203,13 +215,18 @@ const evaluateBasePlusIncrement = (rule, ctx) => {
     if (isTbc || total === null) break;
     const addCount = parseInt(answers[addInc.fieldKey], 10) || 0;
     const addIncluded = addInc.includedUnits ?? 0;
-    if (addCount > addIncluded && addInc.extraTierKey) {
-      const addExtra = evaluateAmountFromTier(ctx.priceMap, addInc.extraTierKey, ctx.noRegion);
-      if (addExtra.isTbc) {
-        isTbc = true;
-        total = null;
-      } else {
-        total = round2(total + (addCount - addIncluded) * addExtra.amount);
+    if (addCount > addIncluded) {
+      const addExtraKey = addInc.extraTierKeyWhen
+        ? resolveExtraTierKey({ extraTierKey: addInc.extraTierKey, extraTierKeyWhen: addInc.extraTierKeyWhen }, answers)
+        : addInc.extraTierKey;
+      if (addExtraKey) {
+        const addExtra = evaluateAmountFromTier(ctx.priceMap, addExtraKey, ctx.noRegion);
+        if (addExtra.isTbc) {
+          isTbc = true;
+          total = null;
+        } else {
+          total = round2(total + (addCount - addIncluded) * addExtra.amount);
+        }
       }
     }
   }
@@ -380,7 +397,26 @@ const evaluateTierRangeMap = (rule, ctx) => {
       break;
     }
   }
-  if (!tierKey) return [];
+  if (!tierKey) {
+    const maxRange = Math.max(...(config.ranges || []).map((r) => r.max), 0);
+    if (config.forceTbcAboveMax && beds > maxRange) {
+      return [
+        buildLine({
+          name: ctx.service.name,
+          sub: config.subTemplate
+            ? interpolate(config.subTemplate, { beds, floors, ...answers })
+            : `${beds} units`,
+          amount: null,
+          isTbc: true,
+          quoteOnly: true,
+          pricingTierId: null,
+          serviceCode: ctx.service.code,
+          serviceName: ctx.service.name,
+        }),
+      ];
+    }
+    return [];
+  }
 
   const base = evaluateAmountFromTier(ctx.priceMap, tierKey, ctx.noRegion);
   let total = base.isTbc ? null : base.amount;

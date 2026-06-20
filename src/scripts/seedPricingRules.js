@@ -92,22 +92,20 @@ const residentialRules = async () => {
     },
   });
 
-  await upsertRule('pat_flat_extra', {
-    ruleType: RULE_TYPES.FLAT_PLUS_EXTRA_UNITS,
+  await upsertRule('pat_band_line', {
+    ruleType: RULE_TYPES.TIER_RANGE_MAP,
     scope: RULE_SCOPES.SERVICE_LINE,
     serviceId: ids.pat,
     sortOrder: 1,
     config: {
-      fieldKey: 'applianceCount',
-      flatTierKey: 'pat_flat_1_10',
-      extraTierKey: 'pat_per_extra_appliance',
-      flatUpTo: 10,
-      variantWhen: {
-        bundleKey: 'bundle-eicr-pat',
-        requiresServiceCode: 'eicr',
-        flatTierKey: 'pat_with_eicr_1_10',
-      },
-      subTemplate: '{count} appliance(s)',
+      bedFieldKey: 'applianceCount',
+      ranges: [
+        { min: 1, max: 10, tierKey: 'pat_flat_1_10' },
+        { min: 11, max: 15, tierKey: 'pat_flat_1_15' },
+        { min: 16, max: 20, tierKey: 'pat_flat_1_20' },
+      ],
+      subTemplate: '{beds} appliance(s)',
+      forceTbcAboveMax: true,
     },
   });
 
@@ -122,6 +120,7 @@ const residentialRules = async () => {
       baseTierKeyWhen: [{ field: 'propertySubtype', equals: 'premium', tierKey: 'fsc_premium_base' }],
       includedUnits: 3,
       extraTierKey: 'fsc_alarm_extra',
+      extraTierKeyWhen: [{ field: 'propertySubtype', equals: 'premium', tierKey: 'fsc_alarm_extra_premium' }],
       subTemplate: '{count} alarm(s)',
     },
   });
@@ -188,14 +187,13 @@ const residentialRules = async () => {
     },
   });
 
-  await upsertRule('asbestos_house', {
+  await upsertRule('asbestos_survey_line', {
     ruleType: RULE_TYPES.OPTION_TIER_LOOKUP,
     scope: RULE_SCOPES.SERVICE_LINE,
     serviceId: ids.asbestos,
     sortOrder: 1,
     config: {
       fieldKey: 'configuration',
-      sub: 'House — up to 3 bedrooms (Full Test)',
     },
   });
 
@@ -205,7 +203,7 @@ const residentialRules = async () => {
     serviceId: ids.asbestos,
     sortOrder: 2,
     config: {
-      when: { field: 'configuration', notIn: ['house_3bed'] },
+      when: { field: 'configuration', equals: 'other' },
       sub: 'Custom configuration — quote required',
     },
   });

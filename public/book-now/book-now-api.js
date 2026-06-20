@@ -166,8 +166,32 @@
     );
   }
 
-  function bundlesForService(serviceCode) {
-    return (catalog?.bundles || []).filter((b) => b.serviceCodes?.[0] === serviceCode);
+  function bundlesForCategory(serviceCodes) {
+    const codes = new Set(serviceCodes);
+    return (catalog?.bundles || [])
+      .filter((b) => {
+        const bundleCodes = b.serviceCodes || [];
+        return bundleCodes.length && codes.has(bundleCodes[0]);
+      })
+      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  }
+
+  function renderCategoryBlock(cat, marginTop) {
+    const services = (cat.services || [])
+      .filter((s) => !s.children?.length)
+      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+
+    let html = `<div class="svc-cat-title" ${marginTop ? 'style="margin-top:20px"' : ''}>${escapeHtml(cat.name)}</div>`;
+
+    for (const svc of services) {
+      html += renderServiceRow(svc);
+    }
+
+    for (const bundle of bundlesForCategory(services.map((s) => s.code))) {
+      html += renderBundleRow(bundle);
+    }
+
+    return html;
   }
 
   async function fetchCatalog(propertyType) {
@@ -273,22 +297,6 @@
         ${ribbon}
       </div>
       <div class="subq-slot" id="subq-${escapeHtml(key)}"></div>`;
-  }
-
-  function renderCategoryBlock(cat, marginTop) {
-    const services = (cat.services || [])
-      .filter((s) => !s.children?.length)
-      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-
-    let html = `<div class="svc-cat-title" ${marginTop ? 'style="margin-top:20px"' : ''}>${escapeHtml(cat.name)}</div>`;
-
-    for (const svc of services) {
-      html += renderServiceRow(svc);
-      for (const bundle of bundlesForService(svc.code)) {
-        html += renderBundleRow(bundle);
-      }
-    }
-    return html;
   }
 
   function renderCatalogGrid() {

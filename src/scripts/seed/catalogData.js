@@ -42,34 +42,41 @@ const pricingTiers = [
   { tierKey: 'eicr_board_3', label: 'EICR 3 fuse boards', serviceCode: 'eicr', sortOrder: 11 },
   { tierKey: 'eicr_board_4', label: 'EICR 4 fuse boards', serviceCode: 'eicr', sortOrder: 12 },
   { tierKey: 'pat_flat_1_10', label: 'PAT 1-10 appliances', serviceCode: 'pat', sortOrder: 1 },
-  { tierKey: 'pat_per_extra_appliance', label: 'PAT per appliance above 10', serviceCode: 'pat', sortOrder: 2 },
-  { tierKey: 'pat_with_eicr_1_10', label: 'PAT 1-10 with EICR bundle', serviceCode: 'pat', sortOrder: 3 },
+  { tierKey: 'pat_flat_1_15', label: 'PAT 1-15 appliances', serviceCode: 'pat', sortOrder: 2 },
+  { tierKey: 'pat_flat_1_20', label: 'PAT 1-20 appliances', serviceCode: 'pat', sortOrder: 3 },
+  { tierKey: 'pat_per_extra_appliance', label: 'PAT per appliance above 20', serviceCode: 'pat', sortOrder: 4, isTbcByDefault: true },
+  { tierKey: 'pat_with_eicr_1_10', label: 'PAT 1-10 with EICR bundle', serviceCode: 'pat', sortOrder: 5 },
   { tierKey: 'fsc_standard_base', label: 'FSC standard base (1-3 alarms)', serviceCode: 'fsc', sortOrder: 1 },
   { tierKey: 'fsc_premium_base', label: 'FSC premium base (1-3 alarms)', serviceCode: 'fsc', sortOrder: 2 },
-  { tierKey: 'fsc_alarm_extra', label: 'FSC each alarm above 3', serviceCode: 'fsc', sortOrder: 3 },
+  { tierKey: 'fsc_alarm_extra', label: 'FSC each alarm above 3 (Grade D)', serviceCode: 'fsc', sortOrder: 3 },
+  { tierKey: 'fsc_alarm_extra_premium', label: 'FSC each alarm above 3 (Grade A)', serviceCode: 'fsc', sortOrder: 4 },
   { tierKey: 'elc_base', label: 'ELC base (1-3 lights)', serviceCode: 'elc', sortOrder: 1 },
   { tierKey: 'elc_light_extra', label: 'ELC each light above 3', serviceCode: 'elc', sortOrder: 2 },
   { tierKey: 'fra_base', label: 'FRA base (1-3 beds, 1 communal)', serviceCode: 'fra', sortOrder: 1 },
   { tierKey: 'fra_bed_extra', label: 'FRA each bedroom above 3', serviceCode: 'fra', sortOrder: 2 },
   { tierKey: 'fra_communal_extra', label: 'FRA each communal above 1', serviceCode: 'fra', sortOrder: 3 },
-  { tierKey: 'epc_bed_1_3', label: 'EPC 1-3 bedrooms', serviceCode: 'epc', sortOrder: 1 },
-  { tierKey: 'epc_bed_4', label: 'EPC 4 bedrooms', serviceCode: 'epc', sortOrder: 2 },
-  { tierKey: 'epc_bed_5', label: 'EPC 5 bedrooms', serviceCode: 'epc', sortOrder: 3 },
-  { tierKey: 'epc_bed_6', label: 'EPC 6 bedrooms', serviceCode: 'epc', sortOrder: 4 },
-  { tierKey: 'epc_bed_7_plus', label: 'EPC 7+ bedrooms', serviceCode: 'epc', sortOrder: 5, isTbcByDefault: true },
+  { tierKey: 'epc_studio', label: 'EPC Studio', serviceCode: 'epc', sortOrder: 1 },
+  { tierKey: 'epc_bed_1_3', label: 'EPC 1-3 bedrooms', serviceCode: 'epc', sortOrder: 2 },
+  { tierKey: 'epc_bed_4', label: 'EPC 4 bedrooms', serviceCode: 'epc', sortOrder: 3 },
+  { tierKey: 'epc_bed_5', label: 'EPC 5 bedrooms', serviceCode: 'epc', sortOrder: 4 },
+  { tierKey: 'epc_bed_6', label: 'EPC 6 bedrooms', serviceCode: 'epc', sortOrder: 5 },
+  { tierKey: 'epc_bed_7_plus', label: 'EPC 7+ bedrooms', serviceCode: 'epc', sortOrder: 6, isTbcByDefault: true },
   { tierKey: 'fp_bed_1_2', label: 'Floor Plan 1-2 bedrooms', serviceCode: 'floorplan', sortOrder: 1 },
   { tierKey: 'fp_bed_3', label: 'Floor Plan 3 bedrooms', serviceCode: 'floorplan', sortOrder: 2 },
   { tierKey: 'fp_bed_4', label: 'Floor Plan 4 bedrooms', serviceCode: 'floorplan', sortOrder: 3 },
   { tierKey: 'fp_bed_5', label: 'Floor Plan 5 bedrooms', serviceCode: 'floorplan', sortOrder: 4 },
   { tierKey: 'fp_bed_6_plus', label: 'Floor Plan 6+ bedrooms', serviceCode: 'floorplan', sortOrder: 5 },
   { tierKey: 'fp_floor_extra', label: 'Floor Plan each floor above 1', serviceCode: 'floorplan', sortOrder: 6 },
-  { tierKey: 'asbestos_house_3bed', label: 'Asbestos House up to 3 bed', serviceCode: 'asbestos', sortOrder: 1 },
+  { tierKey: 'asbestos_2_sample', label: 'Asbestos 2 sample survey', serviceCode: 'asbestos', sortOrder: 1 },
+  { tierKey: 'asbestos_full_property', label: 'Asbestos full property survey', serviceCode: 'asbestos', sortOrder: 2 },
+  { tierKey: 'asbestos_house_3bed', label: 'Asbestos House up to 3 bed (legacy)', serviceCode: 'asbestos', sortOrder: 3, isTbcByDefault: true },
   { tierKey: 'bundle_gsc_boiler_basic', label: 'Bundle discount GSC+Basic Boiler', serviceCode: null, sortOrder: 100 },
   { tierKey: 'bundle_gsc_boiler_full', label: 'Bundle discount GSC+Full Boiler', serviceCode: null, sortOrder: 101 },
   { tierKey: 'bundle_eicr_pat_total', label: 'Bundle discount EICR+PAT total', serviceCode: null, sortOrder: 102 },
   { tierKey: 'bundle_fsc_elc', label: 'Bundle discount FSC+ELC', serviceCode: null, sortOrder: 103 },
   { tierKey: 'bundle_fsc_elc_fra', label: 'Bundle discount FSC+ELC+FRA', serviceCode: null, sortOrder: 104 },
   { tierKey: 'bundle_epc_floorplan', label: 'Bundle discount EPC+Floor Plan', serviceCode: null, sortOrder: 105 },
+  { tierKey: 'zone_premium', label: 'Zone Premium', serviceCode: null, sortOrder: 199 },
   { tierKey: 'congestion_charge', label: 'Congestion Charge', serviceCode: null, sortOrder: 200 },
   { tierKey: 'parking_charge', label: 'Parking Charge', serviceCode: null, sortOrder: 201 },
   { tierKey: 'cp17_starts_from', label: 'CP17 starts from', serviceCode: 'cp17', sortOrder: 1 },
@@ -102,7 +109,7 @@ const gscQuestions = [
 ];
 
 const boilerQuestions = [
-  { fieldKey: 'boilerType', inputType: 'radio', label: 'Service type', options: [{ value: 'basic', label: 'Basic Service', tierKeyStandalone: 'boiler_basic_standalone', tierKeyBundle: 'boiler_basic_bundle_addon' }, { value: 'full', label: 'Full Service', tierKeyStandalone: 'boiler_full_standalone', tierKeyBundle: 'boiler_full_bundle_addon' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'boilerType', inputType: 'radio', label: 'Service type', options: [{ value: 'basic', label: 'Basic Service', tierKey: 'boiler_basic_standalone' }, { value: 'full', label: 'Full Service (TBC)', tierKey: 'boiler_full_standalone' }], validation: { required: true }, sortOrder: 1 },
 ];
 
 const eicrQuestions = [
@@ -130,16 +137,16 @@ const fraQuestions = [
 ];
 
 const epcQuestions = [
-  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: '1-3', tierKey: 'epc_bed_1_3' }, { value: '4', tierKey: 'epc_bed_4' }, { value: '5', tierKey: 'epc_bed_5' }, { value: '6', tierKey: 'epc_bed_6' }, { value: '7+', tierKey: 'epc_bed_7_plus', label: '7+ (TBC)' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: 'studio', tierKey: 'epc_studio', label: 'Studio' }, { value: '1-3', tierKey: 'epc_bed_1_3' }, { value: '4', tierKey: 'epc_bed_4' }, { value: '5', tierKey: 'epc_bed_5' }, { value: '6', tierKey: 'epc_bed_6' }, { value: '7+', tierKey: 'epc_bed_7_plus', label: '7+ (TBC)' }], validation: { required: true }, sortOrder: 1 },
 ];
 
 const floorplanQuestions = [
   { fieldKey: 'bedrooms', inputType: 'select', label: 'Bedrooms', options: ['1', '2', '3', '4', '5', '6'].map((n) => ({ value: n, label: n })), validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'floors', inputType: 'select', label: 'Floors', options: [{ value: '1', label: '1 floor' }, { value: '2', label: '2 floors (+£25)' }, { value: '3', label: '3 floors (+£50)' }], validation: { required: true }, sortOrder: 2 },
+  { fieldKey: 'floors', inputType: 'select', label: 'Floors', options: [{ value: '1', label: '1 floor' }, { value: '2', label: '2 floors (+£39.99)' }, { value: '3', label: '3 floors (+£79.98)' }], validation: { required: true }, sortOrder: 2 },
 ];
 
 const asbestosQuestions = [
-  { fieldKey: 'configuration', inputType: 'select', label: 'Property configuration', options: [{ value: 'house_3bed', tierKey: 'asbestos_house_3bed', label: 'House — up to 3 bedrooms (Full Test)' }, { value: 'other', label: 'Other configuration — quote required' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'configuration', inputType: 'select', label: 'Survey type', options: [{ value: '2_sample', tierKey: 'asbestos_2_sample', label: '2 sample survey' }, { value: 'full_property', tierKey: 'asbestos_full_property', label: 'Full property survey' }, { value: 'other', label: 'Other configuration — quote required' }], validation: { required: true }, sortOrder: 1 },
   { fieldKey: 'propertySizeSqm', inputType: 'number', label: 'Property size (SQM)', validation: { required: false, min: 1 }, sortOrder: 2 },
 ];
 
