@@ -875,11 +875,11 @@
 
   function clearValidationErrors() {
     document.querySelectorAll('.field-error').forEach((el) => el.classList.remove('field-error'));
+    document.querySelectorAll('.form-error-msg').forEach((el) => { el.style.display = 'none'; });
   }
 
   function getMissingRequiredServiceFields() {
     const missing = [];
-    clearValidationErrors();
 
     for (const code of state.services) {
       const svc = catalogServicesByCode[code];
@@ -924,22 +924,33 @@
 
   function alertMissingFields(missing, title) {
     if (!missing.length) return true;
-    const msg = missing.map((m) => `• ${m.serviceName}: ${m.label}`).join('\n');
-    alert(`${title}\n\n${msg}`);
+    if (typeof showToast === 'function') {
+      showToast(title);
+    }
     const first = missing[0];
-    const target = document.getElementById(fieldId(first.serviceCode, first.fieldKey));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      if (typeof target.focus === 'function') target.focus();
+    if (first.serviceCode) {
+      const target = document.getElementById(fieldId(first.serviceCode, first.fieldKey));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (typeof target.focus === 'function') target.focus();
+      }
     }
     return false;
   }
 
   function validateSelectedServices() {
+    clearValidationErrors();
     return alertMissingFields(
       getMissingRequiredServiceFields(),
-      'Please complete all required fields for your selected services:'
+      'Please answer all required service questions. Required fields are highlighted in red.'
     );
+  }
+
+  function showFieldError(elementId, errorId, message) {
+    const el = document.getElementById(elementId);
+    if (el) el.classList.add('field-error');
+    const errEl = document.getElementById(errorId);
+    if (errEl) { errEl.textContent = message; errEl.style.display = 'block'; }
   }
 
   function validateBookingForm() {
@@ -947,26 +958,29 @@
     const missing = [];
 
     const required = [
-      ['b-firstName', 'firstName', 'First name'],
-      ['b-lastName', 'lastName', 'Last name'],
-      ['b-phone', 'phone', 'Phone'],
-      ['b-email', 'email', 'Email'],
-      ['b-address', null, 'Appointment address'],
-      ['b-postcode', 'postcode', 'Postcode'],
-      ['b-date', null, 'Preferred date'],
+      ['b-firstName', 'firstName', 'b-firstName-error', 'First name is required.'],
+      ['b-lastName',  'lastName',  'b-lastName-error',  'Last name is required.'],
+      ['b-phone',     'phone',     'b-phone-error',     'Phone number is required.'],
+      ['b-email',     'email',     'b-email-error',     'Email address is required.'],
+      ['b-address',   null,        'b-address-error',   'Appointment address is required.'],
+      ['b-date',      null,        'b-date-error',      'Preferred date is required.'],
     ];
 
-    for (const [bid, sid, label] of required) {
+    for (const [bid, sid, errId, errMsg] of required) {
       const el = document.getElementById(bid) || (sid ? document.getElementById(sid) : null);
       if (!el?.value?.trim()) {
         if (el) el.classList.add('field-error');
-        missing.push({ serviceName: 'Booking details', label });
+        const errEl = document.getElementById(errId);
+        if (errEl) { errEl.textContent = errMsg; errEl.style.display = 'block'; }
+        missing.push({ serviceName: 'Booking details', label: errMsg });
       }
     }
 
     if (!state.slot) {
       missing.push({ serviceName: 'Booking details', label: 'Preferred time slot' });
       document.querySelectorAll('.time-slot').forEach((t) => t.classList.add('field-error'));
+      const slotErr = document.getElementById('b-slot-error');
+      if (slotErr) { slotErr.textContent = 'Please select a preferred time slot.'; slotErr.style.display = 'block'; }
     }
 
     const access = document.getElementById('access-provider')?.value;
@@ -975,17 +989,24 @@
       if (!arr) {
         const arrEl = document.getElementById('access-arrangements');
         if (arrEl) arrEl.classList.add('field-error');
+        const arrErrEl = document.getElementById('access-arrangements-error');
+        if (arrErrEl) { arrErrEl.textContent = 'Please describe the access arrangements.'; arrErrEl.style.display = 'block'; }
         missing.push({ serviceName: 'Booking details', label: 'Access arrangements' });
       }
     }
 
     const serviceMissing = getMissingRequiredServiceFields();
-    const allMissing = [...serviceMissing, ...missing];
+    const allMissing = [...missing, ...serviceMissing];
 
-    return alertMissingFields(
-      allMissing,
-      'Please complete all required fields before booking:'
-    );
+    if (allMissing.length) {
+      const firstField = document.querySelector('.field-error');
+      if (firstField) firstField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (typeof showToast === 'function') {
+        showToast('Please complete all required fields before booking.');
+      }
+      return false;
+    }
+    return true;
   }
 
   window.calcAll = function calcAllApi() {
@@ -1047,7 +1068,7 @@
 
     if (n === 2) {
       if (!getPostcode()) {
-        alert('Please enter your postcode in step 1 before selecting services.');
+        if (typeof showToast === 'function') showToast('Please enter your postcode in Step 1 before selecting services.');
         return;
       }
       const continueBtn = document.querySelector('#step1 .btn-primary');
@@ -1064,15 +1085,13 @@
           await ensureCatalogLoaded(propType);
         }
         if (propType === 'residential' && catalog && catalog.hasPricing === false) {
-          alert(
-            'This postcode is outside our London & M25 price area. You can continue, but prices will show as TBC until our team confirms.'
-          );
+          if (typeof showToast === 'function') showToast('This postcode is outside our London &amp; M25 price area. Prices will show as TBC until our team confirms.', 'warning');
         }
         updateSubmitCta(lastQuote);
         updateQuoteRegionLabel(lastQuote);
         renderSubQuestions();
       } catch (err) {
-        alert(err.message || 'Could not load services and prices for your postcode.');
+        if (typeof showToast === 'function') showToast(err.message || 'Could not load services and prices for your postcode.');
         return;
       } finally {
         setButtonLoading(continueBtn, false);
@@ -1081,19 +1100,19 @@
 
     if (n === 3) {
       if (state.services.size === 0 && state.activeBundles.size === 0) {
-        alert('Please select at least one service to continue.');
+        if (typeof showToast === 'function') showToast('Please select at least one service to continue.');
         return;
       }
       if (!validateSelectedServices()) return;
     }
     if (n === 4) {
-      if (!validateSelectedServices()) return;
+      if (!validateBookingForm()) return;
       const reviewBtn = document.querySelector('#step3 .btn-primary');
       setButtonLoading(reviewBtn, true, 'Updating quote…');
       try {
         await refreshQuote();
       } catch (err) {
-        alert(err.message || 'Could not load quote. Check postcode and service answers.');
+        if (typeof showToast === 'function') showToast(err.message || 'Could not load quote. Check your postcode and service answers.');
         return;
       } finally {
         setButtonLoading(reviewBtn, false);
@@ -1233,7 +1252,7 @@
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
-      alert(err.message || 'Could not submit booking. Please try again.');
+      if (typeof showToast === 'function') showToast(err.message || 'Could not submit booking. Please try again.');
     } finally {
       setButtonLoading(btn, false);
     }

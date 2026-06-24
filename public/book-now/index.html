@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Instant Quote — Landlord Safety Inspection Ltd</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -252,7 +253,7 @@
     margin-bottom: 7px;
   }
   label .req { color: var(--gold); margin-left: 2px; }
-  input[type=text], input[type=email], input[type=tel], input[type=number],
+  input[type=text], input[type=email], input[type=tel], input[type=number], input[type=date],
   select, textarea {
     width: 100%;
     padding: 11px 14px;
@@ -270,6 +271,12 @@
     border-color: var(--gold);
     box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
   }
+  input:disabled, input[readonly] {
+    background: #f0ede8;
+    color: var(--slate-light);
+    cursor: not-allowed;
+    border-color: var(--border);
+  }
   .field-error,
   .subq-row.field-error select,
   .subq-row.field-error input,
@@ -281,6 +288,29 @@
     border-color: #c0392b !important;
     background: var(--red-light);
   }
+
+  /* ── INLINE FIELD ERROR TEXT ── */
+  .form-error-msg {
+    display: none;
+    color: #c0392b;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ── BOOTSTRAP TOAST OVERRIDES ── */
+  #toast-container .toast {
+    min-width: 300px;
+    max-width: 420px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  }
+  #toast-container .toast.text-bg-danger { background: #8b1a1a !important; }
+  #toast-container .toast.text-bg-warning { background: #7a5c00 !important; color: #fff !important; }
+  #toast-container .toast.text-bg-info { background: var(--navy-mid) !important; color: #fff !important; }
+  #toast-container .toast.text-bg-success { background: var(--green) !important; color: #fff !important; }
   select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5568' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -989,6 +1019,9 @@
 </head>
 <body>
 
+<!-- BOOTSTRAP TOAST CONTAINER -->
+<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999"></div>
+
 <!-- HEADER -->
 <header class="header">
   <div class="header-logo">
@@ -1055,25 +1088,30 @@
             <div class="field-group">
               <label>First Name <span class="req">*</span></label>
               <input type="text" id="firstName" placeholder="e.g. James" oninput="syncField('firstName')">
+              <div class="form-error-msg" id="firstName-error">First name is required.</div>
             </div>
             <div class="field-group">
               <label>Last Name <span class="req">*</span></label>
               <input type="text" id="lastName" placeholder="e.g. Smith" oninput="syncField('lastName')">
+              <div class="form-error-msg" id="lastName-error">Last name is required.</div>
             </div>
           </div>
           <div class="field-row">
             <div class="field-group">
               <label>Mobile / Phone <span class="req">*</span></label>
               <input type="tel" id="phone" placeholder="07700 900000" maxlength="11" oninput="syncField('phone')">
+              <div class="form-error-msg" id="phone-error">Phone number is required.</div>
             </div>
             <div class="field-group">
               <label>Email Address <span class="req">*</span></label>
               <input type="email" id="email" placeholder="james@email.com" oninput="syncField('email')">
+              <div class="form-error-msg" id="email-error">Email address is required.</div>
             </div>
           </div>
           <div class="field-group">
             <label>Postcode <span class="req">*</span></label>
             <input type="text" id="postcode" placeholder="e.g. SW1A 1AA" style="max-width:200px" oninput="syncField('postcode')">
+            <div class="form-error-msg" id="postcode-error">Postcode is required.</div>
             <div class="addon-note" style="margin-top:8px">London &amp; M25 postcodes get instant prices (e.g. <strong>SW1A 1AA</strong>, <strong>E1 6AN</strong>, <strong>NW1 2AA</strong>).</div>
           </div>
 
@@ -1099,6 +1137,7 @@
                 <div class="prop-desc">Get a custom quote</div>
               </div>
             </div>
+            <div class="form-error-msg" id="propType-error" style="margin-top:8px">Please select a property type.</div>
             <div id="commercial-note" class="addon-note hidden" style="margin-top:14px">
               Continue to select your services and submit a quote request — a team member will send you a custom quotation within 1 hour during working hours.
             </div>
@@ -1154,16 +1193,19 @@
             <div class="field-group">
               <label>First Name <span class="req">*</span></label>
               <input type="text" id="b-firstName" placeholder="Pre-filled from Step 1">
+              <div class="form-error-msg" id="b-firstName-error">First name is required.</div>
             </div>
             <div class="field-group">
               <label>Last Name <span class="req">*</span></label>
               <input type="text" id="b-lastName" placeholder="Pre-filled from Step 1">
+              <div class="form-error-msg" id="b-lastName-error">Last name is required.</div>
             </div>
           </div>
           <div class="field-row">
             <div class="field-group">
               <label>Mobile Number <span class="req">*</span></label>
               <input type="tel" id="b-phone" placeholder="Pre-filled from Step 1">
+              <div class="form-error-msg" id="b-phone-error">Phone number is required.</div>
             </div>
             <div class="field-group">
               <label>Phone Number (optional)</label>
@@ -1173,14 +1215,16 @@
           <div class="field-group">
             <label>Email Address <span class="req">*</span></label>
             <input type="email" id="b-email" placeholder="Pre-filled from Step 1">
+            <div class="form-error-msg" id="b-email-error">Email address is required.</div>
           </div>
           <div class="field-group">
             <label>Appointment Address <span class="req">*</span></label>
             <input type="text" id="b-address" placeholder="Full property address">
+            <div class="form-error-msg" id="b-address-error">Appointment address is required.</div>
           </div>
           <div class="field-group">
-            <label>Postcode <span class="req">*</span></label>
-            <input type="text" id="b-postcode" placeholder="Pre-filled from Step 1" style="max-width:200px">
+            <label>Postcode</label>
+            <input type="text" id="b-postcode" placeholder="Pre-filled from Step 1" style="max-width:200px" disabled>
           </div>
 
           <div class="field-row">
@@ -1215,6 +1259,7 @@
           <div class="field-group">
             <label>Preferred Date <span class="req">*</span></label>
             <input type="date" id="b-date" min="">
+            <div class="form-error-msg" id="b-date-error">Preferred date is required.</div>
           </div>
 
           <div class="field-group">
@@ -1229,6 +1274,7 @@
                 <div class="slot-range">1:00pm — 6:00pm</div>
               </div>
             </div>
+            <div class="form-error-msg" id="b-slot-error">Please select a preferred time slot.</div>
           </div>
 
           <div class="field-group">
@@ -1245,6 +1291,7 @@
           <div class="field-group hidden" id="access-arrangements-field">
             <label>Access Arrangements <span class="req">*</span></label>
             <textarea id="access-arrangements" placeholder="e.g. Key with concierge, tenant will be home after 10am, code is 1234..."></textarea>
+            <div class="form-error-msg" id="access-arrangements-error">Please describe the access arrangements.</div>
           </div>
 
           <div class="field-group">
@@ -1429,10 +1476,27 @@ const state = {
 // ═══════════════════════════════════════════════════
 let currentStep = 1;
 
+function showToast(message, type = 'danger') {
+  const container = document.getElementById('toast-container');
+  if (!container) { console.warn('Toast:', message); return; }
+  const id = 'toast-' + Date.now();
+  container.insertAdjacentHTML('beforeend', `
+    <div id="${id}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>`);
+  const el = document.getElementById(id);
+  const toast = new bootstrap.Toast(el, { delay: 5000 });
+  toast.show();
+  el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+
 function goToStep(n) {
   if (n === 2 && !validateStep1()) return;
   if (n === 3 && state.services.size === 0) {
-    alert('Please select at least one service to continue.');
+    showToast('Please select at least one service to continue.');
     return;
   }
   if (n === 4) {
@@ -1460,14 +1524,33 @@ function goToStep(n) {
 }
 
 function validateStep1() {
-  const fields = ['firstName','lastName','phone','email','postcode'];
+  const fieldConfig = [
+    { id: 'firstName', msg: 'First name is required.' },
+    { id: 'lastName',  msg: 'Last name is required.' },
+    { id: 'phone',     msg: 'Phone number is required.' },
+    { id: 'email',     msg: 'Email address is required.' },
+    { id: 'postcode',  msg: 'Postcode is required.' },
+  ];
   let ok = true;
-  fields.forEach(f => {
-    const el = document.getElementById(f);
-    if (!el.value.trim()) { el.style.borderColor = '#c0392b'; ok = false; }
-    else el.style.borderColor = '';
+  fieldConfig.forEach(({ id, msg }) => {
+    const el = document.getElementById(id);
+    const errEl = document.getElementById(id + '-error');
+    if (!el.value.trim()) {
+      el.classList.add('field-error');
+      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+      ok = false;
+    } else {
+      el.classList.remove('field-error');
+      if (errEl) errEl.style.display = 'none';
+    }
   });
-  if (!state.propType) { alert('Please select a property type.'); return false; }
+  const propErr = document.getElementById('propType-error');
+  if (!state.propType) {
+    if (propErr) propErr.style.display = 'block';
+    ok = false;
+  } else {
+    if (propErr) propErr.style.display = 'none';
+  }
   return ok;
 }
 
@@ -1479,7 +1562,14 @@ function syncBookingFields() {
   });
 }
 
-function syncField(f) {}
+function syncField(f) {
+  const el = document.getElementById(f);
+  if (el && el.value.trim()) {
+    el.classList.remove('field-error');
+    const errEl = document.getElementById(f + '-error');
+    if (errEl) errEl.style.display = 'none';
+  }
+}
 
 // Set min date to today
 (function() {
@@ -1500,6 +1590,8 @@ function selectPropType(type) {
   });
   const note = document.getElementById('commercial-note');
   note.classList.toggle('hidden', type === 'residential');
+  const propErr = document.getElementById('propType-error');
+  if (propErr) propErr.style.display = 'none';
 }
 
 // ═══════════════════════════════════════════════════
@@ -2279,5 +2371,6 @@ calcAll();
 updateFloatBar();
 </script>
 <script src="/book-now/book-now-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

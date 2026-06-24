@@ -31,6 +31,18 @@ const { createQuotationValidator } = require('./quotation.validator');
 /** Alias of createQuotationValidator for POST /api/bookings/quote-requests */
 const createQuoteRequestValidator = createQuotationValidator;
 
+const adminCreateBookingValidator = [
+  ...createQuotationValidator,
+  body('submitAs').optional().isIn(['booking', 'quotation']),
+  body('priceOverrides').optional().isArray(),
+  body('priceOverrides.*.lineIndex').isInt({ min: 0 }),
+  body('priceOverrides.*.unitPrice').optional({ nullable: true }).isFloat(),
+  body('priceOverrides.*.isTbc').optional().isBoolean(),
+  body('initialStatus').optional().isIn(ALL_BOOKING_STATUSES),
+  body('technicianId').optional({ nullable: true }).isUUID(),
+  body('adminNotes').optional().isString(),
+];
+
 const listBookingsValidator = [
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 100 }),
@@ -85,6 +97,7 @@ const updateBookingValidator = [
 module.exports = {
   createBookingValidator,
   createQuoteRequestValidator,
+  adminCreateBookingValidator,
   listBookingsValidator,
   bookingIdParam,
   createInvoiceValidator,
