@@ -43,6 +43,19 @@ const adminCreateBookingValidator = [
   body('adminNotes').optional().isString(),
 ];
 
+const bookingIdParam = [param('id').isUUID().withMessage('Invalid booking id')];
+
+const addBookingCommentValidator = [
+  ...bookingIdParam,
+  body('message').trim().notEmpty().isLength({ max: 2000 }),
+];
+
+const listActivitiesValidator = [
+  ...bookingIdParam,
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 100 }),
+];
+
 const listBookingsValidator = [
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 100 }),
@@ -51,8 +64,6 @@ const listBookingsValidator = [
   query('technicianId').optional().isUUID(),
   query('paymentStatus').optional().isIn(ALL_PAYMENT_STATUSES),
 ];
-
-const bookingIdParam = [param('id').isUUID().withMessage('Invalid booking id')];
 
 const createInvoiceValidator = [...bookingIdParam, body('force').optional().isBoolean()];
 
@@ -98,6 +109,8 @@ module.exports = {
   createBookingValidator,
   createQuoteRequestValidator,
   adminCreateBookingValidator,
+  addBookingCommentValidator,
+  listActivitiesValidator,
   listBookingsValidator,
   bookingIdParam,
   createInvoiceValidator,

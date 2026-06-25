@@ -31,6 +31,7 @@ const listBookings = asyncHandler(async (req, res) => {
     status: req.query.status,
     technicianId: req.query.technicianId,
     paymentStatus: req.query.paymentStatus,
+    actor: req.user,
   });
   return sendSuccess(res, {
     data,
@@ -40,7 +41,7 @@ const listBookings = asyncHandler(async (req, res) => {
 });
 
 const getBooking = asyncHandler(async (req, res) => {
-  const data = await bookingService.getBookingById(req.params.id);
+  const data = await bookingService.getBookingById(req.params.id, req.user);
   return sendSuccess(res, {
     data,
     message: 'Booking fetched successfully',
@@ -53,6 +54,29 @@ const updateBooking = asyncHandler(async (req, res) => {
   return sendSuccess(res, {
     data,
     message: 'Booking updated successfully',
+    status: httpStatus.OK,
+  });
+});
+
+const addBookingComment = asyncHandler(async (req, res) => {
+  const data = await bookingService.addBookingComment(req.params.id, req.body.message, req.user);
+  return sendSuccess(res, {
+    data,
+    message: 'Comment added successfully',
+    status: httpStatus.CREATED,
+  });
+});
+
+const listBookingActivities = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 50;
+  const data = await bookingService.listBookingActivities(req.params.id, req.user, {
+    page,
+    limit,
+  });
+  return sendSuccess(res, {
+    data,
+    message: 'Activities fetched successfully',
     status: httpStatus.OK,
   });
 });
@@ -100,6 +124,8 @@ module.exports = {
   listBookings,
   getBooking,
   updateBooking,
+  addBookingComment,
+  listBookingActivities,
   createBookingInvoice,
   getBookingInvoiceMeta,
   downloadBookingInvoice,

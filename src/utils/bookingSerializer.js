@@ -53,15 +53,48 @@ const toPublicInvoiceSummary = (invoice) => {
   };
 };
 
-const toPublicBooking = (booking) => {
+const toPublicBooking = (booking, options = {}) => {
   if (!booking) return null;
   const plain = booking.get ? booking.get({ plain: true }) : booking;
+  const hidePricing = options.hidePricing === true;
 
-  return {
+  const result = {
     ...plain,
-    invoice: toPublicInvoiceSummary(plain.invoice),
+    invoice: hidePricing ? null : toPublicInvoiceSummary(plain.invoice),
     technician: plain.technician ? toPublicUser(plain.technician) : null,
   };
+
+  if (hidePricing) {
+    result.pricingHidden = true;
+    delete result.subtotal;
+    delete result.vat;
+    delete result.total;
+    delete result.paymentStatus;
+    delete result.paidAt;
+    delete result.pricingStatus;
+    result.invoice = null;
+
+    if (result.metadata && typeof result.metadata === 'object') {
+      const meta = { ...result.metadata };
+      delete meta.quoteSnapshot;
+      result.metadata = meta;
+    }
+
+    if (Array.isArray(result.lineItems)) {
+      result.lineItems = result.lineItems.map((line) => {
+        const item = { ...line };
+        delete item.unitPrice;
+        delete item.total;
+        delete item.isTbc;
+        delete item.pricingTierId;
+        return item;
+      });
+    }
+  }
+
+  return result;
 };
 
-module.exports = { toPublicBooking, toPublicInvoiceSummary };
+const toTechnicianBooking = (booking) => toPublicBooking(booking, { hidePricing: true });
+
+module.exports = { toPublicBooking, toPublicInvoiceSummary, toTechnicianBooking };

@@ -19,6 +19,8 @@ const Quotation = require('./Quotation');
 const QuotationLineItem = require('./QuotationLineItem');
 const QuotationAnswer = require('./QuotationAnswer');
 const Invoice = require('./Invoice');
+const BookingActivity = require('./BookingActivity');
+const Notification = require('./Notification');
 
 ServiceCategory.hasMany(Service, { foreignKey: 'categoryId', as: 'services' });
 Service.belongsTo(ServiceCategory, { foreignKey: 'categoryId', as: 'category' });
@@ -48,6 +50,15 @@ Booking.hasMany(BookingAnswer, { foreignKey: 'bookingId', as: 'answers' });
 BookingAnswer.belongsTo(Booking, { foreignKey: 'bookingId', as: 'booking' });
 Booking.hasOne(Invoice, { foreignKey: 'bookingId', as: 'invoice' });
 Invoice.belongsTo(Booking, { foreignKey: 'bookingId', as: 'booking' });
+
+Booking.hasMany(BookingActivity, { foreignKey: 'bookingId', as: 'activities' });
+BookingActivity.belongsTo(Booking, { foreignKey: 'bookingId', as: 'booking' });
+BookingActivity.belongsTo(User, { foreignKey: 'actorId', as: 'actor' });
+
+User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
+Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Notification.belongsTo(Booking, { foreignKey: 'bookingId', as: 'booking' });
+Notification.belongsTo(BookingActivity, { foreignKey: 'activityId', as: 'activity' });
 
 QuoteRequest.belongsTo(Region, { foreignKey: 'resolvedRegionId', as: 'resolvedRegion' });
 QuoteRequest.hasMany(QuoteRequestAnswer, { foreignKey: 'quoteRequestId', as: 'answers' });
@@ -81,6 +92,8 @@ const models = {
   QuotationLineItem,
   QuotationAnswer,
   Invoice,
+  BookingActivity,
+  Notification,
 };
 
 const syncModels = async (options = {}) => {
@@ -111,5 +124,7 @@ module.exports = {
   QuotationLineItem,
   QuotationAnswer,
   Invoice,
+  BookingActivity,
+  Notification,
   syncModels,
 };

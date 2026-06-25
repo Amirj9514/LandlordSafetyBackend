@@ -9,6 +9,7 @@ const quotationRoutes = require('./quotation.routes');
 const dashboardRoutes = require('./dashboard.routes');
 const adminCatalogRoutes = require('./admin/catalog.routes');
 const adminBookingRoutes = require('./admin/booking.routes');
+const notificationRoutes = require('./notification.routes');
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.use('/users', userRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/admin/catalog', adminCatalogRoutes);
 router.use('/admin/bookings', adminBookingRoutes);
+router.use('/notifications', notificationRoutes);
 
 module.exports = router;

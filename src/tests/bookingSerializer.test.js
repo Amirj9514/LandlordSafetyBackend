@@ -43,4 +43,41 @@ describe('bookingSerializer', () => {
     assert.equal(invoice.canRegenerate, true);
     assert.equal(invoice.actionLabel, 'Regenerate Invoice');
   });
+
+  it('strips pricing for technician booking view', () => {
+    const booking = toPublicBooking(
+      {
+        id: 'booking-1',
+        reference: 'BK-ABC123',
+        subtotal: 100,
+        vat: 20,
+        total: 120,
+        paymentStatus: 'unpaid',
+        pricingStatus: 'fixed',
+        technician: null,
+        invoice: { id: 'inv-1', status: INVOICE_STATUS.READY, storageKey: 'x.pdf' },
+        metadata: { quoteSnapshot: { total: 120 } },
+        lineItems: [
+          {
+            description: 'Gas safety',
+            quantity: 1,
+            unitPrice: 100,
+            total: 100,
+            isTbc: false,
+          },
+        ],
+      },
+      { hidePricing: true },
+    );
+
+    assert.equal(booking.pricingHidden, true);
+    assert.equal(booking.total, undefined);
+    assert.equal(booking.subtotal, undefined);
+    assert.equal(booking.paymentStatus, undefined);
+    assert.equal(booking.invoice, null);
+    assert.equal(booking.metadata.quoteSnapshot, undefined);
+    assert.equal(booking.lineItems[0].unitPrice, undefined);
+    assert.equal(booking.lineItems[0].total, undefined);
+    assert.equal(booking.lineItems[0].description, 'Gas safety');
+  });
 });
