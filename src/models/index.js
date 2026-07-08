@@ -21,6 +21,8 @@ const QuotationAnswer = require('./QuotationAnswer');
 const Invoice = require('./Invoice');
 const BookingActivity = require('./BookingActivity');
 const Notification = require('./Notification');
+const Lead = require('./Lead');
+const LeadNote = require('./LeadNote');
 
 ServiceCategory.hasMany(Service, { foreignKey: 'categoryId', as: 'services' });
 Service.belongsTo(ServiceCategory, { foreignKey: 'categoryId', as: 'category' });
@@ -71,6 +73,10 @@ QuotationLineItem.belongsTo(Quotation, { foreignKey: 'quotationId', as: 'quotati
 Quotation.hasMany(QuotationAnswer, { foreignKey: 'quotationId', as: 'answers' });
 QuotationAnswer.belongsTo(Quotation, { foreignKey: 'quotationId', as: 'quotation' });
 
+Lead.hasMany(LeadNote, { foreignKey: 'leadId', as: 'notes', onDelete: 'CASCADE' });
+LeadNote.belongsTo(Lead, { foreignKey: 'leadId', as: 'lead' });
+LeadNote.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+
 const models = {
   User,
   ServiceCategory,
@@ -94,6 +100,8 @@ const models = {
   Invoice,
   BookingActivity,
   Notification,
+  Lead,
+  LeadNote,
 };
 
 const syncModels = async (options = {}) => {
@@ -126,5 +134,7 @@ module.exports = {
   Invoice,
   BookingActivity,
   Notification,
+  Lead,
+  LeadNote,
   syncModels,
 };

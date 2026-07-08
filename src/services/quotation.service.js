@@ -23,6 +23,8 @@ const {
   allocateBookingReference,
   allocateQuotationReference,
 } = require('../utils/referenceNumber');
+const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
+const { applySourceFilter } = require('../utils/sourceFilter');
 
 const round2 = (n) => Math.round(n * 100) / 100;
 
@@ -69,7 +71,7 @@ const persistQuotationAnswers = async (quotationId, services, serviceRows, trans
   }
 };
 
-const buildQuotationPayload = (body, quote, bundles, region) => ({
+const buildQuotationPayload = (body, quote, bundles, region, source = SUBMISSION_SOURCE.WEBSITE) => ({
   propertyType: body.propertyType,
   status: QUOTATION_STATUS.PENDING,
   pricingStatus: quote.pricingStatus,
@@ -93,10 +95,11 @@ const buildQuotationPayload = (body, quote, bundles, region) => ({
   vat: quote.vat,
   total: quote.total,
   activeBundleKeys: bundles,
+  source,
   metadata: { quoteSnapshot: quote },
 });
 
-const createQuotation = async (body) => {
+const createQuotation = async (body, { source = SUBMISSION_SOURCE.WEBSITE } = {}) => {
   const {
     propertyType,
     firstName,
@@ -144,27 +147,28 @@ const createQuotation = async (body) => {
       {
         reference,
         ...buildQuotationPayload(
-        {
-          propertyType,
-          firstName,
-          lastName,
-          email,
-          phone,
-          secondaryPhone,
-          postcode,
-          appointmentAddress,
-          congestionZone,
-          parkingAvailable,
-          preferredDate,
-          preferredTimeSlot,
-          accessProvider,
-          accessArrangements,
-          comment,
-          commercialPropertySubtype,
-        },
-        quote,
-        bundles,
-        region
+          {
+            propertyType,
+            firstName,
+            lastName,
+            email,
+            phone,
+            secondaryPhone,
+            postcode,
+            appointmentAddress,
+            congestionZone,
+            parkingAvailable,
+            preferredDate,
+            preferredTimeSlot,
+            accessProvider,
+            accessArrangements,
+            comment,
+            commercialPropertySubtype,
+          },
+          quote,
+          bundles,
+          region,
+          source,
         ),
       },
       { transaction }
@@ -184,11 +188,12 @@ const createQuotation = async (body) => {
   }
 };
 
-const listQuotations = async ({ page = 1, limit = 20, propertyType, status } = {}) => {
+const listQuotations = async ({ page = 1, limit = 20, propertyType, status, source } = {}) => {
   const offset = (page - 1) * limit;
   const where = {};
   if (propertyType) where.propertyType = propertyType;
   if (status) where.status = status;
+  applySourceFilter(where, source);
 
   const { rows, count } = await Quotation.findAndCountAll({
     where,
@@ -359,6 +364,7 @@ const convertQuotationToBooking = async (quotationId) => {
         vat: quotation.vat,
         total: quotation.total,
         activeBundleKeys: quotation.activeBundleKeys || [],
+        source: quotation.source || SUBMISSION_SOURCE.WEBSITE,
         metadata: {
           convertedFromQuotationId: quotation.id,
           convertedFromQuotationReference: quotation.reference,

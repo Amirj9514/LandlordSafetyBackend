@@ -5,6 +5,7 @@ const REFERENCE_PREFIX = {
   BOOKING: 'BK',
   QUOTATION: 'QT',
   INVOICE: 'IV',
+  LEAD: 'LD',
 };
 
 const randomSuffix = (length = 6) => {
@@ -43,6 +44,9 @@ const allocateQuotationReference = (Quotation) =>
 const allocateInvoiceReference = (Invoice) =>
   allocateUniqueReference(Invoice, REFERENCE_PREFIX.INVOICE);
 
+const allocateLeadReference = (Lead) =>
+  allocateUniqueReference(Lead, REFERENCE_PREFIX.LEAD);
+
 module.exports = {
   REFERENCE_PREFIX,
   REF_CHARS,
@@ -52,4 +56,5 @@ module.exports = {
   allocateBookingReference,
   allocateQuotationReference,
   allocateInvoiceReference,
+  allocateLeadReference,
 };

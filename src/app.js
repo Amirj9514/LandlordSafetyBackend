@@ -8,6 +8,7 @@ const { notFoundHandler, errorHandler } = require('./middleware/error.middleware
 
 const app = express();
 const bookNowDir = path.join(__dirname, '../public/book-now');
+const homeDir = path.join(__dirname, '../public/home');
 
 app.use(
   helmet({
@@ -18,6 +19,9 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static(homeDir));
+app.use('/home', express.static(homeDir));
 
 app.get('/book-now', (_req, res) => {
   res.sendFile(path.join(bookNowDir, 'index.html'));

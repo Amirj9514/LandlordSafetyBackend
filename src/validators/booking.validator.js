@@ -2,6 +2,7 @@ const { body, query, param } = require('express-validator');
 const { ALL_PROPERTY_TYPES } = require('../constants/propertyTypes');
 const { ALL_BOOKING_STATUSES } = require('../constants/bookingStatus');
 const { ALL_PAYMENT_STATUSES } = require('../constants/paymentStatus');
+const { ALL_SUBMISSION_SOURCES } = require('../constants/submissionSource');
 
 const contactFields = [
   body('firstName').trim().notEmpty(),
@@ -63,6 +64,7 @@ const listBookingsValidator = [
   query('status').optional().isIn(ALL_BOOKING_STATUSES),
   query('technicianId').optional().isUUID(),
   query('paymentStatus').optional().isIn(ALL_PAYMENT_STATUSES),
+  query('source').optional().isIn(ALL_SUBMISSION_SOURCES),
 ];
 
 const createInvoiceValidator = [...bookingIdParam, body('force').optional().isBoolean()];

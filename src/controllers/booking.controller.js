@@ -31,6 +31,7 @@ const listBookings = asyncHandler(async (req, res) => {
     status: req.query.status,
     technicianId: req.query.technicianId,
     paymentStatus: req.query.paymentStatus,
+    source: req.query.source,
     actor: req.user,
   });
   return sendSuccess(res, {

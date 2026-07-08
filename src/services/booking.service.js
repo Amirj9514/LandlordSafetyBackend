@@ -3,6 +3,8 @@ const { PROPERTY_TYPES } = require('../constants/propertyTypes');
 const { BOOKING_STATUS, isValidBookingStatus } = require('../constants/bookingStatus');
 const { PAYMENT_STATUS, isValidPaymentStatus } = require('../constants/paymentStatus');
 const { ROLES } = require('../constants/roles');
+const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
+const { applySourceFilter } = require('../utils/sourceFilter');
 const { BOOKING_ACTIVITY_ACTIONS } = require('../constants/bookingActivity');
 const { NOTIFICATION_TYPES } = require('../constants/notificationTypes');
 const { toPublicBooking, toPublicInvoiceSummary, toTechnicianBooking } = require('../utils/bookingSerializer');
@@ -58,7 +60,7 @@ const persistAnswers = async (bookingId, services, serviceRows, transaction) => 
   }
 };
 
-const createBooking = async (body) => {
+const createBooking = async (body, { source = SUBMISSION_SOURCE.WEBSITE } = {}) => {
   const {
     propertyType = PROPERTY_TYPES.RESIDENTIAL,
     firstName,
@@ -141,6 +143,7 @@ const createBooking = async (body) => {
         vat: quote.vat,
         total: quote.total,
         activeBundleKeys: bundles,
+        source,
         metadata: { quoteSnapshot: quote },
       },
       { transaction }
@@ -187,6 +190,7 @@ const listBookings = async ({
   status,
   technicianId,
   paymentStatus,
+  source,
   actor,
 } = {}) => {
   const offset = (page - 1) * limit;
@@ -194,6 +198,7 @@ const listBookings = async ({
   if (propertyType) where.propertyType = propertyType;
   if (status) where.status = status;
   if (paymentStatus) where.paymentStatus = paymentStatus;
+  applySourceFilter(where, source);
 
   if (isTechnicianActor(actor)) {
     where.technicianId = actor.id;
@@ -223,8 +228,11 @@ const listBookings = async ({
   };
 
   if (isAdminActor(actor)) {
+    const quotationWhere = {};
+    if (propertyType) quotationWhere.propertyType = propertyType;
+    applySourceFilter(quotationWhere, source);
     const quotations = await Quotation.findAll({
-      where: propertyType ? { propertyType } : {},
+      where: quotationWhere,
       limit: 50,
       order: [['createdAt', 'DESC']],
       include: ['lineItems', 'resolvedRegion'],

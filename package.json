@@ -16,7 +16,7 @@
     "db:seed:prices": "node src/scripts/seedRegionPricesDefault.js",
     "db:seed:pricing-rules": "node src/scripts/seedPricingRules.js",
     "db:seed:all": "node src/scripts/seedCatalog.js && node src/scripts/seedRegionsLondon.js && node src/scripts/seedRegionPricesDefault.js && node src/scripts/seedPricingRules.js",
-    "test": "node --test src/tests/bookingStatus.test.js src/tests/paymentStatus.test.js src/tests/quotationRouting.test.js src/tests/quoteCalculator.test.js src/tests/regionResolver.test.js src/tests/referenceNumber.test.js src/tests/dashboardStats.test.js src/tests/bookingSerializer.test.js src/tests/bookingAccess.test.js src/tests/technicianPortal.test.js src/tests/adminBookingRoutes.test.js src/tests/invoiceService.test.js src/tests/bookingInvoiceController.test.js src/tests/invoicePdf.test.js src/tests/pricingEngine.test.js src/tests/catalogAdmin.test.js src/tests/lineItemDetails.test.js"
+    "test": "node --test src/tests/bookingStatus.test.js src/tests/paymentStatus.test.js src/tests/quotationRouting.test.js src/tests/quoteCalculator.test.js src/tests/regionResolver.test.js src/tests/referenceNumber.test.js src/tests/dashboardStats.test.js src/tests/bookingSerializer.test.js src/tests/bookingAccess.test.js src/tests/technicianPortal.test.js src/tests/adminBookingRoutes.test.js src/tests/invoiceService.test.js src/tests/bookingInvoiceController.test.js src/tests/invoicePdf.test.js src/tests/pricingEngine.test.js src/tests/catalogAdmin.test.js src/tests/lineItemDetails.test.js src/tests/contactParser.test.js src/tests/leadRoutes.test.js"
   },
   "keywords": [
     "landlord",

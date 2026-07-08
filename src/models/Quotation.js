@@ -2,6 +2,7 @@ const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 const { ALL_PROPERTY_TYPES, PRICING_STATUS } = require('../constants/propertyTypes');
 const { ALL_QUOTATION_STATUSES, QUOTATION_STATUS } = require('../constants/quotationStatus');
+const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
 
 class Quotation extends Model {}
 
@@ -134,6 +135,11 @@ Quotation.init(
       type: DataTypes.UUID,
       allowNull: true,
       field: 'converted_booking_id',
+    },
+    source: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: SUBMISSION_SOURCE.WEBSITE,
     },
     metadata: {
       type: DataTypes.JSONB,

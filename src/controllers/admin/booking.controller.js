@@ -2,6 +2,7 @@ const { BookingLineItem, QuotationLineItem } = require('../../models');
 const asyncHandler = require('../../utils/asyncHandler');
 const { sendSuccess } = require('../../utils/apiResponse');
 const httpStatus = require('../../constants/httpStatus');
+const { SUBMISSION_SOURCE } = require('../../constants/submissionSource');
 const bookingService = require('../../services/booking.service');
 const quotationService = require('../../services/quotation.service');
 
@@ -69,7 +70,7 @@ const adminCreateBooking = asyncHandler(async (req, res) => {
   let resultType;
 
   if (forceQuotation) {
-    result = await quotationService.createQuotation(payload);
+    result = await quotationService.createQuotation(payload, { source: SUBMISSION_SOURCE.ADMIN });
     resultType = 'quotation';
 
     if (Array.isArray(priceOverrides) && priceOverrides.length > 0 && result.lineItems?.length) {
@@ -77,7 +78,7 @@ const adminCreateBooking = asyncHandler(async (req, res) => {
       result = await quotationService.getQuotationById(result.id);
     }
   } else {
-    result = await bookingService.createBooking(payload);
+    result = await bookingService.createBooking(payload, { source: SUBMISSION_SOURCE.ADMIN });
     resultType = 'booking';
 
     const adminPatch = {};

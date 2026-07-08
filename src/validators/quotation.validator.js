@@ -1,6 +1,7 @@
 const { body, query, param } = require('express-validator');
 const { ALL_PROPERTY_TYPES } = require('../constants/propertyTypes');
 const { ALL_QUOTATION_STATUSES } = require('../constants/quotationStatus');
+const { ALL_SUBMISSION_SOURCES } = require('../constants/submissionSource');
 
 const contactFields = [
   body('propertyType').isIn(ALL_PROPERTY_TYPES).withMessage('Invalid propertyType'),
@@ -32,6 +33,7 @@ const listQuotationsValidator = [
   query('limit').optional().isInt({ min: 1, max: 100 }),
   query('propertyType').optional().isIn(ALL_PROPERTY_TYPES),
   query('status').optional().isIn(ALL_QUOTATION_STATUSES),
+  query('source').optional().isIn(ALL_SUBMISSION_SOURCES),
 ];
 
 const quotationIdParam = [param('id').isUUID().withMessage('Invalid quotation id')];

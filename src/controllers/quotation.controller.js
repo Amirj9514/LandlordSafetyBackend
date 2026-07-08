@@ -20,6 +20,7 @@ const listQuotations = asyncHandler(async (req, res) => {
     limit,
     propertyType: req.query.propertyType,
     status: req.query.status,
+    source: req.query.source,
   });
   return sendSuccess(res, {
     data,

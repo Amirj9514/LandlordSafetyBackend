@@ -3,6 +3,7 @@ const sequelize = require('../config/database');
 const { ALL_PROPERTY_TYPES, PRICING_STATUS } = require('../constants/propertyTypes');
 const { BOOKING_STATUS } = require('../constants/bookingStatus');
 const { PAYMENT_STATUS } = require('../constants/paymentStatus');
+const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
 
 class Booking extends Model {}
 
@@ -151,6 +152,11 @@ Booking.init(
       type: DataTypes.TEXT,
       allowNull: true,
       field: 'admin_notes',
+    },
+    source: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: SUBMISSION_SOURCE.WEBSITE,
     },
     metadata: {
       type: DataTypes.JSONB,
