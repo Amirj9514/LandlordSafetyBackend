@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landlord Safety Inspection Limited | LLSI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Manrope:wght@500;700&family=Syne:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header class="site-header">
         <div class="site-header__inner">
             <a href="/" class="logo" aria-label="Landlord Safety Inspection home">
-                <img src="icons/LLSI LOGO ICON.svg" alt="" class="logo__icon" width="37" height="40">
-                <span class="logo__brand">
+                <img src="icons/landFulllogo.png" alt="" class="logo__icon" width="181.5px" height="40">
+                <!-- <span class="logo__brand">
                     <span class="logo__title">LANDLORD</span>
                     <span class="logo__subtitle">Safety Inspection</span>
-                </span>
+                </span> -->
             </a>
 
             <div class="site-header__nav-wrap" id="site-nav-drawer">
                 <button type="button" class="site-header__drawer-close" aria-label="Close menu">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
                 <nav class="nav" aria-label="Main navigation">
@@ -31,24 +35,29 @@
                         Services
                         <img src="icons/arrow_down.svg" alt="" class="nav-link__icon" width="14" height="14">
                     </a>
-                    <a href="#compliance" class="nav-link">Compliance</a>
-                    <a href="#pricing" class="nav-link">Pricing</a>
-                    <a href="#reviews" class="nav-link">Reviews</a>
+                    <a href="#coverage" class="nav-link">Area Coverage</a>
+                    <a href="#coverage" class="nav-link">For Letting agent</a>
                 </nav>
             </div>
 
             <div class="site-header__actions">
-                <a href="https://wa.me/447350538874" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
-                    <img src="icons/message.svg" alt="" class="btn-whatsapp__icon" width="14" height="14">
+                <a href="tel:+447350538874" class="btn-phone">
+                    <svg class="btn-phone__icon" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"></path></svg>
                     <span>07350 538874</span>
                 </a>
-                <a href="#book" class="btn-primary">
-                    Book Now
-                    <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
+                <a href="#book" class="btn-primary btn-primary--header">
+                    <span class="btn-primary__label">Book Now</span>
+                    <span class="btn-primary__arrow" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
                 </a>
             </div>
 
-            <button type="button" class="site-header__menu-toggle" aria-expanded="false" aria-controls="site-nav-drawer" aria-label="Open menu">
+            <button type="button" class="site-header__menu-toggle" aria-expanded="false" aria-controls="site-nav-drawer"
+                aria-label="Open menu">
                 <span class="site-header__menu-icon" aria-hidden="true"></span>
             </button>
         </div>
@@ -63,7 +72,10 @@
 
                 <div class="hero__inner">
                     <div class="hero__content">
-                        <h1 id="hero-title" class="hero__title">Property Safety Certificates for London Landlords</h1>
+                        <h1 id="hero-title" class="hero__title">
+                            Property Safety Certificates for
+                            <span class="hero__title-accent">London Landlords</span>
+                        </h1>
                         <p class="hero__lead">Gas, electrical, fire &amp; energy certificates issued within 24 hours. All inspections by accredited engineers across London and M25.</p>
                     </div>
 
@@ -78,7 +90,8 @@
                         <form class="quote-form" id="quote-form" action="#" method="post" novalidate>
                             <div class="quote-form__field">
                                 <label class="field-label" for="postcode">Postcode</label>
-                                <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA" autocomplete="postal-code">
+                                <input class="field-input" type="text" id="postcode" name="postcode"
+                                    placeholder="SW1A 1AA" autocomplete="postal-code">
                             </div>
 
                             <fieldset class="quote-form__field property-type">
@@ -86,31 +99,55 @@
                                 <div class="property-type__options">
                                     <label class="property-type__option">
                                         <input type="radio" name="property-type" value="residential" checked>
-                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                            <path d="M3.5 12.8333V2.33332C3.5 2.0239 3.62292 1.72716 3.84171 1.50837C4.0605 1.28957 4.35725 1.16666 4.66667 1.16666H9.33333C9.64275 1.16666 9.9395 1.28957 10.1583 1.50837C10.3771 1.72716 10.5 2.0239 10.5 2.33332V12.8333H3.5Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M3.50002 7H2.33335C2.02393 7 1.72719 7.12292 1.5084 7.34171C1.2896 7.5605 1.16669 7.85725 1.16669 8.16667V11.6667C1.16669 11.9761 1.2896 12.2728 1.5084 12.4916C1.72719 12.7104 2.02393 12.8333 2.33335 12.8333H3.50002" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M10.5 5.25H11.6667C11.9761 5.25 12.2728 5.37292 12.4916 5.59171C12.7104 5.8105 12.8333 6.10725 12.8333 6.41667V11.6667C12.8333 11.9761 12.7104 12.2728 12.4916 12.4916C12.2728 12.7104 11.9761 12.8333 11.6667 12.8333H10.5" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M5.83331 3.5H8.16665" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M5.83331 5.83334H8.16665" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M5.83331 8.16666H8.16665" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M5.83331 10.5H8.16665" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14"
+                                            fill="none" aria-hidden="true">
+                                            <path
+                                                d="M3.5 12.8333V2.33332C3.5 2.0239 3.62292 1.72716 3.84171 1.50837C4.0605 1.28957 4.35725 1.16666 4.66667 1.16666H9.33333C9.64275 1.16666 9.9395 1.28957 10.1583 1.50837C10.3771 1.72716 10.5 2.0239 10.5 2.33332V12.8333H3.5Z"
+                                                stroke="currentColor" stroke-width="1.16667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M3.50002 7H2.33335C2.02393 7 1.72719 7.12292 1.5084 7.34171C1.2896 7.5605 1.16669 7.85725 1.16669 8.16667V11.6667C1.16669 11.9761 1.2896 12.2728 1.5084 12.4916C1.72719 12.7104 2.02393 12.8333 2.33335 12.8333H3.50002"
+                                                stroke="currentColor" stroke-width="1.16667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M10.5 5.25H11.6667C11.9761 5.25 12.2728 5.37292 12.4916 5.59171C12.7104 5.8105 12.8333 6.10725 12.8333 6.41667V11.6667C12.8333 11.9761 12.7104 12.2728 12.4916 12.4916C12.2728 12.7104 11.9761 12.8333 11.6667 12.8333H10.5"
+                                                stroke="currentColor" stroke-width="1.16667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M5.83331 3.5H8.16665" stroke="currentColor" stroke-width="1.16667"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M5.83331 5.83334H8.16665" stroke="currentColor"
+                                                stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M5.83331 8.16666H8.16665" stroke="currentColor"
+                                                stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M5.83331 10.5H8.16665" stroke="currentColor" stroke-width="1.16667"
+                                                stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <span>Residential</span>
                                     </label>
                                     <label class="property-type__option">
                                         <input type="radio" name="property-type" value="commercial">
-                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                            <path d="M2.33331 12.8333H11.6666" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M2.33331 12.8333V5.83333L7.00002 1.16666L11.6666 5.83333V12.8333" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M5.83331 12.8333V8.16666H8.16665V12.8333" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14"
+                                            fill="none" aria-hidden="true">
+                                            <path d="M2.33331 12.8333H11.6666" stroke="currentColor"
+                                                stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M2.33331 12.8333V5.83333L7.00002 1.16666L11.6666 5.83333V12.8333"
+                                                stroke="currentColor" stroke-width="1.16667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M5.83331 12.8333V8.16666H8.16665V12.8333" stroke="currentColor"
+                                                stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <span>Commercial</span>
                                     </label>
                                     <label class="property-type__option">
                                         <input type="radio" name="property-type" value="installation">
-                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                            <path d="M8.74998 1.75L12.25 5.25L4.66665 12.8333L1.16665 12.8333L1.16665 9.33333L8.74998 1.75Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M7.58331 3.5L10.5 6.41667" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg class="property-type__icon" width="14" height="14" viewBox="0 0 14 14"
+                                            fill="none" aria-hidden="true">
+                                            <path
+                                                d="M8.74998 1.75L12.25 5.25L4.66665 12.8333L1.16665 12.8333L1.16665 9.33333L8.74998 1.75Z"
+                                                stroke="currentColor" stroke-width="1.16667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M7.58331 3.5L10.5 6.41667" stroke="currentColor"
+                                                stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <span>Installation</span>
                                     </label>
@@ -119,53 +156,56 @@
 
                             <div class="quote-form__field">
                                 <label class="field-label" for="contact">Email or Phone</label>
-                                <input class="field-input" type="text" id="contact" name="contact" placeholder="you@example.com or 07700 000000" autocomplete="email">
+                                <input class="field-input" type="text" id="contact" name="contact"
+                                    placeholder="you@example.com or 07700 000000" autocomplete="email">
                             </div>
 
-                            <button type="submit" class="btn-primary btn-primary--block">
+                            <button type="submit" class="btn-primary btn-primary--block" style="margin-top: 8px;">
                                 <span class="btn-primary__spinner" aria-hidden="true"></span>
                                 <span class="btn-primary__label">Book Now</span>
-                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
+                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
+                                    height="16">
                             </button>
                         </form>
 
+                        <hr class="quote-card__divider">
+
                         <p class="quote-card__footer">
                             Prefer to talk?
-                            <a href="https://wa.me/447350538874" class="quote-card__whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp 07350 538874</a>
+                            <a href="https://wa.me/447350538874" class="quote-card__whatsapp" target="_blank"
+                                rel="noopener noreferrer">WhatsApp 07350 538874</a>
                         </p>
                     </aside>
                 </div>
             </div>
 
-            <div class="hero__trust">
-                <ul class="trust-bar">
-                    <li class="trust-bar__item">
-                        <svg class="trust-bar__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M8 1.33333L2.66669 3.33333V7.66667C2.66669 10.6667 4.66669 13.3333 8 14.6667C11.3334 13.3333 13.3334 10.6667 13.3334 7.66667V3.33333L8 1.33333Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Gas Safe Registered Engineers
-                    </li>
-                    <li class="trust-bar__item">
-                        <svg class="trust-bar__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M9.33335 1.33333L3.33335 9.33333H8.00002L6.66669 14.6667L12.6667 6.66667H8.00002L9.33335 1.33333Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        NICEIC Affiliated
-                    </li>
-                    <li class="trust-bar__item">
-                        <svg class="trust-bar__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M8 14.6667C11.3334 14.6667 14 12 14 8.66667C14 5.33333 11.3334 2.66667 8 2.66667C4.66669 2.66667 2 5.33333 2 8.66667C2 12 4.66669 14.6667 8 14.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 5.33333V8.66667L10 10" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Response in 24 Hours
-                    </li>
-                    <li class="trust-bar__item">
-                        <svg class="trust-bar__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M8 8.66667C9.10457 8.66667 10 7.77124 10 6.66667C10 5.5621 9.10457 4.66667 8 4.66667C6.89543 4.66667 6 5.5621 6 6.66667C6 7.77124 6.89543 8.66667 8 8.66667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 14.6667C10.6667 12 13.3334 9.33333 13.3334 6.66667C13.3334 4.08934 10.9053 2 8 2C5.09476 2 2.66669 4.08934 2.66669 6.66667C2.66669 9.33333 5.33335 12 8 14.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        All London Boroughs + M25
-                    </li>
-                </ul>
+            <div class="cert-marquee" aria-label="Accreditations">
+                <div class="cert-marquee__track">
+                    <ul class="cert-marquee__list">
+                        <li class="cert-marquee__item">GAS SAFE REGISTER</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">NICEIC</li>
+                        <li class="cert-marquee__item">NAPIT</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">ELMHURST</li>
+                        <li class="cert-marquee__item">NEBOSH</li>
+                        <li class="cert-marquee__item">GAS SAFE REGISTER</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">NICEIC</li>
+                        <li class="cert-marquee__item">NAPIT</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">ELMHURST</li>
+                        <li class="cert-marquee__item">NEBOSH</li>
+                    </ul>
+                    <ul class="cert-marquee__list" aria-hidden="true">
+                        <li class="cert-marquee__item">GAS SAFE REGISTER</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">NICEIC</li>
+                        <li class="cert-marquee__item">NAPIT</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">ELMHURST</li>
+                        <li class="cert-marquee__item">NEBOSH</li>
+                        <li class="cert-marquee__item">GAS SAFE REGISTER</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">NICEIC</li>
+                        <li class="cert-marquee__item">NAPIT</li>
+                        <li class="cert-marquee__item cert-marquee__item--outline">ELMHURST</li>
+                        <li class="cert-marquee__item">NEBOSH</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -173,389 +213,171 @@
             <div class="services__inner">
                 <div class="services__header">
                     <div class="services__intro">
-                        <p class="services__eyebrow">OUR SERVICES</p>
-                        <h2 id="services-title" class="services__title">Gas. Electrical. Fire. Energy. All in one call.</h2>
+                        <h2 id="services-title" class="services__title">
+                            Complete Compliance
+                            <span class="services__title-accent">Solutions</span>
+                        </h2>
+                        <p class="services__lead">Everything you need to keep your property safe, legal, and fully compliant under one roof.</p>
                     </div>
 
                     <div class="services-tabs" role="tablist" aria-label="Property type">
                         <button type="button" class="services-tabs__btn services-tabs__btn--active" role="tab" aria-selected="true">
-                            <svg class="services-tabs__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                <path d="M3.5 12.8333V2.33332C3.5 2.0239 3.62292 1.72716 3.84171 1.50837C4.0605 1.28957 4.35725 1.16666 4.66667 1.16666H9.33333C9.64275 1.16666 9.9395 1.28957 10.1583 1.50837C10.3771 1.72716 10.5 2.0239 10.5 2.33332V12.8333H3.5Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3.50002 7H2.33335C2.02393 7 1.72719 7.12292 1.5084 7.34171C1.2896 7.5605 1.16669 7.85725 1.16669 8.16667V11.6667C1.16669 11.9761 1.2896 12.2728 1.5084 12.4916C1.72719 12.7104 2.02393 12.8333 2.33335 12.8333H3.50002" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M10.5 5.25H11.6667C11.9761 5.25 12.2728 5.37292 12.4916 5.59171C12.7104 5.8105 12.8333 6.10725 12.8333 6.41667V11.6667C12.8333 11.9761 12.7104 12.2728 12.4916 12.4916C12.2728 12.7104 11.9761 12.8333 11.6667 12.8333H10.5" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             Residential
                         </button>
                         <button type="button" class="services-tabs__btn" role="tab" aria-selected="false">
-                            <svg class="services-tabs__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                <path d="M2.33331 12.8333H11.6666" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2.33331 12.8333V5.83333L7.00002 1.16666L11.6666 5.83333V12.8333" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5.83331 12.8333V8.16666H8.16665V12.8333" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M4 21V4h10v17M14 8h6v13M8 8h2M8 12h2M8 16h2M17 12h1M17 16h1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             Commercial
                         </button>
                         <button type="button" class="services-tabs__btn" role="tab" aria-selected="false">
-                            <svg class="services-tabs__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                <path d="M8.74998 1.75L12.25 5.25L4.66665 12.8333L1.16665 12.8333L1.16665 9.33333L8.74998 1.75Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M7.58331 3.5L10.5 6.41667" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M14.7 6.3a4.1 4.1 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4.1 4.1 0 0 0 5.4-5.4l-2.1 2.1-2.9-2.9 2.1-2.1Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             Installation
                         </button>
                     </div>
                 </div>
 
-                <div class="services__body">
-                    <article class="services-feature">
-                        <img src="icons/service_card.jpg" alt="" class="services-feature__image" width="384" height="512">
-                        <div class="services-feature__panel">
-                            <h3 class="services-feature__title">Fully Accredited Engineers</h3>
-                            <p class="services-feature__text">Gas Safe registered &amp; NICEIC affiliated — every job, every time.</p>
-                            <a href="#services-list" class="btn-primary btn-primary--block services-feature__cta">
-                                See All Services
-                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                            </a>
-                        </div>
-                    </article>
-
-                    <div id="services-list" class="services-list">
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">Gas Safety Certificate</h3>
-                                    <span class="service-card__price">From £60</span>
-                                </div>
-                                <p class="service-card__desc">The annual landlord gas safety record required by law</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#gas-safety" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">Gas Safety + Basic Service</h3>
-                                    <span class="service-card__price">From £95</span>
-                                </div>
-                                <p class="service-card__desc">CP12 and basic boiler service completed in one visit</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#gas-basic" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">Gas Safety + Full Service</h3>
-                                    <span class="service-card__price">From £180</span>
-                                </div>
-                                <p class="service-card__desc">CP12 and full boiler service bundle for complete peace of mind</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#gas-full" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">EPC (Residential)</h3>
-                                    <span class="service-card__price">From £180</span>
-                                </div>
-                                <p class="service-card__desc">Energy Performance Certificate for residential lettings and sales</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#epc" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">Remedial Electrical Works</h3>
-                                    <span class="service-card__price">From £180</span>
-                                </div>
-                                <p class="service-card__desc">Fixed-price remedial electrical repairs following inspection findings</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#remedial" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <article class="service-card">
-                            <div class="service-card__body">
-                                <div class="service-card__head">
-                                    <h3 class="service-card__name">EICR (Residential)</h3>
-                                    <span class="service-card__price">From £180</span>
-                                </div>
-                                <p class="service-card__desc">Electrical Installation Condition Report for rental properties</p>
-                            </div>
-                            <div class="service-card__foot">
-                                <a href="#eicr" class="service-card__details">Details</a>
-                                <a href="#book" class="service-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="compliance" class="certificates certificates--compact" aria-labelledby="certificates-title">
-            <div class="certificates__inner">
-                <div class="certificates__layout">
-                    <div class="certificates__intro">
-                        <h2 id="certificates-title" class="certificates__title">Every London Rental Needs These 3 Certificates</h2>
-                        <p class="certificates__lead">Missing any? You can't legally let your property — and risk up to £6,000 in fines.</p>
-                    </div>
-
-                    <div class="certificates-cluster">
-                        <article class="cert-card cert-card--featured">
-                            <div class="cert-card__main">
-                                <div class="cert-card__icon-wrap">
-                                    <svg class="cert-card__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M12 2.5C12 2.5 8 8.5 8 12.5C8 14.9853 9.79086 17 12 17C14.2091 17 16 14.9853 16 12.5C16 8.5 12 2.5 12 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M12 17V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <div id="services-list" class="services-grid">
+                    <article class="service-card service-card--featured">
+                        <img src="icons/service_card.jpg" alt="" class="service-card__bg" width="480" height="420">
+                        <div class="service-card__overlay">
+                            <h3 class="service-card__name">Fully Accredited Engineers</h3>
+                            <p class="service-card__desc">Gas Safe Registered &amp; NICEIC Affiliated — Every Job, Every Time.</p>
+                            <a href="#book" class="service-card__cta">
+                                <span>See All Services</span>
+                                <span class="service-card__cta-arrow" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
-                                </div>
-                                <div class="cert-card__body">
-                                    <h3 class="cert-card__title">Gas Safety</h3>
-                                    <p class="cert-card__meta">If property has gas</p>
-                                </div>
-                            </div>
-                            <div class="cert-card__foot">
-                                <span class="cert-card__renew">Renew Every year</span>
-                                <a href="#book" class="cert-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                            </div>
-                        </article>
-
-                        <div class="certificates-cluster__stack">
-                            <article class="cert-card cert-card--horizontal">
-                                <div class="cert-card__main">
-                                    <div class="cert-card__icon-wrap">
-                                        <svg class="cert-card__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                            <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                    <div class="cert-card__body">
-                                        <h3 class="cert-card__title">EICR Electrical</h3>
-                                        <p class="cert-card__meta">All rental properties</p>
-                                    </div>
-                                </div>
-                                <div class="cert-card__foot">
-                                    <span class="cert-card__renew">Renew Every 5 years</span>
-                                    <a href="#book" class="cert-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                                </div>
-                            </article>
-
-                            <article class="cert-card cert-card--horizontal">
-                                <div class="cert-card__main">
-                                    <div class="cert-card__icon-wrap">
-                                        <svg class="cert-card__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                            <path d="M4 10.5L12 4L20 10.5V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19V10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M9.5 20V13.5H14.5V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                    <div class="cert-card__body">
-                                        <h3 class="cert-card__title">EPC Energy</h3>
-                                        <p class="cert-card__meta">Before marketing</p>
-                                    </div>
-                                </div>
-                                <div class="cert-card__foot">
-                                    <span class="cert-card__renew">Renew Every 10 years</span>
-                                    <a href="#book" class="cert-card__book">Book Now <span aria-hidden="true">&gt;</span></a>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="certificates certificates--showcase" aria-labelledby="certificates-showcase-title">
-            <div class="certificates__inner">
-                <div class="certificates__intro certificates__intro--wide">
-                    <h2 id="certificates-showcase-title" class="certificates__title">Every London Rental Needs These 3 Certificates</h2>
-                    <p class="certificates__lead">Missing any? You can't legally let your property — and risk up to £6,000 in fines.</p>
-                </div>
-
-                <div class="certificates-showcase">
-                    <article class="showcase-card showcase-card--split">
-                        <div class="showcase-card__header">
-                            <h3 class="showcase-card__title">Gas Safety</h3>
-                            <a href="#book" class="btn-primary showcase-card__cta showcase-card__cta--inline">
-                                Book Now
-                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                            </a>
-                        </div>
-                        <p class="showcase-card__desc">The annual landlord gas safety record required by law.</p>
-                        <img src="icons/service_card.jpg" alt="" class="showcase-card__image">
-                    </article>
-
-                    <article class="showcase-card showcase-card--stacked">
-                        <div class="showcase-card__copy">
-                            <h3 class="showcase-card__title">Gas Safety</h3>
-                            <p class="showcase-card__desc">The annual landlord gas safety record required by law.</p>
-                        </div>
-                        <img src="icons/service_card.jpg" alt="" class="showcase-card__image">
-                        <a href="#book" class="btn-primary btn-primary--block showcase-card__cta">
-                            Book Now
-                            <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </a>
-                    </article>
-
-                    <article class="showcase-card showcase-card--stacked">
-                        <div class="showcase-card__copy">
-                            <h3 class="showcase-card__title">Gas Safety</h3>
-                            <p class="showcase-card__desc">The annual landlord gas safety record required by law.</p>
-                        </div>
-                        <img src="icons/service_card.jpg" alt="" class="showcase-card__image">
-                        <a href="#book" class="btn-primary btn-primary--block showcase-card__cta">
-                            Book Now
-                            <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </a>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="estimate" class="estimate" aria-labelledby="estimate-title">
-            <div class="estimate__inner">
-                <header class="estimate__header">
-                    <h2 id="estimate-title mb-0" class="estimate__title">Get An Instant Estimate</h2>
-                    <p class="estimate__subtitle">Choose your service, add a few details, and see your estimated price in seconds.</p>
-                </header>
-
-                <div class="estimate-panel">
-                    <div class="estimate-panel__left">
-                        <div class="estimate-tabs" role="tablist" aria-label="Service categories">
-                            <button type="button" class="estimate-tabs__btn estimate-tabs__btn--active" role="tab" aria-selected="true" data-tab="gas">
-                                <img src="icons/gas.svg" alt="" class="estimate-tabs__icon" width="14" height="14">
-                                Gas Safety
-                            </button>
-                            <button type="button" class="estimate-tabs__btn" role="tab" aria-selected="false" data-tab="electric">
-                                <img src="icons/electric.svg" alt="" class="estimate-tabs__icon" width="14" height="14">
-                                Electrical
-                            </button>
-                            <button type="button" class="estimate-tabs__btn" role="tab" aria-selected="false" data-tab="energy">
-                                <img src="icons/energy.svg" alt="" class="estimate-tabs__icon" width="14" height="14">
-                                Energy (EPC)
-                            </button>
-                            <button type="button" class="estimate-tabs__btn" role="tab" aria-selected="false" data-tab="fire">
-                                <img src="icons/fire_stafty.svg" alt="" class="estimate-tabs__icon" width="14" height="14">
-                                Fire Safety
-                            </button>
-                            <button type="button" class="estimate-tabs__btn" role="tab" aria-selected="false" data-tab="pat">
-                                <img src="icons/circle_tick.svg" alt="" class="estimate-tabs__icon" width="14" height="14">
-                                PAT Testing
-                            </button>
-                        </div>
-
-                        <div class="estimate-services">
-                            <div class="estimate-services__head">
-                                <span class="estimate-services__label">
-                                    <div class="estimate-services__label-icon-wrap">
-                                        <img src="icons/gas.svg" alt="" class="estimate-services__label-icon" width="14" height="14">
-                                    </div>
-                                    <span class="estimate-services__label-text">Gas Safety</span>
                                 </span>
-                                <span class="estimate-services__count">4 services</span>
-                            </div>
-
-                            <ul class="estimate-services__list">
-                                <li class="estimate-service estimate-service--selected" tabindex="0" role="button">
-                                    <div class="estimate-service__info">
-                                        <span class="estimate-service__name">CP12 Gas Safety Certificate</span>
-                                        <span class="estimate-service__desc">Annual landlord requirement</span>
-                                    </div>
-                                    <span class="estimate-service__price">from £60</span>
-                                </li>
-                                <li class="estimate-service" tabindex="0" role="button">
-                                    <div class="estimate-service__info">
-                                        <span class="estimate-service__name">CP12 + Basic Boiler Service</span>
-                                        <span class="estimate-service__desc">Certificate and basic service bundle</span>
-                                    </div>
-                                    <span class="estimate-service__price">from £95</span>
-                                </li>
-                                <li class="estimate-service" tabindex="0" role="button">
-                                    <div class="estimate-service__info">
-                                        <span class="estimate-service__name">CP12 + Full Manufacturer Service</span>
-                                        <span class="estimate-service__desc">Full boiler service included</span>
-                                    </div>
-                                    <span class="estimate-service__price">from £180</span>
-                                </li>
-                                <li class="estimate-service" tabindex="0" role="button">
-                                    <div class="estimate-service__info">
-                                        <span class="estimate-service__name">Landlord Gas Safety Record</span>
-                                        <span class="estimate-service__desc">Multi-appliance properties</span>
-                                    </div>
-                                    <span class="estimate-service__price">from £75</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="estimate-panel__right">
-                        <p class="estimate-calc__eyebrow">Calculating estimate for</p>
-                        <h3 class="estimate-calc__service">Fire Risk Assessment — Commercial</h3>
-
-                        <div class="estimate-field">
-                            <label class="field-label" for="estimate-postcode">Your postcode</label>
-                            <input class="field-input" type="text" id="estimate-postcode" name="postcode" value="SW1A 1AA" autocomplete="postal-code">
-                            <p class="estimate-field__status estimate-field__status--success">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                    <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                Covered (Inner London)
-                            </p>
-                        </div>
-
-                        <fieldset class="estimate-field estimate-floors">
-                            <legend class="field-label">Number of floors</legend>
-                            <div class="estimate-floors__options">
-                                <label class="estimate-floors__option">
-                                    <input type="radio" name="floors" value="1">
-                                    <span>1</span>
-                                </label>
-                                <label class="estimate-floors__option">
-                                    <input type="radio" name="floors" value="2" checked>
-                                    <span>2</span>
-                                </label>
-                                <label class="estimate-floors__option">
-                                    <input type="radio" name="floors" value="3">
-                                    <span>3</span>
-                                </label>
-                                <label class="estimate-floors__option">
-                                    <input type="radio" name="floors" value="4">
-                                    <span>4</span>
-                                </label>
-                            </div>
-                        </fieldset>
-
-                        <div class="estimate-price-box">
-                            <div class="estimate-price-box__row">
-                                <div class="estimate-price-box__info">
-                                    <p class="estimate-price-box__label">Your estimated price for</p>
-                                    <p class="estimate-price-box__detail">• 2-floor</p>
-                                </div>
-                                <span class="estimate-price-box__amount">£250</span>
-                            </div>
-                            <hr class="estimate-price-box__divider">
-                            <p class="estimate-price-box__note">This is an estimated price. Final quote may vary based on property access and specific requirements.</p>
-                            <a href="#book" class="btn-primary btn-primary--block estimate-price-box__cta">
-                                Book Now
-                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
                             </a>
-                            <p class="estimate-price-box__whatsapp">
-                                Or <a href="https://wa.me/447350538874" class="estimate-price-box__whatsapp-link" target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help
-                            </p>
                         </div>
-                    </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="./icons/choice 2.jpg" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Gas Safety Certificate (CP12)</h3>
+                            <p class="service-card__desc">Annual Gas Safety Inspections Required By Law For All Rental Properties.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">£47.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="./icons/service_card.jpg" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Electrical Certificate (EICR)</h3>
+                            <p class="service-card__desc">BS7671 : Mandatory 5-yearly electrical inspection for all rental properties</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">£180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="./icons/Image (EICR Report).png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Fire Alarm Certificate (FSC)</h3>
+                            <p class="service-card__desc">BS-5839: Installation, Testing And Certification of Fire Alarm Systems.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">£180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="./icons/Image (EICR Report)-1.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Energy Performance Certificate (EPC)</h3>
+                            <p class="service-card__desc">Required For All Residential Rental Properties Minimum E Rating</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">£180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="./icons/Image (EICR Report)-2.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Fire Safety Risk Assessment (FRA)</h3>
+                            <p class="service-card__desc">Mandatory Fire Safety Assessments For HMOs And Multi-Occupancy Properties</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">£180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -563,16 +385,18 @@
         <section id="why-choose-us" class="why" aria-labelledby="why-title">
             <div class="why__inner">
                 <div class="why__content">
-                    <p class="why__eyebrow">WHY CHOOSE LLSI</p>
-                    <h2 id="why-title" class="why__title">Built for landlords who can&rsquo;t afford delays.</h2>
-                    <p class="why__subtitle">One company for every compliance certificate. Gas Safe engineers, NICEIC affiliated electricians, and fire assessors &mdash; all available across London, same-day.</p>
+                    <h2 id="why-title" class="why__title">
+                        Built for Landlords Who can&rsquo;t
+                        <span class="why__title-accent">Afford Delays.</span>
+                    </h2>
+                    <p class="why__subtitle">We combine expertise, reliability, and speed to deliver the best compliance experience every time — Gas Safe engineers, NICEIC electricians, and fire assessors across London.</p>
 
                     <div class="why__grid">
                         <article class="why-card">
-                            <span class="why-card__icon-wrap" aria-hidden="true">
-                                <svg class="why-card__icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                    <circle cx="9" cy="9" r="7.25" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M9 5V9L11.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <span class="why-card__icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/>
+                                    <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </span>
                             <h3 class="why-card__title">24-Hour Turnaround</h3>
@@ -580,9 +404,9 @@
                         </article>
 
                         <article class="why-card">
-                            <span class="why-card__icon-wrap" aria-hidden="true">
-                                <svg class="why-card__icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                    <path d="M9 1.5L3 4.5V8.25C3 11.7 5.55 14.85 9 16.5C12.45 14.85 15 11.7 15 8.25V4.5L9 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <span class="why-card__icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3 4.5 6.5v5c0 4.8 3.4 9.1 7.5 10.5 4.1-1.4 7.5-5.7 7.5-10.5v-5L12 3Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </span>
                             <h3 class="why-card__title">Fully Accredited</h3>
@@ -590,113 +414,179 @@
                         </article>
 
                         <article class="why-card">
-                            <span class="why-card__icon-wrap" aria-hidden="true">
-                                <svg class="why-card__icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                    <path d="M4.5 3H10.5L13.5 6V14.25C13.5 14.66 13.16 15 12.75 15H4.5C4.09 15 3.75 14.66 3.75 14.25V3.75C3.75 3.34 4.09 3 4.5 3Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M10.5 3V6H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M6.75 9H10.5M6.75 11.25H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <span class="why-card__icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 21V4h9v17M13 8h7v13M8 8h2M8 12h2M8 16h2M16 12h2M16 16h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </span>
                             <h3 class="why-card__title">All Compliance</h3>
-                            <p class="why-card__text">Gas, electrical, fire, EPC &mdash; one call books it all.</p>
+                            <p class="why-card__text">Gas, electrical, fire, EPC — one call books it all.</p>
                         </article>
 
                         <article class="why-card">
-                            <span class="why-card__icon-wrap" aria-hidden="true">
-                                <img src="icons/circle_tick.svg" alt="" class="why-card__icon-img" width="18" height="18">
+                            <span class="why-card__icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/>
+                                    <path d="m8.5 12.5 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </span>
                             <h3 class="why-card__title">No Hidden Fees</h3>
                             <p class="why-card__text">The price quoted is the price you pay. Always.</p>
                         </article>
                     </div>
+
+                    <aside class="why-cta">
+                        <h3 class="why-cta__title">
+                            Work Backed by Customer
+                            <span class="why-cta__accent">Satisfaction</span>
+                        </h3>
+                        <p class="why-cta__text">We ensure everything works perfectly and you&rsquo;re completely satisfied before we leave. Trusted by 500+ London landlords and letting agents.</p>
+                        <a href="#services" class="why-cta__btn">
+                            <span>Explore all our services</span>
+                            <span class="why-cta__btn-arrow" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </a>
+                    </aside>
                 </div>
 
-                <div class="why__gallery" aria-hidden="true">
+                <div class="why__media">
                     <img
-                        src="icons/choice%202.jpg"
-                        alt=""
-                        class="why__image why__image--main"
-                        width="480"
-                        height="640"
+                        src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80"
+                        alt="Accredited engineer working on electrical installation"
+                        class="why__image"
+                        width="520"
+                        height="720"
                     >
-                    <div class="why__gallery-stack">
-                        <img
-                            src="icons/service_card.jpg"
-                            alt=""
-                            class="why__image why__image--stack"
-                            width="400"
-                            height="300"
-                        >
-                        <img
-                            src="icons/choise1.jpg"
-                            alt=""
-                            class="why__image why__image--stack"
-                            width="400"
-                            height="300"
-                        >
+                </div>
+            </div>
+        </section>
+
+        <section id="estimate" class="estimate" aria-labelledby="estimate-title">
+            <div class="estimate__inner">
+                <header class="estimate__header">
+                    <h2 id="estimate-title" class="estimate__title">
+                        Get an Instant <span class="estimate__title-accent">Estimate</span>
+                    </h2>
+                    <p class="estimate__subtitle">Choose your service, add a few details, and see your estimated price
+                        in seconds.</p>
+                </header>
+
+                <div class="estimate-layout">
+                    <div class="estimate-select">
+                        <div class="estimate-select_header">
+                            <h3 class="estimate-select__title">Select A Service</h3>
+                        </div>
+                        
+                        <div id="estimate-categories" class="estimate-accordion" aria-live="polite">
+                            <p class="estimate-accordion__status">Loading services…</p>
+                        </div>
                     </div>
+
+                    <aside class="estimate-calc" aria-label="Estimate calculator">
+                        <div class="estimate-calc__card">
+                            <p class="estimate-calc__eyebrow">Calculating estimate for</p>
+                            <h3 id="estimate-selected-name" class="estimate-calc__service">Select a service</h3>
+                        </div>
+
+                        <div class="estimate-calc__card">
+                            <div class="estimate-field">
+                                <label class="field-label" for="estimate-postcode">Your postcode</label>
+                                <input class="field-input" type="text" id="estimate-postcode" name="postcode"
+                                    value="SW1A 1AA" autocomplete="postal-code" placeholder="e.g. SW1A 1AA">
+                                <p id="estimate-coverage" class="estimate-field__status" hidden></p>
+                            </div>
+                            <div id="estimate-questions" class="estimate-questions"></div>
+                        </div>
+
+                        <div class="estimate-calc__card estimate-calc__card--price">
+                            <div class="estimate-price-box__row">
+                                <div class="estimate-price-box__info">
+                                    <p class="estimate-price-box__label">Your estimated price for</p>
+                                    <p id="estimate-price-detail" class="estimate-price-box__detail"></p>
+                                </div>
+                                <span id="estimate-price-amount" class="estimate-price-box__amount">—</span>
+                            </div>
+                            <hr class="estimate-price-box__divider">
+                            <p class="estimate-price-box__note">This is an estimated price. Final quote may vary based
+                                on property access and specific requirements.</p>
+                            <a id="estimate-book-cta" href="/book-now/"
+                                class="btn-primary btn-primary--block estimate-price-box__cta">
+                                Book Now
+                                <img src="icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
+                                    height="16">
+                            </a>
+                            <p class="estimate-price-box__whatsapp">
+                                Or <a href="https://wa.me/447350538874" class="estimate-price-box__whatsapp-link"
+                                    target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help
+                            </p>
+                        </div>
+                    </aside>
                 </div>
             </div>
         </section>
 
         <section id="how-it-works" class="how" aria-labelledby="how-title">
             <div class="how__inner">
-                <header class="how__header">
-                    <p class="how__eyebrow">HOW IT WORKS</p>
-                    <h2 id="how-title" class="how__title">Three steps to compliant.</h2>
-                </header>
+                <div class="how__visual">
+                    <img
+                        src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80"
+                        alt="Accredited engineer working on an electrical installation"
+                        class="how__image"
+                        width="560"
+                        height="420"
+                    >
+                    <aside class="how-cta">
+                        <h3 class="how-cta__title">
+                            Certificate Needed
+                            <span class="how-cta__accent">by Tomorrow?</span>
+                        </h3>
+                        <p class="how-cta__text">Book before 5pm and our engineer can often visit same day. Certificate guaranteed within 24 hours.</p>
+                        <a href="#book" class="how-cta__btn">
+                            <span>Book Now</span>
+                            <span class="how-cta__btn-arrow" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </a>
+                    </aside>
+                </div>
 
-                <div class="how__steps">
-                    <article class="how-step">
-                        <div class="how-step__media">
-                            <span class="how-step__badge">01</span>
-                            <img
-                                src="./icons/livingroom.jpg"
-                                alt=""
-                                class="how-step__image"
-                                width="400"
-                                height="280"
-                            >
-                        </div>
-                        <div class="how-step__body">
-                            <h3 class="how-step__title">Request a Quote</h3>
-                            <p class="how-step__text">Fill in your postcode, property type, and contact details. We confirm your booking within the hour &mdash; sometimes minutes.</p>
-                        </div>
-                    </article>
+                <div class="how__content">
+                    <header class="how__header">
+                        <h2 id="how-title" class="how__title">
+                            Three Steps to
+                            <span class="how__title-accent">Compliant</span>
+                        </h2>
+                        <p class="how__lead">We&rsquo;ve streamlined the process to get your property certified with zero hassle</p>
+                    </header>
 
-                    <article class="how-step">
-                        <div class="how-step__media">
-                            <span class="how-step__badge">02</span>
-                            <img
-                                src="icons/choice%202.jpg"
-                                alt=""
-                                class="how-step__image"
-                                width="400"
-                                height="280"
-                            >
-                        </div>
-                        <div class="how-step__body">
-                            <h3 class="how-step__title">Engineer Visits</h3>
-                            <p class="how-step__text">A fully accredited engineer arrives at your chosen time. Flexible slots, all London boroughs, no waiting weeks.</p>
-                        </div>
-                    </article>
-
-                    <article class="how-step">
-                        <div class="how-step__media">
-                            <span class="how-step__badge">03</span>
-                            <img
-                                src="icons/bright living room.jpg"
-                                alt=""
-                                class="how-step__image"
-                                width="400"
-                                height="280"
-                            >
-                        </div>
-                        <div class="how-step__body">
-                            <h3 class="how-step__title">Certificate Issued</h3>
-                            <p class="how-step__text">Your official certificate lands in your inbox within 24 hours of inspection. Fully compliant, ready to share with tenants.</p>
-                        </div>
-                    </article>
+                    <ol class="how__steps">
+                        <li class="how-step">
+                            <span class="how-step__num" aria-hidden="true">1</span>
+                            <div class="how-step__body">
+                                <h3 class="how-step__title">Request a Quote</h3>
+                                <p class="how-step__text">Fill in your postcode, property type, and contact details. We confirm your booking within the hour — sometimes minutes.</p>
+                            </div>
+                        </li>
+                        <li class="how-step">
+                            <span class="how-step__num" aria-hidden="true">2</span>
+                            <div class="how-step__body">
+                                <h3 class="how-step__title">Engineer Visits</h3>
+                                <p class="how-step__text">A fully accredited engineer arrives at your chosen time. Flexible slots, all London boroughs, no waiting weeks.</p>
+                            </div>
+                        </li>
+                        <li class="how-step">
+                            <span class="how-step__num" aria-hidden="true">3</span>
+                            <div class="how-step__body">
+                                <h3 class="how-step__title">Certificate Issued</h3>
+                                <p class="how-step__text">Your official certificate lands in your inbox within 24 hours of inspection. Fully compliant, ready to share with tenants.</p>
+                            </div>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </section>
@@ -706,55 +596,96 @@
                 <div class="coverage__content">
                     <p class="coverage__eyebrow">COVERAGE</p>
                     <h2 id="coverage-title" class="coverage__title">Every London borough. Every property type.</h2>
-                    <p class="coverage__desc">We cover all 32 London boroughs and the full M25 corridor. Whether you manage one buy-to-let or a large HMO portfolio, LLSI is your compliance partner.</p>
+                    <p class="coverage__desc">We cover all 32 London boroughs and the full M25 corridor. Whether you
+                        manage one buy-to-let or a large HMO portfolio, LLSI is your compliance partner.</p>
 
                     <h3 class="coverage__label">WE WORK WITH</h3>
                     <ul class="coverage__tags">
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Letting Agents
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.333 6.417L7 2.333L11.667 6.417V11.667C11.667 11.88 11.497 12.05 11.283 12.05H2.717C2.503 12.05 2.333 11.88 2.333 11.667V6.417Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.833 12.05V7.583H8.167V12.05" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M2.333 6.417L7 2.333L11.667 6.417V11.667C11.667 11.88 11.497 12.05 11.283 12.05H2.717C2.503 12.05 2.333 11.88 2.333 11.667V6.417Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M5.833 12.05V7.583H8.167V12.05" stroke="currentColor" stroke-width="1.167"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
                             </span>
                             HMO Landlords
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.333 6.417L7 2.333L11.667 6.417V11.667C11.667 11.88 11.497 12.05 11.283 12.05H2.717C2.503 12.05 2.333 11.88 2.333 11.667V6.417Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.833 12.05V7.583H8.167V12.05" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M2.333 6.417L7 2.333L11.667 6.417V11.667C11.667 11.88 11.497 12.05 11.283 12.05H2.717C2.503 12.05 2.333 11.88 2.333 11.667V6.417Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M5.833 12.05V7.583H8.167V12.05" stroke="currentColor" stroke-width="1.167"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Private Landlords
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Property Managers
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M2.333 12.833H11.667M3.5 12.833V3.5L7 1.167L10.5 3.5V12.833M5.833 12.833V8.167H8.167V12.833"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Hotels
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.75C7 1.75 4.667 4.667 4.667 7C4.667 8.21 5.457 9.333 7 10.5C8.543 9.333 9.333 8.21 9.333 7C9.333 4.667 7 1.75 7 1.75Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 1.75C7 1.75 4.667 4.667 4.667 7C4.667 8.21 5.457 9.333 7 10.5C8.543 9.333 9.333 8.21 9.333 7C9.333 4.667 7 1.75 7 1.75Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Restaurants
                         </li>
                         <li class="coverage-tag">
                             <span class="coverage-tag__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.75L3.5 3.5V7C3.5 9.45 5.075 11.55 7 12.833C8.925 11.55 10.5 9.45 10.5 7V3.5L7 1.75Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 1.75L3.5 3.5V7C3.5 9.45 5.075 11.55 7 12.833C8.925 11.55 10.5 9.45 10.5 7V3.5L7 1.75Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Care Homes
                         </li>
                     </ul>
 
-                    <a href="https://wa.me/447350538874" class="coverage__whatsapp" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/447350538874" class="coverage__whatsapp" target="_blank"
+                        rel="noopener noreferrer">
                         <img src="icons/message.svg" alt="" class="coverage__whatsapp-icon" width="14" height="14">
                         WhatsApp us to check your postcode
                     </a>
@@ -765,73 +696,181 @@
                     <ul class="coverage__grid">
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Central London
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             North London
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             East London
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             South London
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             West London
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Essex
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Hertfordshire
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Surrey
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Kent
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Middlesex
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Berkshire
                         </li>
                         <li class="coverage-area">
                             <span class="coverage-area__icon" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path
+                                        d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                        stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
                             </span>
                             Buckinghamshire
                         </li>
@@ -843,191 +882,467 @@
         <section id="reviews" class="reviews" aria-labelledby="reviews-title">
             <div class="reviews__inner">
                 <header class="reviews__header">
-                    <p class="reviews__eyebrow">CUSTOMER REVIEWS</p>
+                    <p class="reviews__eyebrow">Customer Reviews</p>
                     <h2 id="reviews-title" class="reviews__title">Trusted by London landlords</h2>
                     <div class="reviews__rating">
                         <div class="review-stars" aria-hidden="true">
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><use href="#icon-star" /></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><use href="#icon-star" /></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><use href="#icon-star" /></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><use href="#icon-star" /></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><use href="#icon-star" /></svg>
                         </div>
                         <p class="reviews__score">4.9/5 from 200+ reviews</p>
                     </div>
                 </header>
+            </div>
 
-                <div class="reviews__cards">
-                    <article class="review-card">
-                        <div class="review-stars review-card__stars" aria-hidden="true">
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
+            <div class="reviews__carousel-wrap">
+                <div class="reviews-carousel" aria-label="Customer reviews">
+                    <svg class="reviews-carousel__defs" width="0" height="0" aria-hidden="true" focusable="false">
+                        <symbol id="icon-star" viewBox="0 0 14 14">
+                            <path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z" />
+                        </symbol>
+                    </svg>
+                    <div class="reviews-carousel__track">
+                        <div class="reviews-carousel__group">
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;LLSI handles compliance for our entire portfolio. Gas certs, EICRs, EPCs — all sorted within 24 hours. Our landlords love it.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">S</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Sarah Moran</cite>
+                                        <p class="review-card__role">Letting Agent, Hackney</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;I manage 7 HMOs and used to juggle three different companies. Now I call LLSI for everything. Punctual and brilliant.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">J</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">James Okonkwo</cite>
+                                        <p class="review-card__role">HMO Landlord, Lewisham</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Booked the gas safety check on Monday morning, engineer came Tuesday, certificate in my inbox by 4pm.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">P</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Priya Sharma</cite>
+                                        <p class="review-card__role">Private Landlord, Ealing</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Fast, professional, and the pricing is exactly as quoted. No hidden extras. I recommend LLSI to every landlord.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">M</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Marcus Hill</cite>
+                                        <p class="review-card__role">Property Manager, Islington</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Renewed my EPC and floor plan in one visit. Clear communication from booking through to the certificate.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">E</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Emily Chen</cite>
+                                        <p class="review-card__role">Landlord, Camden</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;We put all agency gas safety work through LLSI. Reliable turnaround and certificates that agents can trust.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">D</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">David Patel</cite>
+                                        <p class="review-card__role">Letting Agent, Croydon</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Fire safety certificates for my HMOs were done the same week. Straightforward booking and fair pricing.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">A</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Aisha Khan</cite>
+                                        <p class="review-card__role">HMO Landlord, Tower Hamlets</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;First time using LLSI for an EICR. Engineer explained everything and the report arrived the next day.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">T</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Tom Bradley</cite>
+                                        <p class="review-card__role">Private Landlord, Greenwich</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Managing multiple blocks, we need consistency. LLSI delivers the same standard every time we book.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">O</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Olivia Reed</cite>
+                                        <p class="review-card__role">Property Manager, Wandsworth</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Needed a same-week CP12 before remortgage. They fitted me in and emailed the certificate the same day.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">H</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Hassan Ali</cite>
+                                        <p class="review-card__role">Landlord, Brent</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Our tenants commented how polite the engineer was. Certificates were clear and filed without chase-ups.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">S</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Sophie Turner</cite>
+                                        <p class="review-card__role">Letting Agent, Southwark</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;Bundle booking for gas and boiler service saved me time and money. Instant estimate matched the final price.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">L</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Liam Foster</cite>
+                                        <p class="review-card__role">HMO Landlord, Newham</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;As a first-time landlord I was unsure what I needed. LLSI guided me through CP12, EICR and EPC calmly.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">N</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Nadia Brooks</cite>
+                                        <p class="review-card__role">Private Landlord, Barnet</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;We schedule quarterly compliance with LLSI. Always on time, always documented properly for our audits.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">K</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Kevin Walsh</cite>
+                                        <p class="review-card__role">Property Manager, Haringey</p>
+                                    </div>
+                                </footer>
+                            </article>
+                            <article class="review-card">
+                                <div class="review-stars review-card__stars" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><use href="#icon-star" /></svg>
+                                </div>
+                                <blockquote class="review-card__quote">&ldquo;WhatsApp support answered in minutes when I needed a last-minute appointment. Stress-free experience.&rdquo;</blockquote>
+                                <footer class="review-card__footer">
+                                    <span class="review-card__avatar" aria-hidden="true">F</span>
+                                    <div class="review-card__author">
+                                        <cite class="review-card__name">Fatima Noor</cite>
+                                        <p class="review-card__role">Landlord, Waltham Forest</p>
+                                    </div>
+                                </footer>
+                            </article>
                         </div>
-                        <blockquote class="review-card__quote">&ldquo;LLSI handles compliance for our entire portfolio. Gas certs, EICRs, EPCs &mdash; all sorted within 24 hours. Our landlords love it and we&rsquo;ve never had a hold-up on a tenancy.&rdquo;</blockquote>
-                        <footer class="review-card__footer">
-                            <span class="review-card__avatar" aria-hidden="true">S</span>
-                            <div class="review-card__author">
-                                <cite class="review-card__name">Sarah Moran</cite>
-                                <p class="review-card__role">Letting Agent, Hackney</p>
-                            </div>
-                        </footer>
-                    </article>
-
-                    <article class="review-card">
-                        <div class="review-stars review-card__stars" aria-hidden="true">
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                        </div>
-                        <blockquote class="review-card__quote">&ldquo;I manage 7 HMOs and used to juggle three different companies. Now I call LLSI for everything. The engineer was punctual, the certificate came through that evening. Brilliant.&rdquo;</blockquote>
-                        <footer class="review-card__footer">
-                            <span class="review-card__avatar" aria-hidden="true">J</span>
-                            <div class="review-card__author">
-                                <cite class="review-card__name">James Okonkwo</cite>
-                                <p class="review-card__role">HMO Landlord, Lewisham</p>
-                            </div>
-                        </footer>
-                    </article>
-
-                    <article class="review-card">
-                        <div class="review-stars review-card__stars" aria-hidden="true">
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                        </div>
-                        <blockquote class="review-card__quote">&ldquo;Booked the gas safety check on a Monday morning, engineer came Tuesday, certificate in my inbox by 4pm. Exactly what I needed before my tenants moved in.&rdquo;</blockquote>
-                        <footer class="review-card__footer">
-                            <span class="review-card__avatar" aria-hidden="true">P</span>
-                            <div class="review-card__author">
-                                <cite class="review-card__name">Priya Sharma</cite>
-                                <p class="review-card__role">Private Landlord, Ealing</p>
-                            </div>
-                        </footer>
-                    </article>
-
-                    <article class="review-card">
-                        <div class="review-stars review-card__stars" aria-hidden="true">
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                            <svg class="review-stars__icon" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.167L8.453 5.047L12.667 5.453L9.5 8.12L10.453 12.287L7 10.287L3.547 12.287L4.5 8.12L1.333 5.453L5.547 5.047L7 1.167Z"/></svg>
-                        </div>
-                        <blockquote class="review-card__quote">&ldquo;Fast, professional, and the pricing is exactly as quoted. No hidden extras. I&rsquo;ve recommended LLSI to every landlord in our block.&rdquo;</blockquote>
-                        <footer class="review-card__footer">
-                            <span class="review-card__avatar" aria-hidden="true">M</span>
-                            <div class="review-card__author">
-                                <cite class="review-card__name">Marcus Hill</cite>
-                                <p class="review-card__role">Property Manager, Islington</p>
-                            </div>
-                        </footer>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="faq" class="faq" aria-labelledby="faq-title">
             <div class="faq__inner">
-                <header class="faq__header">
-                    <p class="faq__eyebrow">FAQ</p>
-                    <h2 id="faq-title" class="faq__title">Common questions</h2>
-                </header>
+                <div class="faq__layout">
+                    <div class="faq__intro">
+                        <h2 id="faq-title" class="faq__title">
+                            Questions Answered <span class="faq__title-accent">FAQ</span>
+                        </h2>
+                        <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings, same-week availability, and certificates sent within 24 hours.</p>
+                        <a href="#estimate" class="btn-primary btn-primary--header faq__book">
+                            <span class="btn-primary__label">Book an inspection</span>
+                            <span class="btn-primary__arrow" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </a>
 
-                <div class="faq__list">
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>How quickly will I receive my certificate after the inspection?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>In most cases your certificate is emailed within 24 hours of the inspection. Same-day visits are often available when you book before 5pm.</p>
+                        <aside class="faq-help" aria-label="More help">
+                            <div class="faq-help__top">
+                                <div class="faq-help__avatars" aria-hidden="true">
+                                    <span class="faq-help__avatar">A</span>
+                                    <span class="faq-help__avatar">S</span>
+                                    <span class="faq-help__avatar">J</span>
+                                </div>
+                                <div class="faq-help__copy">
+                                    <p class="faq-help__title">Have more questions?</p>
+                                    <p class="faq-help__subtitle">Our team replies in minutes</p>
+                                </div>
+                            </div>
+                            <a href="https://wa.me/447350538874" class="faq-help__whatsapp" target="_blank"
+                                rel="noopener noreferrer">
+                                <img src="icons/message.svg" alt="" width="16" height="16">
+                                Chat on WhatsApp
+                            </a>
+                        </aside>
+                    </div>
+
+                    <div class="faq__panel">
+                        <div class="faq__list">
+                            <details class="faq-item" open>
+                                <summary class="faq-item__question">
+                                    <span>How quickly will I receive my certificate after the inspection?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Every certificate is issued within 24 hours of the inspection — usually the same evening. You receive it by email as an official PDF, ready to share with tenants or agents.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Are your engineers Gas Safe registered?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Yes. Every gas engineer we send is Gas Safe registered. Electrical work is carried out by NICEIC affiliated electricians.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>How often does a landlord need a Gas Safety Certificate?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Landlords must have gas appliances and flues checked every 12 months. A new CP12 is required before a new tenancy starts if the current certificate has expired.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>How often is an EICR required for rental properties?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Residential rental properties in England need an EICR at least every 5 years, or at the start of a new tenancy. HMOs and commercial properties may have different requirements.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do I need an EPC for my rental property?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Yes. A valid EPC (minimum rating E) must be provided to tenants before marketing a property and is required for every new tenancy.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>What happens if my property fails an inspection?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Your engineer will explain any issues found and advise on remedial work. We can often return to re-inspect once faults are fixed so you can obtain a compliant certificate.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do you cover my area?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>We cover all 32 London boroughs and the wider M25 corridor, including Essex, Kent, Surrey, Hertfordshire, and surrounding counties. WhatsApp us with your postcode to confirm.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Can I book multiple certificates for the same property?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Absolutely. You can book gas, electrical, fire, and EPC certificates in one visit where possible — saving time and reducing disruption for you and your tenants.</p>
+                                </div>
+                            </details>
                         </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>Are your engineers Gas Safe registered?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Yes. Every gas engineer we send is Gas Safe registered. Electrical work is carried out by NICEIC affiliated electricians.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>How often does a landlord need a Gas Safety Certificate?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Landlords must have gas appliances and flues checked every 12 months. A new CP12 is required before a new tenancy starts if the current certificate has expired.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>How often is an EICR required for rental properties?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Residential rental properties in England need an EICR at least every 5 years, or at the start of a new tenancy. HMOs and commercial properties may have different requirements.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>Do I need an EPC for my rental property?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Yes. A valid EPC (minimum rating E) must be provided to tenants before marketing a property and is required for every new tenancy.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>What happens if my property fails an inspection?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Your engineer will explain any issues found and advise on remedial work. We can often return to re-inspect once faults are fixed so you can obtain a compliant certificate.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>Do you cover my area?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>We cover all 32 London boroughs and the wider M25 corridor, including Essex, Kent, Surrey, Hertfordshire, and surrounding counties. WhatsApp us with your postcode to confirm.</p>
-                        </div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-item__question">
-                            <span>Can I book multiple certificates for the same property?</span>
-                            <img src="icons/arrow_down.svg" alt="" class="faq-item__chevron" width="14" height="14">
-                        </summary>
-                        <div class="faq-item__answer">
-                            <p>Absolutely. You can book gas, electrical, fire, and EPC certificates in one visit where possible &mdash; saving time and reducing disruption for you and your tenants.</p>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="faq__cta-wrap">
-                    <p class="faq__cta-text">Still have questions?</p>
-                    <a href="https://wa.me/447350538874" class="btn-primary faq__cta" target="_blank" rel="noopener noreferrer">
-                        <img src="icons/message.svg" alt="" class="faq__cta-icon" width="14" height="14">
-                        Chat with us on WhatsApp
-                    </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1038,16 +1353,21 @@
             <div class="cta-book__inner">
                 <p class="cta-book__eyebrow">BOOK TODAY</p>
                 <h2 id="cta-book-title" class="cta-book__title">Certificate needed by tomorrow?</h2>
-                <p class="cta-book__lead">Book before 5pm and our engineer can often visit same day. Certificate guaranteed within 24 hours.</p>
+                <p class="cta-book__lead">Book before 5pm and our engineer can often visit same day. Certificate
+                    guaranteed within 24 hours.</p>
                 <div class="cta-book__actions">
                     <a href="#estimate" class="btn-cta btn-cta--primary">
                         Get a Free Quote
-                        <svg class="btn-cta__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M3.333 8H12.667" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 3.333L12.667 8L8 12.667" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg class="btn-cta__icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            aria-hidden="true">
+                            <path d="M3.333 8H12.667" stroke="currentColor" stroke-width="1.333" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M8 3.333L12.667 8L8 12.667" stroke="currentColor" stroke-width="1.333"
+                                stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a href="https://wa.me/447350538874" class="btn-cta btn-cta--outline" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/447350538874" class="btn-cta btn-cta--outline" target="_blank"
+                        rel="noopener noreferrer">
                         <img src="icons/message.svg" alt="" class="btn-cta__whatsapp" width="14" height="14">
                         WhatsApp 07350 538874
                     </a>
@@ -1061,20 +1381,33 @@
             <div class="site-footer__grid">
                 <div class="site-footer__brand">
                     <a href="/" class="site-footer__logo" aria-label="Landlord Safety Inspection home">
-                        <img src="icons/LLSI LOGO ICON.svg" alt="" class="site-footer__logo-icon" width="37" height="40">
+                        <img src="icons/LLSI LOGO ICON.svg" alt="" class="site-footer__logo-icon" width="37"
+                            height="40">
                         <span class="site-footer__logo-brand">
                             <span class="site-footer__logo-title">LANDLORD</span>
                             <span class="site-footer__logo-subtitle">Safety Inspection</span>
                         </span>
                     </a>
-                    <p class="site-footer__desc">Landlord Safety Inspection Limited. Property compliance certificates for London landlords, letting agents, and property managers.</p>
+                    <p class="site-footer__desc">Landlord Safety Inspection Limited. Property compliance certificates
+                        for London landlords, letting agents, and property managers.</p>
                     <div class="site-footer__badges">
                         <span class="site-footer__badge">
-                            <svg class="site-footer__badge-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1L2.5 2.75V5.5C2.5 7.6 4 9.45 6 10.5C8 9.45 9.5 7.6 9.5 5.5V2.75L6 1Z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="site-footer__badge-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                aria-hidden="true">
+                                <path d="M6 1L2.5 2.75V5.5C2.5 7.6 4 9.45 6 10.5C8 9.45 9.5 7.6 9.5 5.5V2.75L6 1Z"
+                                    stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             Gas Safe Registered
                         </span>
                         <span class="site-footer__badge">
-                            <svg class="site-footer__badge-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1.25L7.35 4.15L10.5 4.55L8.15 6.75L8.85 9.85L6 8.35L3.15 9.85L3.85 6.75L1.5 4.55L4.65 4.15L6 1.25Z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="site-footer__badge-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                aria-hidden="true">
+                                <path
+                                    d="M6 1.25L7.35 4.15L10.5 4.55L8.15 6.75L8.85 9.85L6 8.35L3.15 9.85L3.85 6.75L1.5 4.55L4.65 4.15L6 1.25Z"
+                                    stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             NICEIC Affiliated
                         </span>
                     </div>
@@ -1096,7 +1429,7 @@
                     <h3 class="site-footer__heading">Company</h3>
                     <ul class="site-footer__links">
                         <li><a href="#services">All Services</a></li>
-                        <li><a href="#compliance">Compliance Guide</a></li>
+                        <li><a href="#services">Our Services</a></li>
                         <li><a href="#estimate">Pricing</a></li>
                         <li><a href="#reviews">Reviews</a></li>
                         <li><a href="#faq">FAQ</a></li>
@@ -1107,19 +1440,41 @@
                     <h3 class="site-footer__heading">Contact</h3>
                     <ul class="site-footer__contact">
                         <li>
-                            <img src="icons/message.svg" alt="" class="site-footer__contact-icon site-footer__contact-icon--whatsapp" width="14" height="14">
-                            <a href="https://wa.me/447350538874" class="site-footer__contact-link" target="_blank" rel="noopener noreferrer">WhatsApp <strong>07350 538874</strong></a>
+                            <img src="icons/message.svg" alt=""
+                                class="site-footer__contact-icon site-footer__contact-icon--whatsapp" width="14"
+                                height="14">
+                            <a href="https://wa.me/447350538874" class="site-footer__contact-link" target="_blank"
+                                rel="noopener noreferrer">WhatsApp <strong>07350 538874</strong></a>
                         </li>
                         <li>
-                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z" stroke="currentColor" stroke-width="1.167"/><path d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z" stroke="currentColor" stroke-width="1.167"/></svg>
+                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14"
+                                height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path
+                                    d="M7 7.583C7.968 7.583 8.75 6.801 8.75 5.833C8.75 4.865 7.968 4.083 7 4.083C6.032 4.083 5.25 4.865 5.25 5.833C5.25 6.801 6.032 7.583 7 7.583Z"
+                                    stroke="currentColor" stroke-width="1.167" />
+                                <path
+                                    d="M7 12.833C9.333 10.5 11.667 8.435 11.667 5.833C11.667 3.532 9.635 1.667 7 1.667C4.365 1.667 2.333 3.532 2.333 5.833C2.333 8.435 4.667 10.5 7 12.833Z"
+                                    stroke="currentColor" stroke-width="1.167" />
+                            </svg>
                             <span>London &amp; M25 Corridor</span>
                         </li>
                         <li>
-                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.167"/><path d="M7 4.083V7L8.75 8.167" stroke="currentColor" stroke-width="1.167" stroke-linecap="round"/></svg>
+                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14"
+                                height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.167" />
+                                <path d="M7 4.083V7L8.75 8.167" stroke="currentColor" stroke-width="1.167"
+                                    stroke-linecap="round" />
+                            </svg>
                             <span>Certificates within 24 hours</span>
                         </li>
                         <li>
-                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4.667 2.333H5.833L6.417 1.75H7.583L8.167 2.333H9.333C9.7 2.333 10 2.633 10 3V4.667M4.667 2.333C4.3 2.333 4 2.633 4 3V11C4 11.367 4.3 11.667 4.667 11.667H9.333C9.7 11.667 10 11.367 10 11V4.667M4.667 2.333H10M4.667 6.417H9.333M4.667 8.167H9.333" stroke="currentColor" stroke-width="1.167" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="site-footer__contact-icon site-footer__contact-icon--blue" width="14"
+                                height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path
+                                    d="M4.667 2.333H5.833L6.417 1.75H7.583L8.167 2.333H9.333C9.7 2.333 10 2.633 10 3V4.667M4.667 2.333C4.3 2.333 4 2.633 4 3V11C4 11.367 4.3 11.667 4.667 11.667H9.333C9.7 11.667 10 11.367 10 11V4.667M4.667 2.333H10M4.667 6.417H9.333M4.667 8.167H9.333"
+                                    stroke="currentColor" stroke-width="1.167" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             <span>Mon &ndash; Sat, flexible scheduling</span>
                         </li>
                     </ul>
@@ -1190,65 +1545,32 @@
             }
         })();
 
-        (function () {
-            var tabIcons = {
-                gas: 'icons/gas.svg',
-                electric: 'icons/electric.svg',
-                energy: 'icons/energy.svg',
-                fire: 'icons/fire_stafty.svg',
-                pat: 'icons/circle_tick.svg'
-            };
-
-            var tabLabels = {
-                gas: 'Gas Safety',
-                electric: 'Electrical',
-                energy: 'Energy (EPC)',
-                fire: 'Fire Safety',
-                pat: 'PAT Testing'
-            };
-
-            var tabs = document.querySelectorAll('.estimate-tabs__btn');
-            var servicesLabelText = document.querySelector('.estimate-services__label-text');
-            var servicesLabelIcon = document.querySelector('.estimate-services__label-icon');
-            var serviceItems = document.querySelectorAll('.estimate-service');
-
-            tabs.forEach(function (tab) {
-                tab.addEventListener('click', function () {
-                    var tabKey = tab.getAttribute('data-tab');
-
-                    tabs.forEach(function (item) {
-                        var isActive = item === tab;
-                        item.classList.toggle('estimate-tabs__btn--active', isActive);
-                        item.setAttribute('aria-selected', isActive ? 'true' : 'false');
-                    });
-
-                    if (servicesLabelText && tabLabels[tabKey]) {
-                        servicesLabelText.textContent = tabLabels[tabKey];
-                    }
-
-                    if (servicesLabelIcon && tabIcons[tabKey]) {
-                        servicesLabelIcon.src = tabIcons[tabKey];
-                    }
-                });
-            });
-
-            serviceItems.forEach(function (item) {
-                item.addEventListener('click', function () {
-                    serviceItems.forEach(function (service) {
-                        service.classList.remove('estimate-service--selected');
-                    });
-                    item.classList.add('estimate-service--selected');
-                });
-
-                item.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        item.click();
-                    }
-                });
-            });
-        })();
     </script>
     <script src="home-lead-form.js"></script>
+    <script src="home-estimate.js"></script>
+    <script>
+        (function () {
+            var track = document.querySelector('.reviews-carousel__track');
+            var group = track && track.querySelector('.reviews-carousel__group');
+            if (!track || !group) return;
+            var clone = group.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            clone.querySelectorAll('[id]').forEach(function (el) { el.removeAttribute('id'); });
+            track.appendChild(clone);
+        })();
+
+        (function () {
+            var list = document.querySelector('.faq__list');
+            if (!list) return;
+            list.addEventListener('toggle', function (event) {
+                var item = event.target;
+                if (!item.open || !item.classList.contains('faq-item')) return;
+                list.querySelectorAll('.faq-item[open]').forEach(function (other) {
+                    if (other !== item) other.removeAttribute('open');
+                });
+            }, true);
+        })();
+    </script>
 </body>
+
 </html>
