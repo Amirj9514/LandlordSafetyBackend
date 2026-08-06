@@ -2030,6 +2030,8 @@ body {
   opacity: 0;
   transform: translateY(-6px);
   padding-bottom: 0;
+  padding-top: 5px;
+  padding-left: 5px;
   transition:
     opacity 0.3s ease,
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -2164,14 +2166,40 @@ body {
 .estimate-field__status {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  margin: var(--space-2) 0 0;
-  font: var(--text-body-xs);
+  gap: 8px;
+  margin: 8px 0 0;
   font-family: var(--font-family-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.estimate-field__status-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.estimate-field__status-icon img,
+.estimate-field__status-icon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.estimate-field__status--success .estimate-field__status-icon img {
+  filter: invert(48%) sepia(78%) saturate(500%) hue-rotate(123deg) brightness(95%) contrast(101%);
+}
+
+.estimate-field__status-text {
+  min-width: 0;
 }
 
 .estimate-field__status--success {
-  color: var(--color-success);
+  color: #00B37D;
 }
 
 .estimate-field__status--error {
@@ -2225,9 +2253,230 @@ body {
 }
 
 .estimate-chip:has(input:checked) span {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 6%, #fff);
+  color: #fff;
+  border-color: #053BFF;
+  background: #053BFF;
+}
+
+.estimate-mcard__price-amount.is-loading {
+  opacity: 0.55;
+}
+
+/* Mobile / tablet Instant Estimate cards */
+@media (max-width: 63.99rem) {
+  .estimate-layout {
+    display: block;
+  }
+
+  .estimate-layout--mobile .estimate-calc {
+    display: none;
+  }
+
+  .estimate-select {
+    border: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .estimate-select_header {
+    padding: 0 0 16px;
+    border-bottom: none;
+  }
+
+  .estimate-select__title {
+    text-align: left;
+  }
+
+  .estimate-accordion {
+    padding: 0;
+  }
+
+  .estimate-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .estimate-mcard {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 16px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .estimate-mcard--open {
+    border-color: #C4CDD9;
+    box-shadow: 0 8px 24px rgba(28, 43, 58, 0.06);
+  }
+
+  .estimate-mcard__summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .estimate-mcard__copy {
+    min-width: 0;
+  }
+
+  .estimate-mcard__name {
+    margin: 0 0 4px;
+    font-family: var(--font-family-body);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 22px;
+    color: #1C2B3A;
+  }
+
+  .estimate-mcard__desc {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    color: #6B7A8F;
+  }
+
+  .estimate-mcard__from {
+    flex-shrink: 0;
+    font-family: var(--font-family-body);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1C2B3A;
+    white-space: nowrap;
+  }
+
+  .estimate-mcard__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #D6E0FF;
+    border-radius: 12px;
+    background: #EEF2FF;
+    color: #053BFF;
+    font-family: var(--font-family-body);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .estimate-mcard__toggle:hover {
+    background: #e4ebff;
+  }
+
+  .estimate-mcard__toggle-icon {
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .estimate-mcard--open .estimate-mcard__toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .estimate-mcard__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .estimate-mcard--open .estimate-mcard__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .estimate-mcard__panel-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .estimate-mcard__fields {
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 1px solid #E5E7EB;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.3s ease 0.05s, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .estimate-mcard--open .estimate-mcard__fields {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .estimate-mcard__questions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .estimate-mcard__price {
+    padding: 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .estimate-mcard__price-label {
+    margin: 0 0 4px;
+    font-family: var(--font-family-body);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    color: #6B7A8F;
+  }
+
+  .estimate-mcard__price-amount {
+    margin: 0 0 8px;
+    font-family: var(--font-family-body);
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    color: #053BFF;
+  }
+
+  .estimate-mcard__price-note {
+    margin: 0 0 16px;
+    font-family: var(--font-family-body);
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #6B7A8F;
+  }
+
+  .estimate-mcard__book {
+    border-radius: 12px;
+    background: #053BFF;
+  }
+
+  .estimate-mcard__book:hover {
+    background: #0432d6;
+  }
+}
+
+@media (min-width: 64rem) {
+  .estimate-layout--mobile .estimate-calc {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estimate-mcard__panel,
+  .estimate-mcard__fields,
+  .estimate-mcard__toggle-icon,
+  .estimate-cat__body,
+  .estimate-cat__body > .estimate-service-grid {
+    transition: none !important;
+  }
 }
 
 .estimate-select-input {

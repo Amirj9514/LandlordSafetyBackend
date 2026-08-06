@@ -1,12 +1,38 @@
 /**
  * Instant Estimate: catalog from GET /api/catalog, price from POST /api/quotes/preview.
+ * Desktop: category accordion + side calculator.
+ * Mobile/tablet: per-service cards with Get Estimate / Hide Calculator accordion.
  */
 (function () {
   const API = '/api';
   const PROPERTY_TYPE = 'residential';
   const DEFAULT_POSTCODE = 'SW1A 1AA';
+  const MOBILE_MQ = '(max-width: 63.99rem)';
+
+  const SERVICE_BLURBS = {
+    gsc: 'Annual landlord requirement',
+    boiler: 'Certificate plus boiler health check',
+    eicr: 'Electrical safety for rentals',
+    pat: 'Portable appliance testing',
+    fsc: 'Fire alarm certification',
+    elc: 'Emergency lighting certificate',
+    fra: 'Fire risk assessment for landlords',
+    epc: 'Energy performance certificate',
+    floorplan: 'Measured floor plan',
+    asbestos: 'Asbestos survey',
+  };
+
+  const FIELD_LABELS = {
+    applianceCount: 'Gas appliances',
+    bedrooms: 'Number of bedrooms',
+    communalAreas: 'Number of communal areas',
+    fuseBoards: 'Number of fuse boards',
+    floors: 'Number of floors',
+    boilerType: 'Service type',
+  };
 
   const els = {
+    layout: document.querySelector('.estimate-layout'),
     categories: document.getElementById('estimate-categories'),
     selectedName: document.getElementById('estimate-selected-name'),
     postcode: document.getElementById('estimate-postcode'),
@@ -15,6 +41,7 @@
     priceDetail: document.getElementById('estimate-price-detail'),
     priceAmount: document.getElementById('estimate-price-amount'),
     bookCta: document.getElementById('estimate-book-cta'),
+    calc: document.querySelector('.estimate-calc'),
   };
 
   if (!els.categories || !els.postcode) return;
@@ -22,9 +49,16 @@
   let catalog = null;
   let selectedCategoryCode = null;
   let selectedServiceCode = null;
+  let expandedMobileCode = null;
   let answers = {};
   let previewTimer = null;
   let previewSeq = 0;
+  let postcodeTimer = null;
+  const media = window.matchMedia(MOBILE_MQ);
+
+  function isMobileLayout() {
+    return media.matches;
+  }
 
   function escapeHtml(str) {
     return String(str ?? '')
@@ -45,6 +79,10 @@
   }
 
   function getPostcode() {
+    const mobileInput = document.getElementById('estimate-postcode-mobile');
+    if (isMobileLayout() && mobileInput) {
+      return normalizePostcode(mobileInput.value) || DEFAULT_POSTCODE;
+    }
     return normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
   }
 
@@ -52,6 +90,18 @@
     return (category.services || [])
       .filter((svc) => !svc.children?.length)
       .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  }
+
+  function allLeafServices() {
+    if (!catalog) return [];
+    const list = [];
+    const categories = [...(catalog.categories || [])].sort(
+      (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
+    );
+    for (const cat of categories) {
+      for (const svc of listLeafServices(cat)) list.push(svc);
+    }
+    return list;
   }
 
   function findService(code) {
@@ -72,10 +122,33 @@
     return null;
   }
 
-  function optionLabel(opt) {
+  function optionLabel(opt, fieldKey) {
     if (!opt) return '';
+    if (fieldKey === 'communalAreas') {
+      const value = String(opt.value ?? '');
+      if (value === '5') return '5+';
+      return value || String(opt.label || '').replace(/\s*\([^)]*\)\s*/g, '').trim();
+    }
+    if (fieldKey === 'bedrooms') {
+      const value = String(opt.value ?? '');
+      if (value === 'studio') return 'Studio';
+      if (value === '7+') return '7+';
+      const cleaned = String(opt.label || opt.displayLabel || value)
+        .replace(/\s*[—–-]\s*£[\d,.]+.*$/i, '')
+        .replace(/\s*\([^)]*\)\s*/g, '')
+        .replace(/\s*bedrooms?\s*/gi, '')
+        .trim();
+      return cleaned || value;
+    }
+    if (fieldKey === 'applianceCount') {
+      return String(opt.value ?? opt.label ?? '');
+    }
     const raw = opt.displayLabel || opt.label || opt.value;
     return String(raw).replace(/\s*[—–-]\s*£[\d,.]+.*$/i, '').trim();
+  }
+
+  function questionLabel(q) {
+    return FIELD_LABELS[q.fieldKey] || q.label || q.fieldKey;
   }
 
   function serviceFromPrice(service) {
@@ -94,7 +167,7 @@
     if (service.metadata?.startsFrom != null) {
       return { text: 'from ' + fmtMoney(service.metadata.startsFrom), amount: Number(service.metadata.startsFrom) };
     }
-    if (anyTbc || service.pricingMode === 'quote_only') return { text: 'Quote on request', amount: null };
+    if (anyTbc || service.pricingMode === 'quote_only') return { text: 'Quote', amount: null };
     return { text: 'from TBC', amount: null };
   }
 
@@ -105,6 +178,7 @@
       meta.description ||
       meta.tagline ||
       meta.subtitle ||
+      SERVICE_BLURBS[service.code] ||
       ''
     );
   }
@@ -116,9 +190,7 @@
       .filter((q) => {
         if (q.inputType === 'textarea') return false;
         const showWhen = q.conditionalLogic?.showWhen;
-        if (showWhen) {
-          return answers[showWhen.field] === showWhen.equals;
-        }
+        if (showWhen) return answers[showWhen.field] === showWhen.equals;
         const hideWhen = q.conditionalLogic?.hideWhen;
         if (hideWhen && answers[hideWhen.field] === hideWhen.equals) return false;
         return true;
@@ -134,7 +206,6 @@
         continue;
       }
       if (q.options?.length) {
-        // Prefer values that keep the estimate simple (e.g. CO alarm already present).
         if (q.fieldKey === 'coAlarmPresent') {
           const yes = q.options.find((o) => o.value === 'yes');
           next[q.fieldKey] = (yes || q.options[0]).value;
@@ -154,7 +225,9 @@
   function useChipUi(question) {
     if (!question?.options?.length) return false;
     if (question.options.length > 8) return false;
-    return question.options.every((opt) => String(optionLabel(opt) || opt.value).length <= 12);
+    return question.options.every(
+      (opt) => String(optionLabel(opt, question.fieldKey) || opt.value).length <= 12
+    );
   }
 
   async function fetchCatalog(postcode) {
@@ -188,51 +261,62 @@
     return json.data;
   }
 
-  function setCoverage(state, message) {
-    if (!els.coverage) return;
-    if (!message) {
-      els.coverage.hidden = true;
-      els.coverage.textContent = '';
-      els.coverage.className = 'estimate-field__status';
-      return;
-    }
-    els.coverage.hidden = false;
-    els.coverage.className = 'estimate-field__status estimate-field__status--' + state;
-    els.coverage.innerHTML =
-      state === 'success'
-        ? `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>${escapeHtml(message)}`
-        : escapeHtml(message);
+  function setCoverage(state, message, targetEl) {
+    const targets = targetEl
+      ? [targetEl]
+      : [els.coverage, document.getElementById('estimate-coverage-mobile')].filter(Boolean);
+
+    targets.forEach((el) => {
+      if (!message) {
+        el.hidden = true;
+        el.textContent = '';
+        el.className = 'estimate-field__status';
+        return;
+      }
+      el.hidden = false;
+      el.className = 'estimate-field__status estimate-field__status--' + state;
+      if (state === 'success') {
+        el.innerHTML =
+          `<span class="estimate-field__status-icon" aria-hidden="true">` +
+          `<img src="icons/circle_tick.svg" alt="" width="14" height="14">` +
+          `</span>` +
+          `<span class="estimate-field__status-text">${escapeHtml(message)}</span>`;
+      } else {
+        el.innerHTML = `<span class="estimate-field__status-text">${escapeHtml(message)}</span>`;
+      }
+    });
   }
 
-  function updateBookLink() {
-    if (!els.bookCta) return;
+  function bookHref() {
     const params = new URLSearchParams();
     if (selectedServiceCode) params.set('service', selectedServiceCode);
     const pc = getPostcode();
     if (pc) params.set('postcode', pc);
     const qs = params.toString();
-    els.bookCta.href = qs ? `/book-now/?${qs}` : '/book-now/';
+    return qs ? `/book-now/?${qs}` : '/book-now/';
   }
 
-  function renderQuestions() {
-    const service = findService(selectedServiceCode);
-    if (!els.questions || !service) {
-      if (els.questions) els.questions.innerHTML = '';
-      return;
-    }
-
-    const questions = visibleQuestions(service).filter((q) => {
-      // Keep the right panel light: show option-based pricing questions + short selects/radios/numbers.
-      return ['select', 'radio', 'number'].includes(q.inputType);
+  function updateBookLink() {
+    const href = bookHref();
+    if (els.bookCta) els.bookCta.href = href;
+    document.querySelectorAll('.estimate-mcard__book').forEach((el) => {
+      el.href = href;
     });
+  }
 
-    els.questions.innerHTML = questions
+  function questionsHtml(service) {
+    const questions = visibleQuestions(service).filter((q) =>
+      ['select', 'radio', 'number'].includes(q.inputType)
+    );
+
+    return questions
       .map((q) => {
         const current = answers[q.fieldKey];
+        const label = questionLabel(q);
         if (q.inputType === 'number') {
           return `
             <div class="estimate-field">
-              <label class="field-label" for="estimate-q-${escapeHtml(q.fieldKey)}">${escapeHtml(q.label)}</label>
+              <label class="field-label" for="estimate-q-${escapeHtml(q.fieldKey)}">${escapeHtml(label)}</label>
               <input class="field-input estimate-select-input" type="number" id="estimate-q-${escapeHtml(q.fieldKey)}"
                 data-field="${escapeHtml(q.fieldKey)}" min="${q.validation?.min ?? 1}" max="${q.validation?.max ?? 100}"
                 value="${escapeHtml(current ?? '')}">
@@ -242,7 +326,7 @@
         if (useChipUi(q)) {
           return `
             <fieldset class="estimate-field">
-              <legend class="field-label">${escapeHtml(q.label)}</legend>
+              <legend class="field-label">${escapeHtml(label)}</legend>
               <div class="estimate-chips">
                 ${q.options
                   .map((opt) => {
@@ -250,7 +334,7 @@
                     return `
                       <label class="estimate-chip">
                         <input type="radio" name="estimate-${escapeHtml(q.fieldKey)}" value="${escapeHtml(opt.value)}" data-field="${escapeHtml(q.fieldKey)}"${checked}>
-                        <span>${escapeHtml(optionLabel(opt) || opt.value)}</span>
+                        <span>${escapeHtml(optionLabel(opt, q.fieldKey) || opt.value)}</span>
                       </label>`;
                   })
                   .join('')}
@@ -260,18 +344,28 @@
 
         return `
           <div class="estimate-field">
-            <label class="field-label" for="estimate-q-${escapeHtml(q.fieldKey)}">${escapeHtml(q.label)}</label>
+            <label class="field-label" for="estimate-q-${escapeHtml(q.fieldKey)}">${escapeHtml(label)}</label>
             <select class="field-input estimate-select-input" id="estimate-q-${escapeHtml(q.fieldKey)}" data-field="${escapeHtml(q.fieldKey)}">
               ${q.options
                 .map((opt) => {
                   const selected = String(current) === String(opt.value) ? ' selected' : '';
-                  return `<option value="${escapeHtml(opt.value)}"${selected}>${escapeHtml(optionLabel(opt) || opt.value)}</option>`;
+                  return `<option value="${escapeHtml(opt.value)}"${selected}>${escapeHtml(optionLabel(opt, q.fieldKey) || opt.value)}</option>`;
                 })
                 .join('')}
             </select>
           </div>`;
       })
       .join('');
+  }
+
+  function renderDesktopQuestions() {
+    const service = findService(selectedServiceCode);
+    if (!els.questions) return;
+    if (!service) {
+      els.questions.innerHTML = '';
+      return;
+    }
+    els.questions.innerHTML = questionsHtml(service);
   }
 
   function renderCategories() {
@@ -320,7 +414,7 @@
                           data-service="${escapeHtml(svc.code)}" aria-pressed="${selected ? 'true' : 'false'}">
                           <span class="estimate-service__name">${escapeHtml(svc.name)}</span>
                           <span class="estimate-service__price">${escapeHtml(from.text)}</span>
-                          ${desc ? `<span class="estimate-service__desc">${escapeHtml(desc)}</span>` : '<span class="estimate-service__desc"></span>'}
+                          <span class="estimate-service__desc">${escapeHtml(desc)}</span>
                         </button>
                       </li>`;
                   })
@@ -332,10 +426,108 @@
       .join('');
   }
 
+  function mobilePanelHtml(service) {
+    const pc = normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
+    return `
+      <div class="estimate-mcard__fields">
+        <div class="estimate-field">
+          <label class="field-label" for="estimate-postcode-mobile">Your postcode</label>
+          <input class="field-input" type="text" id="estimate-postcode-mobile" name="postcode"
+            value="${escapeHtml(pc)}" autocomplete="postal-code" placeholder="e.g. SW1A 1AA">
+          <p id="estimate-coverage-mobile" class="estimate-field__status" hidden></p>
+        </div>
+        <div class="estimate-mcard__questions">
+          ${questionsHtml(service)}
+        </div>
+        <div class="estimate-mcard__price">
+          <p class="estimate-mcard__price-label">Estimated price</p>
+          <p class="estimate-mcard__price-amount" data-mobile-price>—</p>
+          <p class="estimate-mcard__price-note">Final price may vary based on property access.</p>
+          <a class="btn-primary btn-primary--block estimate-mcard__book" href="${escapeHtml(bookHref())}">Book Now</a>
+        </div>
+      </div>`;
+  }
+
+  function renderMobileCards() {
+    if (!catalog) return;
+    const services = allLeafServices();
+    if (!services.length) {
+      els.categories.innerHTML =
+        '<p class="estimate-accordion__status estimate-accordion__status--error">No services available right now.</p>';
+      return;
+    }
+
+    els.categories.innerHTML = `
+      <div class="estimate-mobile-list">
+        ${services
+          .map((svc) => {
+            const open = svc.code === expandedMobileCode;
+            const from = serviceFromPrice(svc);
+            const desc = serviceDescription(svc);
+            return `
+              <article class="estimate-mcard${open ? ' estimate-mcard--open' : ''}" data-service="${escapeHtml(svc.code)}">
+                <div class="estimate-mcard__summary">
+                  <div class="estimate-mcard__copy">
+                    <h4 class="estimate-mcard__name">${escapeHtml(svc.name)}</h4>
+                    <p class="estimate-mcard__desc">${escapeHtml(desc)}</p>
+                  </div>
+                  <span class="estimate-mcard__from">${escapeHtml(from.text)}</span>
+                </div>
+                <button type="button" class="estimate-mcard__toggle" aria-expanded="${open ? 'true' : 'false'}">
+                  <span>${open ? 'Hide Calculator' : 'Get Estimate'}</span>
+                  <svg class="estimate-mcard__toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="estimate-mcard__panel">
+                  <div class="estimate-mcard__panel-inner">
+                    ${open && selectedServiceCode === svc.code ? mobilePanelHtml(svc) : ''}
+                  </div>
+                </div>
+              </article>`;
+          })
+          .join('')}
+      </div>`;
+
+    if (expandedMobileCode && selectedServiceCode === expandedMobileCode) {
+      syncMobileCoverage();
+      const amountEl = document.querySelector('[data-mobile-price]');
+      if (amountEl && els.priceAmount) amountEl.textContent = els.priceAmount.textContent;
+    }
+  }
+
+  function syncMobileCoverage() {
+    const mobileCoverage = document.getElementById('estimate-coverage-mobile');
+    if (!mobileCoverage || !els.coverage) return;
+    mobileCoverage.hidden = els.coverage.hidden;
+    mobileCoverage.className = els.coverage.className;
+    mobileCoverage.innerHTML = els.coverage.innerHTML;
+  }
+
+  function renderLayout() {
+    if (els.layout) {
+      els.layout.classList.toggle('estimate-layout--mobile', isMobileLayout());
+    }
+    if (isMobileLayout()) {
+      renderMobileCards();
+    } else {
+      expandedMobileCode = null;
+      renderCategories();
+      renderDesktopQuestions();
+    }
+  }
+
   function applyQuote(quote) {
+    const setAmount = (text) => {
+      if (els.priceAmount) els.priceAmount.textContent = text;
+      document.querySelectorAll('[data-mobile-price]').forEach((el) => {
+        el.textContent = text;
+      });
+    };
+
     if (!quote) {
-      els.priceAmount.textContent = '—';
-      els.priceDetail.textContent = '';
+      setAmount('—');
+      if (els.priceDetail) els.priceDetail.textContent = '';
       return;
     }
 
@@ -350,7 +542,7 @@
       quote.pricingStatus === 'tbc' ||
       serviceLines.some((line) => line.isTbc || line.quoteOnly);
 
-    els.priceAmount.textContent = isTbc && !(amount > 0) ? 'TBC' : fmtMoney(amount);
+    setAmount(isTbc && !(amount > 0) ? 'TBC' : fmtMoney(amount));
 
     const primary = (quote.lines || []).find((line) => line.serviceCode === selectedServiceCode);
     const detailBits = [];
@@ -360,21 +552,23 @@
       const firstQ = visibleQuestions(service || {})[0];
       if (firstQ && answers[firstQ.fieldKey] != null) {
         const opt = (firstQ.options || []).find((o) => String(o.value) === String(answers[firstQ.fieldKey]));
-        detailBits.push('• ' + (optionLabel(opt) || answers[firstQ.fieldKey]));
+        detailBits.push('• ' + (optionLabel(opt, firstQ.fieldKey) || answers[firstQ.fieldKey]));
       }
     }
-    els.priceDetail.textContent = detailBits.join(' ');
+    if (els.priceDetail) els.priceDetail.textContent = detailBits.join(' ');
   }
 
   function schedulePreview() {
     clearTimeout(previewTimer);
-    els.priceAmount.classList.add('is-loading');
+    if (els.priceAmount) els.priceAmount.classList.add('is-loading');
+    document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.add('is-loading'));
     previewTimer = setTimeout(() => {
       refreshPreview().catch((err) => {
         console.error(err);
-        els.priceAmount.classList.remove('is-loading');
-        els.priceAmount.textContent = '—';
-        els.priceDetail.textContent = 'Could not calculate price';
+        if (els.priceAmount) els.priceAmount.classList.remove('is-loading');
+        document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.remove('is-loading'));
+        applyQuote(null);
+        if (els.priceDetail) els.priceDetail.textContent = 'Could not calculate price';
       });
     }, 280);
   }
@@ -383,17 +577,19 @@
     const seq = ++previewSeq;
     if (!selectedServiceCode) {
       applyQuote(null);
-      els.priceAmount.classList.remove('is-loading');
+      if (els.priceAmount) els.priceAmount.classList.remove('is-loading');
+      document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.remove('is-loading'));
       return;
     }
 
     const quote = await fetchPreview();
     if (seq !== previewSeq) return;
     applyQuote(quote);
-    els.priceAmount.classList.remove('is-loading');
+    if (els.priceAmount) els.priceAmount.classList.remove('is-loading');
+    document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.remove('is-loading'));
   }
 
-  function selectService(code, { skipPreview } = {}) {
+  function selectService(code, { skipPreview, expandMobile } = {}) {
     const service = findService(code);
     if (!service) return;
     const category = findCategoryForService(code);
@@ -401,8 +597,8 @@
     selectedCategoryCode = category?.code || selectedCategoryCode;
     answers = defaultAnswersForService(service);
     if (els.selectedName) els.selectedName.textContent = service.name;
-    renderCategories();
-    renderQuestions();
+    if (expandMobile) expandedMobileCode = code;
+    renderLayout();
     updateBookLink();
     if (!skipPreview) schedulePreview();
   }
@@ -417,8 +613,18 @@
     }
   }
 
+  function toggleMobileCard(code) {
+    if (expandedMobileCode === code) {
+      expandedMobileCode = null;
+      renderMobileCards();
+      return;
+    }
+    selectService(code, { expandMobile: true });
+  }
+
   async function loadCatalog({ keepSelection } = {}) {
     const previousService = keepSelection ? selectedServiceCode : null;
+    const previousExpanded = keepSelection ? expandedMobileCode : null;
     els.categories.innerHTML = '<p class="estimate-accordion__status">Loading services…</p>';
     setCoverage('muted', 'Checking coverage…');
 
@@ -438,18 +644,26 @@
       );
 
       let nextService = previousService && findService(previousService) ? previousService : null;
-      if (!nextService) {
+      if (!nextService && !isMobileLayout()) {
         const firstCat = categories[0];
         nextService = firstCat ? listLeafServices(firstCat)[0]?.code : null;
       }
 
-      if (nextService) {
-        selectService(nextService, { skipPreview: true });
-      } else {
-        renderCategories();
+      if (previousExpanded && findService(previousExpanded)) {
+        expandedMobileCode = previousExpanded;
       }
 
-      schedulePreview();
+      if (nextService) {
+        selectService(nextService, {
+          skipPreview: true,
+          expandMobile: isMobileLayout() && !!expandedMobileCode,
+        });
+      } else {
+        renderLayout();
+      }
+
+      if (selectedServiceCode) schedulePreview();
+      syncMobileCoverage();
     } catch (err) {
       console.error(err);
       els.categories.innerHTML = `<p class="estimate-accordion__status estimate-accordion__status--error">${escapeHtml(err.message || 'Failed to load services')}</p>`;
@@ -457,7 +671,44 @@
     }
   }
 
+  function onFieldChange(event) {
+    const field = event.target.getAttribute('data-field');
+    if (!field) return;
+    const service = findService(selectedServiceCode);
+    const beforeKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
+    answers[field] = event.target.value;
+    const afterKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
+    if (beforeKeys !== afterKeys) {
+      if (isMobileLayout()) renderMobileCards();
+      else renderDesktopQuestions();
+    }
+    updateBookLink();
+    schedulePreview();
+  }
+
+  function onPostcodeInput(event) {
+    clearTimeout(postcodeTimer);
+    const target = event && event.target;
+    const mobileInput = document.getElementById('estimate-postcode-mobile');
+    if (target && target.id === 'estimate-postcode-mobile') {
+      els.postcode.value = target.value;
+    } else if (mobileInput && target === els.postcode) {
+      mobileInput.value = els.postcode.value;
+    }
+    updateBookLink();
+    postcodeTimer = setTimeout(() => {
+      loadCatalog({ keepSelection: true });
+    }, 450);
+  }
+
   els.categories.addEventListener('click', (event) => {
+    const toggle = event.target.closest('.estimate-mcard__toggle');
+    if (toggle) {
+      const card = toggle.closest('.estimate-mcard');
+      if (card) toggleMobileCard(card.getAttribute('data-service'));
+      return;
+    }
+
     const header = event.target.closest('.estimate-cat__header');
     if (header) {
       const cat = header.closest('.estimate-cat');
@@ -471,30 +722,32 @@
     }
   });
 
-  els.questions.addEventListener('change', (event) => {
-    const field = event.target.getAttribute('data-field');
-    if (!field) return;
-    const service = findService(selectedServiceCode);
-    const beforeKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
-    answers[field] = event.target.value;
-    const afterKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
-    if (beforeKeys !== afterKeys) renderQuestions();
-    updateBookLink();
-    schedulePreview();
+  els.categories.addEventListener('change', onFieldChange);
+  if (els.questions) els.questions.addEventListener('change', onFieldChange);
+
+  els.categories.addEventListener('input', (event) => {
+    if (event.target.id === 'estimate-postcode-mobile') onPostcodeInput(event);
   });
 
-  let postcodeTimer = null;
-  els.postcode.addEventListener('input', () => {
-    clearTimeout(postcodeTimer);
-    updateBookLink();
-    postcodeTimer = setTimeout(() => {
-      loadCatalog({ keepSelection: true });
-    }, 450);
-  });
-
+  els.postcode.addEventListener('input', onPostcodeInput);
   els.postcode.addEventListener('blur', () => {
-    els.postcode.value = getPostcode();
+    els.postcode.value = normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
   });
+
+  els.categories.addEventListener('focusout', (event) => {
+    if (event.target.id === 'estimate-postcode-mobile') {
+      event.target.value = normalizePostcode(event.target.value) || DEFAULT_POSTCODE;
+      els.postcode.value = event.target.value;
+    }
+  });
+
+  function onViewportChange() {
+    renderLayout();
+    if (selectedServiceCode) schedulePreview();
+  }
+
+  if (media.addEventListener) media.addEventListener('change', onViewportChange);
+  else media.addListener(onViewportChange);
 
   loadCatalog();
 })();
