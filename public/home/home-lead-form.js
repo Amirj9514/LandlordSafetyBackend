@@ -25,9 +25,29 @@
     feedback.className = 'quote-form__feedback';
   }
 
+  function getPropertyType() {
+    var selected = form.querySelector('input[name="property-type"]:checked');
+    return selected ? selected.value : null;
+  }
+
+  function isFormComplete() {
+    var postcodeEl = form.querySelector('#postcode');
+    var contactEl = form.querySelector('#contact');
+    var postcode = postcodeEl ? postcodeEl.value.trim() : '';
+    var contact = contactEl ? contactEl.value.trim() : '';
+    return Boolean(postcode && contact && getPropertyType());
+  }
+
+  function updateSubmitState() {
+    if (!submitBtn) return;
+    var busy = form.classList.contains('quote-form--loading');
+    submitBtn.disabled = busy || !isFormComplete();
+  }
+
   function setFormBusy(isBusy) {
     form.classList.toggle('quote-form--loading', isBusy);
     form.querySelectorAll('input, button, select, textarea').forEach(function (el) {
+      if (el === submitBtn) return;
       el.disabled = isBusy;
     });
     if (submitBtn) {
@@ -37,12 +57,12 @@
     if (submitLabel) {
       submitLabel.textContent = isBusy ? 'Submitting' : defaultSubmitLabel;
     }
+    updateSubmitState();
   }
 
-  function getPropertyType() {
-    var selected = form.querySelector('input[name="property-type"]:checked');
-    return selected ? selected.value : null;
-  }
+  form.addEventListener('input', updateSubmitState);
+  form.addEventListener('change', updateSubmitState);
+  updateSubmitState();
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();

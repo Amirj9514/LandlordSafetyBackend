@@ -589,6 +589,21 @@
     document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.remove('is-loading'));
   }
 
+  function syncDesktopAccordion() {
+    if (!els.categories) return;
+    els.categories.querySelectorAll('.estimate-cat').forEach((el) => {
+      const isOpen = el.getAttribute('data-category') === selectedCategoryCode;
+      el.classList.toggle('estimate-cat--open', isOpen);
+      const header = el.querySelector('.estimate-cat__header');
+      if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    els.categories.querySelectorAll('.estimate-service').forEach((btn) => {
+      const selected = btn.getAttribute('data-service') === selectedServiceCode;
+      btn.classList.toggle('estimate-service--selected', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
+
   function selectService(code, { skipPreview, expandMobile } = {}) {
     const service = findService(code);
     if (!service) return;
@@ -598,14 +613,23 @@
     answers = defaultAnswersForService(service);
     if (els.selectedName) els.selectedName.textContent = service.name;
     if (expandMobile) expandedMobileCode = code;
-    renderLayout();
+    if (isMobileLayout() || expandMobile || !els.categories?.querySelector('.estimate-cat')) {
+      renderLayout();
+    } else {
+      syncDesktopAccordion();
+      renderDesktopQuestions();
+    }
     updateBookLink();
     if (!skipPreview) schedulePreview();
   }
 
   function toggleCategory(code) {
     selectedCategoryCode = selectedCategoryCode === code ? null : code;
-    renderCategories();
+    if (els.categories?.querySelector('.estimate-cat')) {
+      syncDesktopAccordion();
+    } else {
+      renderCategories();
+    }
     if (selectedCategoryCode && !selectedServiceCode) {
       const cat = (catalog.categories || []).find((c) => c.code === selectedCategoryCode);
       const first = cat ? listLeafServices(cat)[0] : null;
