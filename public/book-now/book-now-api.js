@@ -115,6 +115,237 @@
     if (slot) slot.innerHTML = '';
   }
 
+  function removeStoredQuestions(code) {
+    const stored = document.getElementById('stored-q-' + code);
+    if (stored) stored.remove();
+  }
+
+  let modalContext = null;
+
+  function serviceHasQuestions(code) {
+    const svc = catalogServicesByCode[code];
+    return Boolean(svc?.questions?.length);
+  }
+
+  function bundleHasQuestions(svcIds) {
+    return (svcIds || []).some((code) => serviceHasQuestions(code));
+  }
+
+  function getServiceModalTitle(code) {
+    if (SERVICE_UI[code]?.title) return SERVICE_UI[code].title;
+    const svc = catalogServicesByCode[code];
+    if (!svc) return code;
+    if (svc.code === 'eicr') return 'EICR';
+    return svc.name;
+  }
+
+  function getModalServiceCodes() {
+    if (!modalContext) return [];
+    if (modalContext.type === 'service') return [modalContext.serviceCode];
+    return (modalContext.svcIds || []).filter((code) => serviceHasQuestions(code));
+  }
+
+  function renderQuestionsOnly(serviceCode) {
+    const svc = catalogServicesByCode[serviceCode];
+    if (!svc?.questions?.length) return '';
+    const questions = [...svc.questions].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    return questions.map((q) => renderQuestion(serviceCode, q)).join('');
+  }
+
+  function loadQuestionsIntoModalBody(codes) {
+    const body = document.getElementById('service-modal-body');
+    if (!body) return;
+    body.innerHTML = '';
+
+    codes.forEach((code) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'service-modal__section';
+      wrapper.dataset.storedService = code;
+
+      const stored = document.getElementById('stored-q-' + code);
+      if (stored && stored.childNodes.length) {
+        while (stored.firstChild) wrapper.appendChild(stored.firstChild);
+      } else {
+        const questionsHtml = renderQuestionsOnly(code);
+        if (!questionsHtml) return;
+        if (codes.length > 1) {
+          const heading = document.createElement('h3');
+          heading.className = 'service-modal__section-title';
+          heading.textContent = getServiceModalTitle(code);
+          wrapper.appendChild(heading);
+        }
+        wrapper.insertAdjacentHTML('beforeend', questionsHtml);
+      }
+
+      body.appendChild(wrapper);
+      applyConditionalVisibility(code);
+    });
+  }
+
+  function persistModalToStore(codes) {
+    const body = document.getElementById('service-modal-body');
+    const store = document.getElementById('service-questions-store');
+    if (!body || !store) return;
+
+    codes.forEach((code) => {
+      const section = body.querySelector(`[data-stored-service="${code}"]`);
+      if (!section) return;
+
+      let holder = document.getElementById('stored-q-' + code);
+      if (!holder) {
+        holder = document.createElement('div');
+        holder.id = 'stored-q-' + code;
+        store.appendChild(holder);
+      }
+      holder.innerHTML = '';
+      while (section.firstChild) holder.appendChild(section.firstChild);
+    });
+
+    body.innerHTML = '';
+  }
+
+  function getMissingRequiredForCodes(codes) {
+    const missing = [];
+    for (const code of codes) {
+      const svc = catalogServicesByCode[code];
+      if (!svc?.questions) continue;
+
+      for (const q of svc.questions) {
+        if (!q.validation?.required) continue;
+        if (!isQuestionVisible(code, q)) continue;
+
+        let val = null;
+        if (q.inputType === 'radio') {
+          val = state.radios[radioGroup(code, q.fieldKey)] || null;
+        } else {
+          const el = document.getElementById(fieldId(code, q.fieldKey));
+          val = el?.value?.trim() || null;
+        }
+
+        if (!val) {
+          missing.push({
+            serviceCode: code,
+            fieldKey: q.fieldKey,
+            serviceName: svc.name,
+            label: q.label,
+          });
+          const el = document.getElementById(fieldId(code, q.fieldKey));
+          if (el) el.classList.add('field-error');
+          const row = document.querySelector(
+            `[data-q-row][data-service="${code}"][data-field="${q.fieldKey}"]`
+          );
+          if (row) row.classList.add('field-error');
+          if (q.inputType === 'radio') {
+            document
+              .querySelectorAll(`[data-radio-group="${radioGroup(code, q.fieldKey)}"]`)
+              .forEach((r) => r.classList.add('field-error'));
+          }
+        }
+      }
+    }
+    return missing;
+  }
+
+  function openServiceModal(type, ctx) {
+    modalContext = { type, ...ctx };
+    const modal = document.getElementById('service-modal');
+    const titleEl = document.getElementById('service-modal-title');
+    if (!modal || !titleEl) return;
+
+    if (type === 'service') {
+      titleEl.textContent = getServiceModalTitle(ctx.serviceCode);
+      loadQuestionsIntoModalBody([ctx.serviceCode]);
+    } else {
+      const bundle = (catalog?.bundles || []).find((b) => b.bundleKey === ctx.bundleId);
+      titleEl.textContent = getBundleCardTitle(bundle || { bundleKey: ctx.bundleId, label: ctx.bundleId });
+      loadQuestionsIntoModalBody(getModalServiceCodes());
+    }
+
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const body = document.getElementById('service-modal-body');
+    if (body) body.scrollTop = 0;
+  }
+
+  window.closeServiceModal = function closeServiceModal() {
+    const modal = document.getElementById('service-modal');
+    const body = document.getElementById('service-modal-body');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    if (body) body.innerHTML = '';
+    modalContext = null;
+    document.body.style.overflow = '';
+  };
+
+  function finalizeBundleSelection(bundleId, svcIds) {
+    const bundleRow = document.getElementById('svc-' + bundleId);
+
+    for (const [bid, bdef] of Object.entries(window.BUNDLES)) {
+      if (bid === bundleId) continue;
+      if (!state.activeBundles.has(bid)) continue;
+      const overlap = bdef.services.some((s) => svcIds.includes(s));
+      if (overlap) deactivateBundle(bid);
+    }
+
+    svcIds.forEach((id) => {
+      if (state.services.has(id)) clearServiceAnswers(id);
+      const row = document.getElementById('svc-' + id);
+      if (row) row.classList.remove('selected');
+    });
+
+    state.activeBundles.add(bundleId);
+    if (bundleRow) bundleRow.classList.add('selected');
+
+    svcIds.forEach((id) => {
+      state.services.add(id);
+      const row = document.getElementById('svc-' + id);
+      if (row) {
+        row.classList.remove('selected');
+        row.style.display = 'none';
+      }
+      clearSubqSlot(id);
+    });
+  }
+
+  window.confirmServiceModal = function confirmServiceModal() {
+    if (!modalContext) return;
+
+    const codes = getModalServiceCodes();
+    const missing = getMissingRequiredForCodes(codes);
+    if (missing.length) {
+      if (typeof showToast === 'function') {
+        showToast('Please complete all required fields before adding this service.');
+      }
+      const first = document.querySelector('#service-modal-body .field-error');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    persistModalToStore(codes);
+
+    if (modalContext.type === 'service') {
+      const serviceCode = modalContext.serviceCode;
+      state.services.add(serviceCode);
+      const row = document.getElementById('svc-' + serviceCode);
+      if (row) row.classList.add('selected');
+    } else {
+      finalizeBundleSelection(modalContext.bundleId, modalContext.svcIds);
+    }
+
+    closeServiceModal();
+    renderSubQuestions();
+    resetQuoteIfEmpty();
+    calcAll();
+    if (typeof updateStep2NextState === 'function') updateStep2NextState();
+  };
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modalContext) closeServiceModal();
+  });
+
   function showServiceRow(serviceCode) {
     const row = document.getElementById('svc-' + serviceCode);
     if (row) {
@@ -144,9 +375,12 @@
     bdef.services.forEach((id) => {
       state.services.delete(id);
       clearServiceAnswers(id);
+      clearSubqSlot(id);
+      removeStoredQuestions(id);
       showServiceRow(id);
     });
     clearSubqSlot(bundleId);
+    removeStoredQuestions(bundleId);
   }
 
   function syncBundlesMap() {
@@ -166,6 +400,58 @@
     );
   }
 
+  const CATEGORY_TAB_LABELS = {
+    'EPC & Survey': 'Energy Rating',
+    'Commercial EPC & Survey': 'Energy Rating',
+    'Commercial Gas': 'Gas',
+    'Commercial Electrical': 'Electrical',
+    'Commercial Fire Safety': 'Fire Safety',
+    'Electrical Installation & Repair': 'Electrical',
+    'Gas Installation & Repair': 'Gas',
+    'Fire Installation & Repair': 'Fire Safety',
+  };
+
+  const CATEGORY_SORT_ORDER = ['Gas', 'Electrical', 'Fire Safety', 'Energy Rating', 'Other'];
+
+  const BUNDLE_UI = {
+    'bundle-gsc-boiler': { title: 'Gas Bundle', popular: true },
+    'bundle-eicr-pat': { title: 'Electrical Bundle', popular: true },
+    'bundle-fsc-elc': { title: 'Fire Safety Bundle 1', popular: true },
+    'bundle-fsc-elc-fra': { title: 'Fire Safety Bundle 2', popular: true },
+    'bundle-epc-fp': { title: 'Energy Bundle', popular: true },
+  };
+
+  const SERVICE_UI = {
+    gsc: { title: 'CP12 Gas Safety Certificate', desc: 'Annual Landlord Requirement' },
+    boiler: { title: 'Annual Boiler Service', desc: 'Certificate Plus Boiler Health Check' },
+    eicr: { title: 'EICR', desc: 'Annual Landlord Requirement' },
+    pat: { title: 'PAT Testing', desc: 'Portable Appliance Testing' },
+    fsc: { title: 'Fire Alarm Certificate', desc: 'Annual Landlord Requirement' },
+    elc: { title: 'Emergency Light Certificate', desc: 'Annual Compliance Check' },
+    fra: { title: 'Fire Risk Assessment', desc: 'Commercial & HMO Requirement' },
+    epc: { title: 'Energy Performance Certificate', desc: 'Valid for 10 Years' },
+    floorplan: { title: 'Floor Plan', desc: 'Professional Property Survey' },
+    asbestos: { title: 'Asbestos Survey', desc: 'Pre-Renovation Assessment' },
+  };
+
+  function categoryTabLabel(name) {
+    return CATEGORY_TAB_LABELS[name] || name.replace(/^Commercial /, '');
+  }
+
+  function categorySectionTitle(name) {
+    return categoryTabLabel(name);
+  }
+
+  function sortCategories(categories) {
+    return [...categories].sort((a, b) => {
+      const ai = CATEGORY_SORT_ORDER.indexOf(categoryTabLabel(a.name));
+      const bi = CATEGORY_SORT_ORDER.indexOf(categoryTabLabel(b.name));
+      const aRank = ai === -1 ? 99 : ai;
+      const bRank = bi === -1 ? 99 : bi;
+      return aRank - bRank || (a.displayOrder || 0) - (b.displayOrder || 0);
+    });
+  }
+
   function bundlesForCategory(serviceCodes) {
     const codes = new Set(serviceCodes);
     return (catalog?.bundles || [])
@@ -176,22 +462,132 @@
       .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
   }
 
-  function renderCategoryBlock(cat, marginTop) {
+  function minOptionPrice(service) {
+    let min = null;
+    for (const q of service.questions || []) {
+      for (const opt of q.options || []) {
+        const amount =
+          opt.price != null ? opt.price : tierAmount(typeof opt === 'string' ? null : opt.tierKey);
+        if (amount != null && (min === null || amount < min)) min = amount;
+      }
+    }
+    return min;
+  }
+
+  function getServicePriceLabel(service) {
+    const meta = service.metadata || {};
+    if (meta.startsFrom != null) {
+      return `from £${Math.round(Number(meta.startsFrom))}`;
+    }
+    if (meta.startsFromTierKey) {
+      const amount = tierAmount(meta.startsFromTierKey);
+      if (amount != null) return `from £${Math.round(amount)}`;
+    }
+    const min = minOptionPrice(service);
+    if (min != null) return `from £${Math.round(min)}`;
+    if (service.pricingMode === 'quote_only') return 'Quote';
+    return '';
+  }
+
+  function getServiceCardTitle(service) {
+    return SERVICE_UI[service.code]?.title || service.name;
+  }
+
+  function getServiceCardDesc(service) {
+    return SERVICE_UI[service.code]?.desc || service.metadata?.cardDescription || '';
+  }
+
+  function getBundleCardTitle(bundle) {
+    return BUNDLE_UI[bundle.bundleKey]?.title || bundle.label;
+  }
+
+  function getBundleCardDesc(bundle) {
+    if (BUNDLE_UI[bundle.bundleKey]?.title) return bundle.label;
+    return bundle.metadata?.subtitle || bundle.label;
+  }
+
+  function renderSubqSlot(id) {
+    return `<div class="subq-slot" id="subq-${escapeHtml(id)}"></div>`;
+  }
+
+  function renderServiceCard(service) {
+    const code = service.code;
+    const price = getServicePriceLabel(service);
+    const desc = getServiceCardDesc(service);
+    return `
+      <div class="svc-card" id="svc-${escapeHtml(code)}" data-service-code="${escapeHtml(code)}" onclick="toggleService('${escapeHtml(code)}')">
+        <div class="svc-card__body">
+          <div class="svc-card__main">
+            <div class="svc-card__title">${escapeHtml(getServiceCardTitle(service))}</div>
+            ${desc ? `<div class="svc-card__desc">${escapeHtml(desc)}</div>` : ''}
+          </div>
+          ${price ? `<div class="svc-card__price">${escapeHtml(price)}</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function renderBundleCard(bundle, layout) {
+    const key = bundle.bundleKey;
+    const services = JSON.stringify(bundle.serviceCodes || []);
+    const save =
+      bundle.metadata?.saveLabel ||
+      (bundle.discountAmount ? `Save £${bundle.discountAmount}` : '');
+    const popular = BUNDLE_UI[key]?.popular || bundle.metadata?.popular;
+    const widthClass = layout === 'full' ? ' svc-card--full' : '';
+    const popularClass = popular ? ' svc-card--popular' : '';
+    return `
+      <div class="svc-card svc-card--bundle${widthClass}${popularClass}" id="svc-${escapeHtml(key)}"
+        data-bundle-key="${escapeHtml(key)}"
+        data-bundle-services='${escapeHtml(services)}'
+        onclick="toggleBundleFromEl(this)">
+        ${popular ? '<span class="svc-card__badge">Popular</span>' : ''}
+        <div class="svc-card__body">
+          <div class="svc-card__main">
+            <div class="svc-card__title">${escapeHtml(getBundleCardTitle(bundle))}</div>
+            <div class="svc-card__desc">${escapeHtml(getBundleCardDesc(bundle))}</div>
+          </div>
+          ${save ? `<div class="svc-card__save">${escapeHtml(save)}</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function renderCategorySection(cat) {
     const services = (cat.services || [])
       .filter((s) => !s.children?.length)
       .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    const bundles = bundlesForCategory(services.map((s) => s.code));
 
-    let html = `<div class="svc-cat-title" ${marginTop ? 'style="margin-top:20px"' : ''}>${escapeHtml(cat.name)}</div>`;
+    let cardsHtml = '';
 
-    for (const svc of services) {
-      html += renderServiceRow(svc);
+    if (bundles.length === 1) {
+      cardsHtml += renderBundleCard(bundles[0], 'full');
+      cardsHtml += renderSubqSlot(bundles[0].bundleKey);
+    } else if (bundles.length > 1) {
+      cardsHtml += `<div class="svc-cards-row">${bundles.map((b) => renderBundleCard(b, 'half')).join('')}</div>`;
+      cardsHtml += bundles.map((b) => renderSubqSlot(b.bundleKey)).join('');
     }
 
-    for (const bundle of bundlesForCategory(services.map((s) => s.code))) {
-      html += renderBundleRow(bundle);
+    if (services.length) {
+      cardsHtml += `<div class="svc-cards-row">${services.map((s) => renderServiceCard(s)).join('')}</div>`;
+      cardsHtml += services.map((s) => renderSubqSlot(s.code)).join('');
     }
 
-    return html;
+    return `
+      <section class="svc-section" id="svc-section-${escapeHtml(cat.code)}" data-category="${escapeHtml(cat.code)}">
+        <h3 class="svc-section__title">${escapeHtml(categorySectionTitle(cat.name))}</h3>
+        <div class="svc-section__cards">${cardsHtml}</div>
+      </section>`;
+  }
+
+  function bindSvcTabs() {
+    document.querySelectorAll('.svc-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.svc-tab').forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = document.getElementById(tab.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
   }
 
   async function fetchCatalog(propertyType) {
@@ -220,9 +616,10 @@
     catalogPostcode = pc;
     const container = document.getElementById('catalog-services');
     if (container) {
-      container.innerHTML =
-        '<p class="catalog-loading" style="grid-column:1/-1;text-align:center;color:var(--slate-light);padding:24px">Loading services…</p>';
+      container.innerHTML = '<p class="catalog-loading">Loading services…</p>';
     }
+    const tabsContainer = document.getElementById('svc-tabs');
+    if (tabsContainer) tabsContainer.innerHTML = '';
 
     catalogLoadPromise = fetchCatalog(propertyType)
       .then((data) => {
@@ -259,7 +656,7 @@
       })
       .catch((err) => {
         if (container) {
-          container.innerHTML = `<p class="catalog-error" style="grid-column:1/-1;color:var(--red);padding:24px;text-align:center">${escapeHtml(err.message)}</p>`;
+          container.innerHTML = `<p class="catalog-error">${escapeHtml(err.message)}</p>`;
         }
         throw err;
       })
@@ -270,52 +667,32 @@
     return catalogLoadPromise;
   }
 
-  function renderServiceRow(service) {
-    const code = service.code;
-    return `
-      <div class="svc-row" id="svc-${escapeHtml(code)}" data-service-code="${escapeHtml(code)}" onclick="toggleService('${escapeHtml(code)}')">
-        <div class="svc-cb" id="cb-${escapeHtml(code)}"></div>
-        <span>${escapeHtml(service.name)}</span>
-      </div>
-      <div class="subq-slot" id="subq-${escapeHtml(code)}"></div>`;
-  }
-
-  function renderBundleRow(bundle) {
-    const key = bundle.bundleKey;
-    const services = JSON.stringify(bundle.serviceCodes || []);
-    const save =
-      bundle.metadata?.saveLabel ||
-      (bundle.discountAmount ? `Save £${bundle.discountAmount}` : '');
-    const ribbon = save ? `<div class="save-ribbon">${escapeHtml(save)}</div>` : '';
-    return `
-      <div class="svc-row bundle-row" id="svc-${escapeHtml(key)}"
-        data-bundle-key="${escapeHtml(key)}"
-        data-bundle-services='${escapeHtml(services)}'
-        onclick="toggleBundleFromEl(this)">
-        <div class="svc-cb" id="cb-${escapeHtml(key)}"></div>
-        <span>${escapeHtml(bundle.label)}</span>
-        ${ribbon}
-      </div>
-      <div class="subq-slot" id="subq-${escapeHtml(key)}"></div>`;
-  }
-
   function renderCatalogGrid() {
     const container = document.getElementById('catalog-services');
+    const tabsContainer = document.getElementById('svc-tabs');
     if (!container || !catalog) return;
 
-    const categories = [...(catalog.categories || [])].sort(
-      (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
-    );
-    const mid = Math.ceil(categories.length / 2);
-    const left = categories.slice(0, mid);
-    const right = categories.slice(mid);
+    const categories = sortCategories(catalog.categories || []);
 
-    const colHtml = (cats, isRight) =>
-      `<div class="svc-col">${cats.map((c, i) => renderCategoryBlock(c, isRight && i > 0)).join('')}</div>`;
+    if (tabsContainer) {
+      tabsContainer.innerHTML = categories
+        .map(
+          (cat, index) => `
+        <button type="button" class="svc-tab${index === 0 ? ' active' : ''}"
+          data-target="svc-section-${escapeHtml(cat.code)}"
+          role="tab"
+          aria-selected="${index === 0 ? 'true' : 'false'}">
+          ${escapeHtml(categoryTabLabel(cat.name))}
+        </button>`
+        )
+        .join('');
+      bindSvcTabs();
+    }
 
-    container.innerHTML = colHtml(left, false) + colHtml(right, true);
+    container.innerHTML = categories.map((cat) => renderCategorySection(cat)).join('');
 
     restoreSelectionUi();
+    if (typeof updateStep2NextState === 'function') updateStep2NextState();
   }
 
   function restoreSelectionUi() {
@@ -397,8 +774,8 @@
           })
           .join('');
         return `
-        <div class="subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label>${escapeHtml(q.label)} ${req}</label>
+        <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
+          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
           <select id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" onchange="onQuestionChange('${escapeHtml(serviceCode)}')">
             <option value="">${escapeHtml(placeholder)}</option>
             ${optionsHtml}
@@ -415,7 +792,7 @@
           })
           .join('');
         return `
-        <div class="subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}" id="row-${id}">
+        <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}" id="row-${id}">
           <label>${escapeHtml(q.label)} ${req}</label>
           <div class="radio-group">${radios}</div>
           ${note}
@@ -425,22 +802,22 @@
         const min = q.validation?.min != null ? ` min="${q.validation.min}"` : '';
         const max = q.validation?.max != null ? ` max="${q.validation.max}"` : '';
         return `
-        <div class="subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label>${escapeHtml(q.label)} ${req}</label>
+        <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
+          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
           <input type="number" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" placeholder="e.g. 8"${min}${max} oninput="calcAll()">
         </div>`;
       }
       case 'textarea':
         return `
-        <div class="subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label>${escapeHtml(q.label)} ${req}</label>
+        <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
+          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
           <textarea id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" oninput="calcAll()"></textarea>
         </div>`;
       case 'text':
       default:
         return `
-        <div class="subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label>${escapeHtml(q.label)} ${req}</label>
+        <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
+          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
           <input type="text" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" oninput="calcAll()">
         </div>`;
     }
@@ -460,11 +837,7 @@
 
   window.onQuestionChange = function onQuestionChange(serviceCode) {
     applyConditionalVisibility(serviceCode);
-    if (serviceCode === 'fsc' || serviceCode === 'elc') {
-      renderSubQuestions();
-    } else {
-      calcAll();
-    }
+    calcAll();
   };
 
   function applyConditionalVisibility(serviceCode) {
@@ -488,65 +861,20 @@
   }
 
   window.renderSubQuestions = function renderSubQuestionsFromCatalog() {
-    const saved = {};
-    document.querySelectorAll('.subq-slot input, .subq-slot select, .subq-slot textarea').forEach((el) => {
-      if (el.id && el.value !== '') saved[el.id] = el.value;
-    });
-    const savedRadios = { ...state.radios };
-
-    document.querySelectorAll('.subq-slot').forEach((s) => {
-      s.innerHTML = '';
+    document.querySelectorAll('.subq-slot').forEach((slot) => {
+      slot.innerHTML = '';
     });
 
-    for (const bundleKey of state.activeBundles) {
-      const slot = document.getElementById('subq-' + bundleKey);
-      const def = window.BUNDLES[bundleKey];
-      if (!slot || !def) continue;
-
-      let combined = '';
-      for (const code of def.services) {
-        combined += renderServiceQuestionsPanel(code);
-      }
-      if (combined) {
-        slot.innerHTML = `<div class="subq-panel">${combined}</div>`;
-      }
+    for (const code of state.services) {
+      applyConditionalVisibility(code);
     }
 
-    const serviceOrder = Object.keys(catalogServicesByCode).sort((a, b) => {
-      const ao = catalogServicesByCode[a].displayOrder || 0;
-      const bo = catalogServicesByCode[b].displayOrder || 0;
-      return ao - bo;
-    });
-
-    for (const code of serviceOrder) {
-      if (!state.services.has(code)) continue;
-      if (coveredByBundle(code)) continue;
-
-      const slot = document.getElementById('subq-' + code);
-      const svc = catalogServicesByCode[code];
-      if (!slot || !svc) continue;
-
-      const panel = renderServiceQuestionsPanel(code);
-      if (panel) {
-        slot.innerHTML = `<div class="subq-panel"><div class="subq-panel-title">${escapeHtml(svc.name)}</div>${panel}</div>`;
-      }
-    }
-
-    Object.entries(saved).forEach(([id, val]) => {
-      const el = document.getElementById(id);
-      if (el && val != null) el.value = val;
-    });
-    state.radios = savedRadios;
     Object.entries(state.radios).forEach(([group, val]) => {
       if (!val) return;
       document.querySelectorAll(`[data-radio-group="${group}"]`).forEach((el) => {
         el.classList.toggle('checked', el.dataset.radioValue === val);
       });
     });
-
-    for (const code of state.services) {
-      applyConditionalVisibility(code);
-    }
 
     calcAll();
     updateFloatBar();
@@ -576,11 +904,80 @@
       catalog = null;
       catalogPropertyType = null;
       catalogPostcode = null;
+      const store = document.getElementById('service-questions-store');
+      if (store) store.innerHTML = '';
+      closeServiceModal();
     }
 
     updateSubmitCta(lastQuote);
     updateQuoteRegionLabel(lastQuote);
   };
+
+  function getCurrentStep() {
+    if (typeof currentStep === 'number') return currentStep;
+    if (typeof window.currentStep === 'number') return window.currentStep;
+    const active = document.querySelector('.step-panel.active');
+    if (active?.id?.startsWith('step')) {
+      const stepNum = parseInt(active.id.replace('step', ''), 10);
+      if (!Number.isNaN(stepNum)) return stepNum;
+    }
+    return 1;
+  }
+
+  function shouldIncludeSurcharges() {
+    return getCurrentStep() >= 3;
+  }
+
+  function isSurchargeApiLine(line) {
+    const name = line?.name || '';
+    return name === 'Congestion Charge' || name === 'Parking Charge';
+  }
+
+  function isSurchargeDisplayLine(line) {
+    return (
+      line.id === 'congestion' ||
+      line.id === 'parking' ||
+      line.name === 'Congestion Charge' ||
+      line.name === 'Parking Charge'
+    );
+  }
+
+  function recalcQuoteSummary(lines, quote) {
+    const subtotal = round2(
+      lines.reduce((sum, line) => {
+        if (line.isTbc || line.quoteOnly || line.total === null || line.total === undefined) return sum;
+        return sum + line.total;
+      }, 0)
+    );
+    const origSubtotal = quote?.subtotal ?? 0;
+    const origVat = quote?.vat ?? 0;
+    const origTotal = quote?.total ?? origSubtotal;
+    if (!origSubtotal || origSubtotal === subtotal) {
+      return { subtotal, vat: origVat, total: origTotal };
+    }
+    const ratio = subtotal / origSubtotal;
+    const vat = round2(origVat * ratio);
+    const total = round2(subtotal + vat);
+    return { subtotal, vat, total };
+  }
+
+  function filterQuoteForCurrentStep(quote) {
+    if (!quote || shouldIncludeSurcharges()) return quote;
+    const lines = (quote.lines || []).filter((line) => !isSurchargeApiLine(line));
+    const summary = recalcQuoteSummary(lines, quote);
+    return { ...quote, lines, ...summary };
+  }
+
+  function applyZoneDefaultsForDetails() {
+    const regionName =
+      lastQuote?.resolvedRegion?.name ||
+      catalog?.resolvedRegion?.name ||
+      regionPrices?.resolvedRegion?.name ||
+      '';
+    if (!/Zone 1/i.test(regionName)) return;
+    if (typeof window.selectZone === 'function') window.selectZone(true);
+    if (typeof window.selectParking === 'function') window.selectParking(false);
+  }
 
   function buildQuotePayload() {
     const services = Array.from(state.services).map((code) => ({
@@ -593,45 +990,116 @@
       postcode: getPostcode(),
       services,
       activeBundleKeys: [...state.activeBundles],
-      congestionZone: !!state.congestion,
-      parkingAvailable: !!state.parking,
+      congestionZone: shouldIncludeSurcharges() ? !!state.congestion : false,
+      parkingAvailable: shouldIncludeSurcharges() ? !!state.parking : true,
     };
+  }
+
+  function round2(n) {
+    return Math.round(Number(n) * 100) / 100;
   }
 
   function mapApiLines(lines) {
     return (lines || []).map((l) => {
-      const selectionSummary = l.serviceDetails?.summary || '';
-      const selectionDetails = formatLineSelectionDetails(l.serviceDetails);
-      return {
+      const mapped = {
         name: l.name,
-        sub: l.sub || selectionSummary || '',
-        selectionDetails,
+        sub: l.sub || '',
+        selectionDetails: '',
         serviceDetails: l.serviceDetails || null,
         price: l.total,
         id: l.serviceCode,
         serviceCode: l.serviceCode,
         serviceName: l.serviceName,
         discount: l.isDiscount,
+        isAddon: !!l.isAddon,
+        componentFieldKey: l.componentFieldKey || null,
+        pricingFieldKeys: l.pricingFieldKeys || null,
         quoteOnly: l.quoteOnly || l.isTbc,
       };
+      mapped.selectionDetails = formatLineSelectionDetails(mapped.serviceDetails, mapped);
+      return mapped;
     });
   }
 
-  function formatLineSelectionDetails(serviceDetails) {
-    if (!serviceDetails?.selections?.length) return '';
-    return serviceDetails.selections
-      .map((s) => `${s.label}: ${s.displayValue}`)
-      .join(' · ');
+  function formatLineSelectionDetails(serviceDetails, line = {}) {
+    if (!serviceDetails?.selections?.length || line.isAddon || line.componentFieldKey) return '';
+    let selections = serviceDetails.selections;
+    for (const fieldKey of line.pricingFieldKeys || []) {
+      selections = selections.filter((entry) => entry.fieldKey !== fieldKey);
+    }
+    if (line.serviceCode === 'gsc') {
+      selections = selections.filter(
+        (entry) => !['applianceCount', 'coAlarmInstall'].includes(entry.fieldKey)
+      );
+    }
+    return selections.map((s) => `${s.label}: ${s.displayValue}`).join(' · ');
   }
 
   function formatLineDetailsHtml(line) {
-    if (line.selectionDetails) {
-      return `<div class="line-sub line-details">${escapeHtml(line.selectionDetails)}</div>`;
+    if (line.isAddon || line.componentFieldKey) {
+      return line.sub
+        ? `<div class="line-sub line-details">${escapeHtml(line.sub)}</div>`
+        : '';
     }
-    if (line.sub) {
-      return `<div class="line-sub">${escapeHtml(line.sub)}</div>`;
+    const parts = [];
+    if (line.sub?.trim()) parts.push(line.sub.trim());
+    if (line.selectionDetails?.trim()) {
+      const subText = line.sub?.trim() || '';
+      if (!subText || !line.selectionDetails.includes(subText)) {
+        parts.push(line.selectionDetails.trim());
+      }
     }
-    return '';
+    if (!parts.length) return '';
+    return `<div class="line-sub line-details">${escapeHtml(parts.join(' · '))}</div>`;
+  }
+
+  function formatQuoteLinePrice(line) {
+    if (line.quoteOnly) return 'TBC';
+    if (line.price == null || line.price === undefined) return 'TBC';
+    return fmt(line.price);
+  }
+
+  function updateQuoteTotals(serviceLines, discountLines, quoteTotal) {
+    const grossSubtotal = round2(
+      serviceLines.reduce((sum, line) => {
+        if (line.quoteOnly || line.price == null || line.price === undefined) return sum;
+        return sum + line.price;
+      }, 0)
+    );
+    const discountTotal = round2(
+      discountLines.reduce((sum, line) => {
+        if (line.price == null || line.price === undefined) return sum;
+        return sum + Math.abs(line.price);
+      }, 0)
+    );
+    const finalTotal =
+      quoteTotal != null && quoteTotal !== undefined ? quoteTotal : round2(grossSubtotal - discountTotal);
+
+    const subEl = document.getElementById('q-subtotal');
+    const totalEl = document.getElementById('q-total');
+    const wasEl = document.getElementById('q-was');
+    const discountRow = document.getElementById('q-discount-row');
+    const discountEl = document.getElementById('q-discount');
+    const discountLabelEl = document.getElementById('q-discount-label');
+
+    if (subEl) subEl.textContent = fmt(grossSubtotal);
+    if (totalEl) totalEl.textContent = fmt(finalTotal);
+
+    if (discountTotal > 0.001) {
+      discountRow?.classList.remove('hidden');
+      if (discountEl) discountEl.textContent = `−${fmt(discountTotal)}`;
+      if (discountLabelEl) {
+        const label = discountLines.find((line) => line.name)?.name || 'Bundle Discount';
+        discountLabelEl.textContent = label;
+      }
+      if (wasEl) {
+        wasEl.textContent = fmt(grossSubtotal);
+        wasEl.classList.remove('hidden');
+      }
+    } else {
+      discountRow?.classList.add('hidden');
+      wasEl?.classList.add('hidden');
+    }
   }
 
   window.renderQuotePanel = function renderQuotePanelApi(lines) {
@@ -639,9 +1107,10 @@
     const totalsEl = document.getElementById('quote-totals');
     const emptyEl = document.getElementById('quote-empty');
 
-    const validLines = lines.filter((l) => l.price !== 0 || l.quoteOnly);
+    const validLines = lines.filter((l) => l.discount || l.price !== 0 || l.quoteOnly);
+    const serviceLines = validLines.filter((l) => !l.discount);
 
-    if (validLines.length === 0) {
+    if (serviceLines.length === 0) {
       if (emptyEl) emptyEl.style.display = '';
       if (linesEl) linesEl.innerHTML = '';
       if (totalsEl) totalsEl.classList.add('hidden');
@@ -652,27 +1121,23 @@
     if (totalsEl) totalsEl.classList.remove('hidden');
 
     if (linesEl) {
-      linesEl.innerHTML = validLines
+      linesEl.innerHTML = serviceLines
         .map(
           (l) => `
-    <div class="quote-line ${l.discount ? 'quote-discount' : ''}">
+    <div class="quote-line">
       <div class="quote-line-name">
         ${escapeHtml(l.name)}
         ${formatLineDetailsHtml(l)}
       </div>
-      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : l.price == null || l.price === undefined ? 'TBC' : l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)}</div>
+      <div class="quote-line-price">${formatQuoteLinePrice(l)}</div>
     </div>
   `
         )
         .join('');
     }
 
-    const subtotal = lastQuote?.subtotal ?? validLines.reduce((s, l) => s + (l.quoteOnly ? 0 : l.price), 0);
-    const total = lastQuote?.total ?? subtotal;
-    const subEl = document.getElementById('q-subtotal');
-    const totalEl = document.getElementById('q-total');
-    if (subEl) subEl.textContent = fmt(subtotal);
-    if (totalEl) totalEl.textContent = fmt(total);
+    const discountLines = validLines.filter((l) => l.discount);
+    updateQuoteTotals(serviceLines, discountLines, lastQuote?.total ?? null);
   };
 
   function quoteNeedsQuotation(quote) {
@@ -686,10 +1151,10 @@
     if (!btn) return;
     const needsQuote = quoteNeedsQuotation(quote);
     if (needsQuote) {
-      btn.innerHTML = '📋 Request Quote — Submit for Pricing';
+      btn.innerHTML = 'Request Quote';
       btn.dataset.submitMode = 'quotation';
     } else {
-      btn.innerHTML = '🏠 Book Now — Confirm Appointment';
+      btn.innerHTML = 'Confirm Booking';
       btn.dataset.submitMode = 'booking';
     }
   }
@@ -735,9 +1200,11 @@
 
     const pc = getPostcode();
     if (!pc) {
-      el.textContent = 'Enter postcode in step 1, then select services';
+      el.textContent = '';
+      el.style.display = 'none';
       return;
     }
+    el.style.display = '';
     if (state.propType && state.propType !== 'residential') {
       el.textContent = `Custom quote for ${pc} — team will confirm pricing`;
       return;
@@ -759,24 +1226,14 @@
 
   function applyQuoteToUi(quote) {
     lastQuote = quote;
-    quoteLines = mapApiLines(quote.lines);
+    const displayQuote = filterQuoteForCurrentStep(quote);
+    quoteLines = mapApiLines(displayQuote.lines).filter((line) =>
+      shouldIncludeSurcharges() ? true : !isSurchargeDisplayLine(line)
+    );
     renderQuotePanel(quoteLines);
-    updateQuoteRegionLabel(quote);
-
-    const subtotal = quote.subtotal ?? 0;
-    const total = quote.total ?? subtotal;
-    const vat = quote.vat ?? 0;
-
-    const subEl = document.getElementById('q-subtotal');
-    const totalEl = document.getElementById('q-total');
-    if (subEl) subEl.textContent = fmt(subtotal);
-    if (totalEl) totalEl.textContent = fmt(total);
-
-    const vatRow = document.querySelector('.quote-vat span:last-child');
-    if (vatRow) vatRow.textContent = fmt(vat);
-
+    updateQuoteRegionLabel(displayQuote);
     updateFloatBar();
-    updateSubmitCta(quote);
+    updateSubmitCta(displayQuote);
   }
 
   async function refreshQuote() {
@@ -841,6 +1298,7 @@
   }
 
   function buildBookingPayload() {
+    if (typeof syncFullName === 'function') syncFullName();
     const quotePayload = buildQuotePayload();
     const firstName =
       document.getElementById('b-firstName')?.value?.trim() ||
@@ -1131,9 +1589,23 @@
       if (sn === n) t.classList.add('active');
     });
 
-    if (n === 3) syncBookingFields();
-
+    if (typeof updateStepProgress === 'function') updateStepProgress(n);
     currentStep = n;
+    window.currentStep = n;
+
+    if (n === 3) {
+      syncBookingFields();
+      applyZoneDefaultsForDetails();
+    }
+
+    if ((n === 2 || n === 3) && (state.services.size > 0 || state.activeBundles.size > 0)) {
+      try {
+        await refreshQuote();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -1269,6 +1741,7 @@
       clearServiceAnswers(serviceCode);
       if (row) row.classList.remove('selected');
       clearSubqSlot(serviceCode);
+      removeStoredQuestions(serviceCode);
 
       for (const bundleId of [...state.activeBundles]) {
         const bdef = window.BUNDLES[bundleId];
@@ -1276,14 +1749,26 @@
           deactivateBundle(bundleId);
         }
       }
-    } else {
-      state.services.add(serviceCode);
-      if (row) row.classList.add('selected');
+
+      renderSubQuestions();
+      resetQuoteIfEmpty();
+      calcAll();
+      if (typeof updateStep2NextState === 'function') updateStep2NextState();
+      return;
     }
+
+    if (serviceHasQuestions(serviceCode)) {
+      openServiceModal('service', { serviceCode });
+      return;
+    }
+
+    state.services.add(serviceCode);
+    if (row) row.classList.add('selected');
 
     renderSubQuestions();
     resetQuoteIfEmpty();
     calcAll();
+    if (typeof updateStep2NextState === 'function') updateStep2NextState();
   };
 
   window.toggleBundle = function toggleBundleApi(bundleId, svcIds) {
@@ -1292,39 +1777,45 @@
 
     if (isOn) {
       deactivateBundle(bundleId);
-    } else {
-      for (const [bid, bdef] of Object.entries(window.BUNDLES)) {
-        if (bid === bundleId) continue;
-        if (!state.activeBundles.has(bid)) continue;
-        const overlap = bdef.services.some((s) => svcIds.includes(s));
-        if (overlap) deactivateBundle(bid);
-      }
-
-      svcIds.forEach((id) => {
-        if (state.services.has(id)) {
-          clearServiceAnswers(id);
-        }
-        const row = document.getElementById('svc-' + id);
-        if (row) row.classList.remove('selected');
-      });
-
-      state.activeBundles.add(bundleId);
-      if (bundleRow) bundleRow.classList.add('selected');
-
-      svcIds.forEach((id) => {
-        state.services.add(id);
-        const row = document.getElementById('svc-' + id);
-        if (row) {
-          row.classList.remove('selected');
-          row.style.display = 'none';
-        }
-        clearSubqSlot(id);
-      });
+      renderSubQuestions();
+      resetQuoteIfEmpty();
+      calcAll();
+      if (typeof updateStep2NextState === 'function') updateStep2NextState();
+      return;
     }
 
+    if (bundleHasQuestions(svcIds)) {
+      openServiceModal('bundle', { bundleId, svcIds });
+      return;
+    }
+
+    finalizeBundleSelection(bundleId, svcIds);
     renderSubQuestions();
     resetQuoteIfEmpty();
     calcAll();
+    if (typeof updateStep2NextState === 'function') updateStep2NextState();
+  };
+
+  const originalSelectZone = window.selectZone;
+  window.selectZone = function selectZoneApi(val) {
+    if (originalSelectZone) originalSelectZone(val);
+    else {
+      state.congestion = val;
+      document.getElementById('congestion-yes')?.classList.toggle('selected', val);
+      document.getElementById('congestion-no')?.classList.toggle('selected', !val);
+    }
+    if (shouldIncludeSurcharges()) calcAll();
+  };
+
+  const originalSelectParking = window.selectParking;
+  window.selectParking = function selectParkingApi(val) {
+    if (originalSelectParking) originalSelectParking(val);
+    else {
+      state.parking = val;
+      document.getElementById('parking-yes')?.classList.toggle('selected', val);
+      document.getElementById('parking-no')?.classList.toggle('selected', !val);
+    }
+    if (shouldIncludeSurcharges()) calcAll();
   };
 
   const originalSyncField = window.syncField;

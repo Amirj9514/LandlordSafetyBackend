@@ -1,0 +1,6 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M12 4h17.172a4 4 0 0 1 2.828 1.172l8.828 8.828A4 4 0 0 1 42 16.828V40a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z" stroke="#6B7A8F" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M28 4v8a4 4 0 0 0 4 4h8" stroke="#6B7A8F" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M16 28h16M16 34h10" stroke="#6B7A8F" stroke-width="2" stroke-linecap="round"/>
+  <text x="24" y="24" text-anchor="middle" fill="#6B7A8F" font-family="DM Sans, sans-serif" font-size="8" font-weight="700">PDF</text>
+</svg>

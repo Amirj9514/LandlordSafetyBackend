@@ -84,7 +84,7 @@
                 <div class="hero__inner">
                     <div class="hero__content">
                         <h1 id="hero-title" class="hero__title">
-                            Property Safety Certificates for
+                            Landlord Safety Certificates for
                             <span class="hero__title-accent">London Landlords</span>
                         </h1>
                         <p class="hero__lead">Gas, electrical, fire &amp; energy certificates issued within 24 hours. All inspections by accredited engineers across London and M25.</p>
@@ -93,18 +93,18 @@
                     <aside class="quote-card" aria-label="Get your free quote">
                         <div class="quote-card__header">
                             <h2 class="quote-card__title">Get Your Free Quote</h2>
-                            <p class="quote-card__subtitle">Takes 30 seconds — no payment required</p>
+                            <p class="quote-card__subtitle">Quick booking &mdash; Pay by invoice after confirmation.</p>
                         </div>
 
                         <form class="quote-form" id="quote-form" action="#" method="post" novalidate>
                             <div class="quote-form__field">
-                                <label class="field-label" for="postcode">Postcode</label>
+                                <label class="field-label" for="postcode">Postcode*</label>
                                 <input class="field-input" type="text" id="postcode" name="postcode"
                                     placeholder="SW1A 1AA" autocomplete="postal-code" required>
                             </div>
 
                             <fieldset class="quote-form__field property-type">
-                                <legend class="field-label">Property Type</legend>
+                                <legend class="field-label">Property Type*</legend>
                                 <div class="property-type__options">
                                     <label class="property-type__option">
                                         <input type="radio" name="property-type" value="residential" checked>
@@ -191,7 +191,7 @@
                             </fieldset>
 
                             <div class="quote-form__field">
-                                <label class="field-label" for="contact">Email or Phone</label>
+                                <label class="field-label" for="contact">Email or Phone*</label>
                                 <input class="field-input" type="text" id="contact" name="contact"
                                     placeholder="you@example.com or 07700 000000" autocomplete="email" required>
                             </div>
@@ -255,19 +255,19 @@
                     </div>
 
                     <div class="services-tabs" role="tablist" aria-label="Property type">
-                        <button type="button" class="services-tabs__btn services-tabs__btn--active" role="tab" aria-selected="true">
+                        <button type="button" class="services-tabs__btn services-tabs__btn--active" role="tab" aria-selected="true" data-services-tab="residential" aria-controls="services-panel-residential">
                             <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             Residential
                         </button>
-                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false">
+                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false" data-services-tab="commercial" aria-controls="services-panel-commercial">
                             <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M4 21V4h10v17M14 8h6v13M8 8h2M8 12h2M8 16h2M17 12h1M17 16h1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             Commercial
                         </button>
-                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false">
+                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false" data-services-tab="installation" aria-controls="services-panel-installation">
                             <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M14.7 6.3a4.1 4.1 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4.1 4.1 0 0 0 5.4-5.4l-2.1 2.1-2.9-2.9 2.1-2.1Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -276,23 +276,7 @@
                     </div>
                 </div>
 
-                <div id="services-list" class="services-grid">
-                    <article class="service-card service-card--featured">
-                        <img src="images/service-featured.png" alt="" class="service-card__bg" width="480" height="420">
-                        <div class="service-card__overlay">
-                            <h3 class="service-card__name">Fully Accredited Engineers</h3>
-                            <p class="service-card__desc">Gas Safe Registered &amp; NICEIC Affiliated — Every Job, Every Time.</p>
-                            <a href="#book" class="service-card__cta">
-                                <span>See All Services</span>
-                                <span class="service-card__cta-arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                    </article>
-
+                <div id="services-panel-residential" class="services-grid services-grid--active" data-services-panel="residential">
                     <article class="service-card">
                         <div class="service-card__media">
                             <img src="images/service-gas.png" alt="" width="480" height="200">
@@ -303,7 +287,7 @@
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">£47.99</span>
+                                    <span class="service-card__price">&pound;67.99</span>
                                 </div>
                                 <a href="#book" class="service-card__cta">
                                     <span>Book Now</span>
@@ -323,35 +307,11 @@
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name">Electrical Certificate (EICR)</h3>
-                            <p class="service-card__desc">BS7671 : Mandatory 5-yearly electrical inspection for all rental properties</p>
+                            <p class="service-card__desc">BS7671: Mandatory 5-yearly electrical inspection for all rental properties</p>
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">£180</span>
-                                </div>
-                                <a href="#book" class="service-card__cta">
-                                    <span>Book Now</span>
-                                    <span class="service-card__cta-arrow" aria-hidden="true">
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="service-card">
-                        <div class="service-card__media">
-                            <img src="images/service-fire-alarm.png" alt="" width="480" height="200">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__name">Fire Alarm Certificate (FSC)</h3>
-                            <p class="service-card__desc">BS-5839: Installation, Testing And Certification of Fire Alarm Systems.</p>
-                            <div class="service-card__meta">
-                                <div class="service-card__pricing">
-                                    <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">£180</span>
+                                    <span class="service-card__price">&pound;180</span>
                                 </div>
                                 <a href="#book" class="service-card__cta">
                                     <span>Book Now</span>
@@ -371,11 +331,35 @@
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name">Energy Performance Certificate (EPC)</h3>
-                            <p class="service-card__desc">Required For All Residential Rental Properties Minimum E Rating</p>
+                            <p class="service-card__desc">Minimum E Rating Required for All Rental Properties.</p>
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">£180</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="/services/epc/" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-fire-alarm.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Fire Alarm Certificate (FAC)</h3>
+                            <p class="service-card__desc">Fire Alarm Testing and Certification to BS 5839.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;34.99</span>
                                 </div>
                                 <a href="#book" class="service-card__cta">
                                     <span>Book Now</span>
@@ -395,14 +379,522 @@
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name">Fire Safety Risk Assessment (FRA)</h3>
-                            <p class="service-card__desc">Mandatory Fire Safety Assessments For HMOs And Multi-Occupancy Properties</p>
+                            <p class="service-card__desc">Mandatory Fire Risk Assessments for HMO&rsquo;s and Multi-Occupancy Properties.</p>
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">£180</span>
+                                    <span class="service-card__price">&pound;179.99</span>
                                 </div>
                                 <a href="#book" class="service-card__cta">
                                     <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Emergency Light Certificate (ELC)</h3>
+                            <p class="service-card__desc">Testing and certification of emergency lighting systems to BS 5266.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;34.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Portable Appliance (PAT)</h3>
+                            <p class="service-card__desc">Mandatory for landlord-provided appliances in furnished or semi-furnished lettings.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Boiler Service (Servicing)</h3>
+                            <p class="service-card__desc">Annual boiler maintenance and cleaning, carried out by Gas Safe registered engineers.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Asbestos (Survey)</h3>
+                            <p class="service-card__desc">Asbestos surveys for older residential properties, required before renovation or demolition work.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Floor Plan</h3>
+                            <p class="service-card__desc">Professional floor plans for listings, compliance records, or EPC assessments.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Installation / Diagnostic Works</h3>
+                            <p class="service-card__desc">Boiler, fuse board and fire alarm installation, plus fault finding across electrical, gas and fire systems.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Get A Quote</span>
+                                    <span class="service-card__price service-card__price--quote">&pound;</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div id="services-panel-commercial" class="services-grid" data-services-panel="commercial" hidden>
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-gas.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Gas Safety Certificate (CP42)</h3>
+                            <p class="service-card__desc">CP15, CP17, CP42 and CP16 gas safety inspections for boilers and kitchen appliances.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;150</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-eicr.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Electrical Certificate (CEICR)</h3>
+                            <p class="service-card__desc">Mandatory periodic electrical inspection for commercial premises, certified to BS7671.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;199.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-epc.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Energy Performance Certificate (CEPC)</h3>
+                            <p class="service-card__desc">Required for commercial buildings being sold, let, or constructed.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;219.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-fire-alarm.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Fire Alarm Certificate (CFSC)</h3>
+                            <p class="service-card__desc">Fire alarm testing and certification to BS 5839 for commercial premises.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;129.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Fire Safety Risk Assessment (CFRA)</h3>
+                            <p class="service-card__desc">Mandatory Fire Risk Assessments for HMO&rsquo;s and Multi-Occupancy Properties.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Commercial Emergency Lighting Certificate (ELC)</h3>
+                            <p class="service-card__desc">Regular PAT testing for all portable electrical equipment on commercial premises.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;119.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Portable Appliance Testing (PAT)</h3>
+                            <p class="service-card__desc">Regular PAT testing for all portable electrical equipment on commercial premises.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Asbestos (Survey)</h3>
+                            <p class="service-card__desc">Asbestos management and refurbishment surveys for commercial premises, required under the Control of Asbestos Regulations 2012.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;499.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Installation &amp; Diagnostic Works</h3>
+                            <p class="service-card__desc">Boiler, electrical and fire system installation, plus fault diagnostics for commercial premises, carried out by accredited engineers.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;149.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div id="services-panel-installation" class="services-grid" data-services-panel="installation" hidden>
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-eicr.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Consumer Unit Installation (Fuse Board)</h3>
+                            <p class="service-card__desc">New or replacement fuse boards installed to BS7671 with Building Regulations Part P notification where required.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;399.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">New Boiler Installation</h3>
+                            <p class="service-card__desc">Full boiler installation by Gas Safe registered engineers, with a Benchmark Certificate and compliance certificate issued on completion.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;2399.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-epc.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Fire Alarm &amp; Panel Installation</h3>
+                            <p class="service-card__desc">Fire detection systems and control panels installed to BS 5839, matched to your property&rsquo;s grade and category requirements.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;1999.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="images/service-fire-alarm.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Emergency Lighting Installation</h3>
+                            <p class="service-card__desc">Emergency lighting systems installed and commissioned to BS 5266.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;219.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Smoke &amp; CO Alarm Installation</h3>
+                            <p class="service-card__desc">Interlinked smoke heat and carbon monoxide alarms fitted to meet the Regulations.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;179.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../images/service-fra.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Fault Finding &amp; Diagnostics</h3>
+                            <p class="service-card__desc">Fault diagnosis across electrical gas and fire systems, with a clear breakdown of any remedial work needed.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;149.99</span>
+                                </div>
+                                <a href="#book" class="service-card__cta">
+                                    <span>Get a Quote</span>
                                     <span class="service-card__cta-arrow" aria-hidden="true">
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                                             <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -505,7 +997,7 @@
                         Get an Instant<br>
                         <span class="estimate__title-accent">Estimate</span>
                     </h2>
-                    <p class="estimate__subtitle">Choose your service, add a few details, and </br> see your estimated price
+                    <p class="estimate__subtitle">Choose your service, add a few details, and see your estimated price
                         in seconds.</p>
                 </header>
 
@@ -579,21 +1071,21 @@
                             <span class="how-step__num" aria-hidden="true">1</span>
                             <div class="how-step__body">
                                 <h3 class="how-step__title">Request a Quote</h3>
-                                <p class="how-step__text">Fill in your postcode, property type, and contact details. We confirm your booking within the hour — sometimes minutes.</p>
+                                <p class="how-step__text">Fill in your postcode, property type, and contact details. We confirm your booking within the hour, sometimes minutes. Once confirmed, pay your invoice and your booking schedule will be sent to you.</p>
                             </div>
                         </li>
                         <li class="how-step">
                             <span class="how-step__num" aria-hidden="true">2</span>
                             <div class="how-step__body">
                                 <h3 class="how-step__title">Engineer Visits</h3>
-                                <p class="how-step__text">A fully accredited engineer arrives at your chosen time. Flexible slots, all London boroughs, no waiting weeks.</p>
+                                <p class="how-step__text">A fully accredited engineer arrives at your chosen slot. Morning or afternoon slots, all London boroughs, no waiting weeks.</p>
                             </div>
                         </li>
                         <li class="how-step">
                             <span class="how-step__num" aria-hidden="true">3</span>
                             <div class="how-step__body">
                                 <h3 class="how-step__title">Certificate Issued</h3>
-                                <p class="how-step__text">Your official certificate lands in your inbox within 24 hours of inspection. Fully compliant, ready to share with tenants.</p>
+                                <p class="how-step__text">Your official certificate lands in your inbox as soon as it&rsquo;s ready &mdash; most services within 24&ndash;48 hours, EPC and Fire Risk Assessments a little longer. Fully compliant, ready to share with tenants.</p>
                             </div>
                         </li>
                     </ol>
@@ -610,9 +1102,9 @@
                     <aside class="how-cta">
                         <h3 class="how-cta__title">
                             Certificate Needed
-                            <span class="how-cta__accent">by Tomorrow?</span>
+                            <span class="how-cta__accent">Fast?</span>
                         </h3>
-                        <p class="how-cta__text">Book before 5pm and our engineer can often visit same day. Certificate guaranteed within 24 hours.</p>
+                        <p class="how-cta__text">Book now for Next-day inspection and certificate &mdash; just &pound;99 extra.*</p>
                         <a href="#book" class="how-cta__btn">
                             <span>Book Now</span>
                             <span class="how-cta__btn-arrow" aria-hidden="true">
@@ -741,6 +1233,7 @@
             </div>
         </section>
 
+        <!-- Stories from London Landlords (hidden for now)
         <section id="reviews" class="reviews" aria-labelledby="reviews-title">
             <div class="reviews__inner">
                 <header class="reviews__header">
@@ -1091,13 +1584,14 @@
                 </div>
             </div>
         </section>
+        -->
 
         <section id="faq" class="faq" aria-labelledby="faq-title">
             <div class="faq__inner">
                 <div class="faq__layout">
                     <div class="faq__intro">
                         <h2 id="faq-title" class="faq__title">
-                            Questions  <span class="faq__title-accent">Answered FAQ</span>
+                            Questions Answered <span class="faq__title-accent">FAQ</span>
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings, same-week availability, and certificates sent within 24 hours.</p>
                         <a href="#estimate" class="btn-primary btn-primary--header faq__book">
@@ -1507,6 +2001,32 @@
                     if (other !== item) other.removeAttribute('open');
                 });
             }, true);
+        })();
+
+        (function () {
+            var tabs = document.querySelector('.services-tabs');
+            if (!tabs) return;
+
+            tabs.addEventListener('click', function (event) {
+                var btn = event.target.closest('.services-tabs__btn');
+                if (!btn || !tabs.contains(btn)) return;
+
+                var tabKey = btn.getAttribute('data-services-tab');
+                if (!tabKey) return;
+
+                tabs.querySelectorAll('.services-tabs__btn').forEach(function (tab) {
+                    tab.classList.remove('services-tabs__btn--active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+                btn.classList.add('services-tabs__btn--active');
+                btn.setAttribute('aria-selected', 'true');
+
+                document.querySelectorAll('[data-services-panel]').forEach(function (panel) {
+                    var isActive = panel.getAttribute('data-services-panel') === tabKey;
+                    panel.hidden = !isActive;
+                    panel.classList.toggle('services-grid--active', isActive);
+                });
+            });
         })();
     </script>
 </body>

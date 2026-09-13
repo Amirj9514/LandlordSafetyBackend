@@ -171,6 +171,8 @@ describe('pricingEngine unit', () => {
     assert.equal(lines[1].sub, '2 fuse boards');
     assert.equal(lines[1].total, 60);
     assert.equal(lines[0].serviceCode, 'eicr');
+    assert.equal(lines[0].componentFieldKey, 'bedrooms');
     assert.equal(lines[1].serviceCode, 'eicr');
+    assert.equal(lines[1].componentFieldKey, 'fuseBoards');
   });
 });

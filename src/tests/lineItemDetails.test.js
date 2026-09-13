@@ -101,6 +101,172 @@ describe('lineItemDetails', () => {
     assert.equal(lines[1].serviceDetails, null);
   });
 
+  it('does not attach GSC answers to CO Alarm addon lines', () => {
+    const gscQuestions = [
+      {
+        fieldKey: 'applianceCount',
+        label: 'Number of appliances',
+        sortOrder: 1,
+        options: [{ value: '4', label: '4' }],
+      },
+      {
+        fieldKey: 'coAlarmPresent',
+        label: 'CO Alarm present at property?',
+        sortOrder: 2,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        fieldKey: 'coAlarmInstall',
+        label: 'Add CO Alarm installation? (+£35)',
+        sortOrder: 3,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+    ];
+
+    const context = {
+      servicesByCode: {
+        gsc: { id: 'svc-gsc', code: 'gsc', name: 'Gas Safety Certificate (CP12)' },
+      },
+      questionsByServiceId: {
+        'svc-gsc': gscQuestions,
+      },
+    };
+
+    const lines = attachServiceDetailsToLines(
+      [
+        {
+          name: 'Gas Safety Certificate (CP12)',
+          sub: 'Meter & 4 appliance(s)',
+          serviceCode: 'gsc',
+          serviceName: 'Gas Safety Certificate (CP12)',
+          total: 89.99,
+          unitPrice: 89.99,
+          isTbc: false,
+          pricingFieldKeys: ['applianceCount'],
+        },
+        {
+          name: 'CO Alarm Installation',
+          sub: '',
+          serviceCode: 'gsc',
+          serviceName: 'Gas Safety Certificate (CP12)',
+          total: 35,
+          unitPrice: 35,
+          isTbc: false,
+          isAddon: true,
+        },
+      ],
+      context,
+      [
+        {
+          code: 'gsc',
+          answers: {
+            applianceCount: '4',
+            coAlarmPresent: 'no',
+            coAlarmInstall: 'yes',
+          },
+        },
+      ]
+    );
+
+    assert.equal(
+      formatServiceDetailsText(lines[0].serviceDetails),
+      'CO Alarm present at property?: No'
+    );
+    assert.equal(lines[1].serviceDetails, null);
+  });
+
+  it('shows only component-specific details for EICR multi-line quotes', () => {
+    const eicrQuestions = [
+      {
+        fieldKey: 'bedrooms',
+        label: 'Number of bedrooms',
+        sortOrder: 1,
+        options: [{ value: '4', label: '4 bedrooms' }],
+      },
+      {
+        fieldKey: 'fuseBoards',
+        label: 'Number of fuse boards',
+        sortOrder: 2,
+        options: [{ value: '3', label: '3 fuse boards' }],
+      },
+    ];
+
+    const context = {
+      servicesByCode: {
+        eicr: { id: 'svc-eicr', code: 'eicr', name: 'Electrical Installation Condition Report (EICR)' },
+      },
+      questionsByServiceId: {
+        'svc-eicr': eicrQuestions,
+      },
+    };
+
+    const lines = attachServiceDetailsToLines(
+      [
+        {
+          name: 'Electrical Installation Condition Report (EICR)',
+          sub: '4 bedrooms',
+          serviceCode: 'eicr',
+          total: 139.99,
+          componentFieldKey: 'bedrooms',
+        },
+        {
+          name: 'Electrical Installation Condition Report (EICR)',
+          sub: '3 fuse boards',
+          serviceCode: 'eicr',
+          total: 120,
+          componentFieldKey: 'fuseBoards',
+        },
+      ],
+      context,
+      [{ code: 'eicr', answers: { bedrooms: '4', fuseBoards: '3' } }]
+    );
+
+    assert.equal(lines[0].serviceDetails, null);
+    assert.equal(lines[1].serviceDetails, null);
+  });
+
+  it('does not duplicate PAT appliance count in service details', () => {
+    const patQuestions = [
+      {
+        fieldKey: 'applianceCount',
+        label: 'Number of appliances to test',
+        sortOrder: 1,
+        options: [],
+      },
+    ];
+
+    const context = {
+      servicesByCode: {
+        pat: { id: 'svc-pat', code: 'pat', name: 'Portable Appliance Test (PAT)' },
+      },
+      questionsByServiceId: {
+        'svc-pat': patQuestions,
+      },
+    };
+
+    const lines = attachServiceDetailsToLines(
+      [
+        {
+          name: 'Portable Appliance Test (PAT)',
+          sub: '7 appliance(s)',
+          serviceCode: 'pat',
+          total: 59.99,
+          pricingFieldKeys: ['applianceCount'],
+        },
+      ],
+      context,
+      [{ code: 'pat', answers: { applianceCount: '7' } }]
+    );
+
+    assert.equal(lines[0].serviceDetails.selections.length, 0);
+  });
+
   it('formats service details as readable text', () => {
     const text = formatServiceDetailsText({
       selections: [

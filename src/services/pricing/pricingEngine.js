@@ -79,6 +79,17 @@ const evaluateAmountFromTier = (priceMap, tierKey, noRegion) => {
   };
 };
 
+const pricingFieldKeysFromConfig = (config = {}) => {
+  const keys = [];
+  if (config.fieldKey) keys.push(config.fieldKey);
+  if (config.bedFieldKey) keys.push(config.bedFieldKey);
+  if (config.floorFieldKey && config.floorExtraTierKey) keys.push(config.floorFieldKey);
+  for (const inc of config.additionalIncrements || []) {
+    if (inc.fieldKey) keys.push(inc.fieldKey);
+  }
+  return keys.length ? keys : null;
+};
+
 const buildLine = ({
   name,
   sub,
@@ -89,6 +100,9 @@ const buildLine = ({
   serviceName,
   isDiscount = false,
   quoteOnly = false,
+  isAddon = false,
+  componentFieldKey = null,
+  pricingFieldKeys = null,
 }) =>
   lineFromPrice({
     name,
@@ -100,6 +114,9 @@ const buildLine = ({
     serviceName,
     isDiscount,
     quoteOnly,
+    isAddon,
+    componentFieldKey,
+    pricingFieldKeys,
   });
 
 const evaluateOptionTierLookup = (rule, ctx) => {
@@ -155,6 +172,7 @@ const evaluateOptionTierLookup = (rule, ctx) => {
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
       quoteOnly,
+      pricingFieldKeys: [config.fieldKey],
     }),
   ];
 };
@@ -182,6 +200,7 @@ const evaluateTierKeyTemplate = (rule, ctx) => {
       pricingTierId,
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
+      pricingFieldKeys: [config.fieldKey],
     }),
   ];
 };
@@ -244,6 +263,7 @@ const evaluateBasePlusIncrement = (rule, ctx) => {
       pricingTierId: base.pricingTierId,
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
+      pricingFieldKeys: pricingFieldKeysFromConfig(config),
     }),
   ];
 };
@@ -298,6 +318,7 @@ const evaluateMultiFieldSum = (rule, ctx) => {
         pricingTierId: part.pricingTierId,
         serviceCode: ctx.service.code,
         serviceName: ctx.service.name,
+        componentFieldKey: comp.fieldKey,
       })
     );
   }
@@ -354,6 +375,7 @@ const evaluateFlatPlusExtraUnits = (rule, ctx) => {
       pricingTierId: null,
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
+      pricingFieldKeys: [config.fieldKey],
     }),
   ];
 
@@ -379,6 +401,7 @@ const evaluateConditionalAddon = (rule, ctx) => {
       pricingTierId,
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
+      isAddon: true,
     }),
   ];
 };
@@ -412,6 +435,7 @@ const evaluateTierRangeMap = (rule, ctx) => {
           pricingTierId: null,
           serviceCode: ctx.service.code,
           serviceName: ctx.service.name,
+          pricingFieldKeys: pricingFieldKeysFromConfig(config),
         }),
       ];
     }
@@ -445,6 +469,7 @@ const evaluateTierRangeMap = (rule, ctx) => {
       pricingTierId: base.pricingTierId,
       serviceCode: ctx.service.code,
       serviceName: ctx.service.name,
+      pricingFieldKeys: pricingFieldKeysFromConfig(config),
     }),
   ];
 };
