@@ -8,63 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body class="service-page service-page--epc">
-    <header class="site-header">
-        <div class="site-header__inner">
-            <a href="/" class="logo" aria-label="Landlord Safety Inspection home">
-                <img src="../../icons/landFulllogo.png" alt="" class="logo__icon" width="181.5" height="40">
-            </a>
-
-            <div class="site-header__nav-wrap" id="site-nav-drawer">
-                <button type="button" class="site-header__drawer-close" aria-label="Close menu">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                </button>
-                <nav class="nav" aria-label="Main navigation">
-                    <a href="/#services" class="nav-link nav-link--dropdown">
-                        Residential
-                        <img src="../../icons/arrow_down.svg" alt="" class="nav-link__icon" width="14" height="14">
-                    </a>
-                    <a href="/#services" class="nav-link nav-link--dropdown">
-                        Commercial
-                        <img src="../../icons/arrow_down.svg" alt="" class="nav-link__icon" width="14" height="14">
-                    </a>
-                    <a href="/#services" class="nav-link nav-link--dropdown">
-                        Installation
-                        <img src="../../icons/arrow_down.svg" alt="" class="nav-link__icon" width="14" height="14">
-                    </a>
-                    <a href="/#coverage" class="nav-link">Area Coverage</a>
-                </nav>
-            
-            </div>
-
-            <div class="site-header__actions">
-                <a href="tel:+447350538874" class="btn-phone">
-                    <span class="btn-phone__icon" aria-hidden="true">
-                        <img src="../../icons/message.svg" alt="" width="14" height="14">
-                    </span>
-                    <span>07350 538874</span>
-                </a>
-                <a href="#book-epc" class="btn-primary btn-primary--header">
-                    <span class="btn-primary__label">Book Now</span>
-                    <span class="btn-primary__arrow" aria-hidden="true">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </a>
-            </div>
-
-            <button type="button" class="site-header__menu-toggle" aria-expanded="false" aria-controls="site-nav-drawer" aria-label="Open menu">
-                <span class="site-header__menu-icon" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="site-header__backdrop" aria-hidden="true"></div>
-    </header>
+    <!--#include header-->
 
     <main>
         <section class="service-hero" aria-labelledby="service-hero-title">
@@ -380,7 +328,7 @@
                                     <span class="service-card__from">Starting from</span>
                                     <span class="service-card__price">&pound;47.99</span>
                                 </div>
-                                <a href="#book-epc" class="service-card__cta">
+                                <a href="/services/cp12/" class="service-card__cta">
                                     <span>Book Now</span>
                                     <span class="service-card__cta-arrow" aria-hidden="true">
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -623,95 +571,10 @@
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="site-footer__inner">
-            <div class="site-footer__grid">
-                <div class="site-footer__brand">
-                    <a href="/" class="site-footer__logo" aria-label="Landlord Safety Inspection home">
-                        <img src="../../icons/LLSI LOGO ICON.svg" alt="" class="site-footer__logo-icon" width="37" height="40">
-                        <span class="site-footer__logo-brand">
-                            <span class="site-footer__logo-title">LANDLORD</span>
-                            <span class="site-footer__logo-subtitle">Safety Inspection</span>
-                        </span>
-                    </a>
-                    <p class="site-footer__desc">Landlord Safety Inspection Limited. Property compliance certificates for London landlords, letting agents, and property managers.</p>
-                </div>
-                <div class="site-footer__col">
-                    <h3 class="site-footer__heading">Services</h3>
-                    <ul class="site-footer__links">
-                        <li><a href="/#services">Gas Safety Certificate</a></li>
-                        <li><a href="/#services">EICR (Residential)</a></li>
-                        <li><a href="/services/epc/">EPC (Residential)</a></li>
-                        <li><a href="/#services">Fire Risk Assessment (Residential)</a></li>
-                        <li><a href="/#services">PAT Testing</a></li>
-                    </ul>
-                </div>
-                <div class="site-footer__col">
-                    <h3 class="site-footer__heading">Company</h3>
-                    <ul class="site-footer__links">
-                        <li><a href="/#services">All Services</a></li>
-                        <li><a href="/#estimate">Pricing</a></li>
-                        <li><a href="/#reviews">Reviews</a></li>
-                        <li><a href="/#faq">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="site-footer__col">
-                    <h3 class="site-footer__heading">Contact</h3>
-                    <ul class="site-footer__contact">
-                        <li>
-                            <img src="../../icons/message.svg" alt="" class="site-footer__contact-icon site-footer__contact-icon--whatsapp" width="14" height="14">
-                            <a href="https://wa.me/447350538874" class="site-footer__contact-link" target="_blank" rel="noopener noreferrer">WhatsApp <strong>07350 538874</strong></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="site-footer__bar">
-                <p class="site-footer__copy">&copy; 2025 Landlord Safety Inspection Limited. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!--#include footer-->
+    <script src="/header-mega-menu.js"></script>
 
     <script>
-        (function () {
-            var menuToggle = document.querySelector('.site-header__menu-toggle');
-            var navDrawer = document.getElementById('site-nav-drawer');
-            var navBackdrop = document.querySelector('.site-header__backdrop');
-            var drawerClose = document.querySelector('.site-header__drawer-close');
-
-            function closeNavDrawer() {
-                if (!navDrawer || !navBackdrop || !menuToggle) return;
-                navDrawer.classList.remove('is-open');
-                navBackdrop.classList.remove('is-open');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                navBackdrop.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-            }
-
-            function openNavDrawer() {
-                if (!navDrawer || !navBackdrop || !menuToggle) return;
-                navDrawer.classList.add('is-open');
-                navBackdrop.classList.add('is-open');
-                menuToggle.setAttribute('aria-expanded', 'true');
-                navBackdrop.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-            }
-
-            if (menuToggle && navDrawer && navBackdrop) {
-                menuToggle.addEventListener('click', function () {
-                    if (menuToggle.getAttribute('aria-expanded') === 'true') closeNavDrawer();
-                    else openNavDrawer();
-                });
-                navBackdrop.addEventListener('click', closeNavDrawer);
-                if (drawerClose) drawerClose.addEventListener('click', closeNavDrawer);
-                navDrawer.querySelectorAll('.nav-link, .site-header__drawer-cta').forEach(function (link) {
-                    link.addEventListener('click', closeNavDrawer);
-                });
-                document.addEventListener('keydown', function (event) {
-                    if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') closeNavDrawer();
-                });
-            }
-        })();
-
         (function () {
             var tabs = document.querySelector('.services-tabs');
             if (!tabs) return;
