@@ -177,6 +177,42 @@
       item.classList.remove('is-open');
     });
   });
+
+  document.querySelectorAll('.services-tabs').forEach(function (tabs) {
+    tabs.addEventListener('click', function (event) {
+      var btn = event.target.closest('.services-tabs__btn');
+      if (!btn || !tabs.contains(btn)) return;
+
+      var tabKey = btn.getAttribute('data-services-tab');
+      if (tabKey) activateServicesTab(tabKey);
+    });
+  });
+})();
+
+(function () {
+  var list = document.querySelector('.faq__list');
+  if (!list) return;
+
+  list.addEventListener('toggle', function (event) {
+    var item = event.target;
+    if (!item.open || !item.classList.contains('faq-item')) return;
+    list.querySelectorAll('.faq-item[open]').forEach(function (other) {
+      if (other !== item) other.removeAttribute('open');
+    });
+  }, true);
+})();
+
+(function () {
+  document.querySelectorAll('[data-see-all-services]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var grid = btn.closest('.services-grid');
+      if (!grid) return;
+
+      var expanded = grid.classList.toggle('is-expanded');
+      var label = btn.querySelector('.service-card__cta-label');
+      if (label) label.textContent = expanded ? 'Show Less' : 'See All Services';
+    });
+  });
 })();
 
 (function () {

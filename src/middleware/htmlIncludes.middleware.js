@@ -11,6 +11,7 @@ const htmlIncludes = (homeDir) => {
   const partials = {
     header: loadPartial(partialsDir, 'header'),
     footer: loadPartial(partialsDir, 'footer'),
+    services: loadPartial(partialsDir, 'services'),
   };
 
   return (req, res, next) => {

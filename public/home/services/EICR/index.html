@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="service-page service-page--cp12">
+<body class="service-page service-page--eicr">
     <!--#include header-->
 
     <main>
@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-epc" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="#book-eicr" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -82,7 +82,7 @@
                                 Pricing For Residential
                                 <span class="service-pricing__title-accent">EICR Assessments</span>
                             </h2>
-                            <p class="service-pricing__subtitle">Our certified GSC inspections are affordable and
+                            <p class="service-pricing__subtitle">Our certified EICR inspections are affordable and
                                 tailored for residential properties:</p>
                         </header>
 
@@ -99,7 +99,7 @@
                                         <span class="service-pricing-card__price">£99.99</span>
                                         <span class="service-pricing-card__unit">Studio & 1 Fuse board included</span>
                                     </div>
-                                    <a href="#book-epc"
+                                    <a href="#book-eicr"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -123,9 +123,9 @@
                                     <div class="service-pricing-card__pricing">
                                         <span class="service-pricing-card__from">Starting from</span>
                                         <span class="service-pricing-card__price">£20</span>
-                                        <span class="service-pricing-card__unit">Each additional </spbedrooman>
+                                        <span class="service-pricing-card__unit">Each additional bedroom</span>
                                     </div>
-                                    <a href="#book-epc"
+                                    <a href="#book-eicr"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -167,8 +167,8 @@
                                 What&rsquo;s
                                 <span class="service-included__title-accent">Included</span>
                             </h2>
-                            <p class="service-included__subtitle">Thorough gas safety checks by Gas Safe registeredEvery
-                                engineers, with your certificate issued within 24 hours.</p>
+                            <p class="service-included__subtitle">Thorough electrical safety checks by NICEIC-approved
+                                electricians, with your certificate issued within 24 hours.</p>
                         </header>
 
                         <div class="service-included__grid">
@@ -217,7 +217,7 @@
                                 Requirements You
                                 <span class="service-requirements__title-accent">Should Know</span>
                             </h2>
-                            <p class="service-requirements__subtitle">Our certified Gsc assessments are affordable and tailored for residential properties:</p>
+                            <p class="service-requirements__subtitle">Our certified EICR assessments are affordable and tailored for residential properties:</p>
                         </header>
 
                         <ol class="service-requirements__list">
@@ -267,9 +267,10 @@
                                     <span class="service-sample__title-accent">EICR Certificate</span>
                                 </h2>
                                 <p class="service-sample__lead" style="text-align: justify;">Every valid EICR shows the
-                                    property address, a list of the appliances checked, the engineer's Gas Safe licence
-                                    number, the date of inspection, the next check due date, and details of any defects
-                                    found. Download a sample certificate below to see exactly what you'll receive.</p>
+                                    property address, the circuits and observations checked, the electrician's
+                                    registration number, the date of inspection, the next check due date, and details of
+                                    any defects found. Download a sample certificate below to see exactly what you'll
+                                    receive.</p>
                             </div>
 
                             <div class="service-sample__aside">
@@ -278,7 +279,7 @@
                                         width="48" height="48">
                                     <h3 class="service-sample-card__title">Sample EICR Certificate</h3>
                                     <p class="service-sample-card__meta">PDF &ndash; Anonymised example</p>
-                                    <a href="../../documents/sample-epc-certificate.pdf"
+                                    <a href="../../documents/sample-eicr-certificate.pdf"
                                         class="btn-primary btn-primary--header service-sample-card__cta" download>
                                         <span class="btn-primary__label">Download Sample</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -295,12 +296,12 @@
                         </div>
                         <p class="service-sample__lead">Protect your tenants, stay compliant, and avoid fines. Whether
                             you manage one property or a large portfolio, LLSI is your trusted London compliance
-                            partner. Reach out today to discuss your gas (residential) requirements and get a confirmed
-                            quote within the hour.</p>
+                            partner. Reach out today to discuss your electrical (residential) requirements and get a
+                            confirmed quote within the hour.</p>
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-epc" aria-label="Book EPC assessor">
+                <aside class="service-book-card" id="book-eicr" aria-label="Book EICR assessor">
                     <div class="service-book-card__header">
                         <h3 class="service-book-card__title">Book Electrician for EICR now!</h3>
                         <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
@@ -308,7 +309,7 @@
                     </div>
 
                     <form class="service-book-form quote-form" id="service-book-form" action="#" method="post"
-                        novalidate data-service="epc">
+                        novalidate data-service="eicr">
                         <input type="hidden" name="property-type" value="residential">
                         <div class="quote-form__field">
                             <label class="field-label" for="postcode">Postcode</label>
@@ -336,136 +337,7 @@
             </div>
         </section>
 
-        <section id="services" class="services services--cp12-compliance" aria-labelledby="services-title">
-            <div class="services__inner">
-                <div class="services__header">
-                    <div class="services__intro">
-                        <h2 id="services-title" class="services__title">
-                            Complete Compliance
-                            <span class="services__title-accent">Solutions</span>
-                        </h2>
-                        <p class="services__lead">Everything you need to keep your property safe, legal, and fully
-                            compliant under one roof.</p>
-                    </div>
-
-                    <div class="services-tabs" role="tablist" aria-label="Property type">
-                        <button type="button" class="services-tabs__btn services-tabs__btn--active" role="tab"
-                            aria-selected="true" data-services-tab="residential"
-                            aria-controls="services-panel-residential">
-                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                aria-hidden="true">
-                                <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"
-                                    stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            Residential
-                        </button>
-                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false"
-                            data-services-tab="commercial" aria-controls="services-panel-commercial">
-                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                aria-hidden="true">
-                                <path d="M4 21V4h10v17M14 8h6v13M8 8h2M8 12h2M8 16h2M17 12h1M17 16h1"
-                                    stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            Commercial
-                        </button>
-                        <button type="button" class="services-tabs__btn" role="tab" aria-selected="false"
-                            data-services-tab="installation" aria-controls="services-panel-installation">
-                            <svg class="services-tabs__icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                aria-hidden="true">
-                                <path
-                                    d="M14.7 6.3a4.1 4.1 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4.1 4.1 0 0 0 5.4-5.4l-2.1 2.1-2.9-2.9 2.1-2.1Z"
-                                    stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            Installation
-                        </button>
-                    </div>
-                </div>
-
-                <div id="services-panel-residential" class="services-grid services-grid--active"
-                    data-services-panel="residential">
-                    <article class="service-card">
-                        <div class="service-card__media">
-                            <img src="../../images/service-gas.png" alt="" width="480" height="200">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__name">Boiler Servicing (BS)</h3>
-                            <p class="service-card__desc">Boiler Service is suggested once a year to help keep your
-                                boiler&rsquo;s life longer.</p>
-                            <div class="service-card__meta">
-                                <div class="service-card__pricing">
-                                    <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;79.99</span>
-                                </div>
-                                <a href="#book-epc" class="service-card__cta">
-                                    <span>Book Now</span>
-                                    <span class="service-card__cta-arrow" aria-hidden="true">
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="service-card">
-                        <div class="service-card__media">
-                            <img src="../../images/service-eicr.png" alt="" width="480" height="200">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__name">Electrical Certificate (EICR)</h3>
-                            <p class="service-card__desc">BS7671 : Mandatory 5-yearly electrical inspection for all
-                                rental properties</p>
-                            <div class="service-card__meta">
-                                <div class="service-card__pricing">
-                                    <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;69.99</span>
-                                </div>
-                                <a href="#book-epc" class="service-card__cta">
-                                    <span>Book Now</span>
-                                    <span class="service-card__cta-arrow" aria-hidden="true">
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="service-card">
-                        <div class="service-card__media">
-                            <img src="../../images/service-epc.png" alt="" width="480" height="200">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__name">Energy Performance Certificate (EPC)</h3>
-                            <p class="service-card__desc">Required For All Residential Rental Properties Minimum E
-                                Rating</p>
-                            <div class="service-card__meta">
-                                <div class="service-card__pricing">
-                                    <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;89.99</span>
-                                </div>
-                                <a href="/services/epc/" class="service-card__cta">
-                                    <span>Book Now</span>
-                                    <span class="service-card__cta-arrow" aria-hidden="true">
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
+        <!--#include services-->
 
         <section id="faq" class="faq faq--cp12" aria-labelledby="faq-title">
             <div class="faq__inner">
@@ -476,7 +348,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-epc" class="btn-primary btn-primary--header faq__book">
+                        <a href="#book-eicr" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -510,7 +382,7 @@
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How often do I need a Gas Safety Certificate?</span>
+                                    <span>How often do I need an EICR?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -523,14 +395,16 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every 12 months, without exception. You can carry out the check up to 2 months
-                                        before the current certificate expires without losing your renewal date.</p>
+                                    <p>At least every 5 years for most rental properties, or sooner if your previous
+                                        report recommends an earlier reinspection. You can carry out the check up to
+                                        2 months before the current certificate expires without losing your renewal
+                                        date.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if I don&rsquo;t have a valid CP12?</span>
+                                    <span>What happens if I don&rsquo;t have a valid EICR?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -543,10 +417,10 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>It&rsquo;s a criminal offence, not just an administrative one &mdash; it can lead
-                                        to unlimited fines and, in serious cases, prosecution. A missing or expired
-                                        certificate also invalidates a Section 21 notice, so you can&rsquo;t regain
-                                        possession of the property without a valid record in place.</p>
+                                    <p>Local authorities can issue civil penalties of up to &pound;30,000 per breach.
+                                        A missing or expired EICR can also block a valid Section 21 or Section 8
+                                        possession notice, so you can&rsquo;t regain possession of the property
+                                        without a valid record in place.</p>
                                 </div>
                             </details>
 
@@ -565,9 +439,10 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every gas appliance, pipe, fitting and flue you provide as landlord &mdash;
-                                        boilers, hobs, gas fires, cookers &mdash; checked for leaks, safe combustion,
-                                        and correct ventilation.</p>
+                                    <p>The consumer unit, earthing and bonding, and every circuit in the property
+                                        &mdash; tested for continuity, insulation resistance and correct operation,
+                                        with any issues coded C1, C2 or C3, or flagged for further investigation
+                                        (F1).</p>
                                 </div>
                             </details>
 
@@ -586,15 +461,15 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. A copy must go to tenants within 28 days of the check, and to new tenants
-                                        before they move in. You&rsquo;re required to keep records for at least 2 years.
-                                    </p>
+                                    <p>Yes. New tenants must receive a copy before they move in, existing tenants
+                                        within 28 days of the inspection, and your local authority within 7 days if
+                                        they request one.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What if an appliance fails the inspection?</span>
+                                    <span>What if the inspection finds a fault?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -607,11 +482,10 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>The appliance will be marked as &ldquo;At Risk&rdquo; or &ldquo;Immediately
-                                        Dangerous&rdquo; on the certificate and must not be used until repaired by a Gas
-                                        Safe registered engineer. Your engineer will explain the fault and what remedial
-                                        work is needed. We can re-inspect once repairs are complete so you can obtain a
-                                        compliant CP12.</p>
+                                    <p>Any C1 (danger present) or C2 (potentially dangerous) observation must be
+                                        remediated within 28 days, or sooner if the report specifies. C3 items are
+                                        recommended but not mandatory. We can re-inspect once repairs are complete so
+                                        you can obtain a compliant EICR.</p>
                                 </div>
                             </details>
                         </div>
@@ -625,20 +499,6 @@
     <script src="/header-mega-menu.js"></script>
 
     <script>
-        (function () {
-            var tabs = document.querySelector('.services-tabs');
-            if (!tabs) return;
-            tabs.addEventListener('click', function (event) {
-                var btn = event.target.closest('.services-tabs__btn');
-                if (!btn) return;
-                tabs.querySelectorAll('.services-tabs__btn').forEach(function (tab) {
-                    tab.classList.remove('services-tabs__btn--active');
-                    tab.setAttribute('aria-selected', 'false');
-                });
-                btn.classList.add('services-tabs__btn--active');
-                btn.setAttribute('aria-selected', 'true');
-            });
-        })();
 
         (function () {
             var list = document.querySelector('.faq__list');

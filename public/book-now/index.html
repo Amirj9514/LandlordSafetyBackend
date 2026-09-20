@@ -2601,7 +2601,9 @@ function selectRadio(group, val, cb) {
 // FRA TYPE CHECK
 // ═══════════════════════════════════════════════════
 function checkFraType() {
-  const v = document.getElementById('fra-proptype').value;
+  const propTypeEl = document.getElementById('fra-proptype');
+  if (!propTypeEl) return;
+  const v = propTypeEl.value;
   const note = document.getElementById('fra-flat-note');
   if (note) note.classList.toggle('hidden', v !== 'flat');
   calcAll();
@@ -3014,6 +3016,13 @@ updateFloatBar();
     const el = document.getElementById(field);
     if (el) el.value = val;
   });
+
+  // The service catalog (and #svc-<code> cards) only exists once Step 2 loads,
+  // so stash the requested code and let book-now-api.js apply it once the
+  // catalog for that step has actually rendered.
+  const serviceCode = params.get('service');
+  if (serviceCode) window.__pendingServiceCode = serviceCode;
+
   const fn = document.getElementById('firstName')?.value || '';
   const ln = document.getElementById('lastName')?.value || '';
   if (fn || ln) {

@@ -289,6 +289,7 @@
 
   function bookHref() {
     const params = new URLSearchParams();
+    params.set('propertyType', PROPERTY_TYPE);
     if (selectedServiceCode) params.set('service', selectedServiceCode);
     const pc = getPostcode();
     if (pc) params.set('postcode', pc);

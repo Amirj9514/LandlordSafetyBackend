@@ -652,6 +652,7 @@
           regionPricesPostcode = pc || null;
         }
         renderCatalogGrid();
+        applyPendingServiceCode();
         return catalog;
       })
       .catch((err) => {
@@ -665,6 +666,18 @@
       });
 
     return catalogLoadPromise;
+  }
+
+  // Applies a service code requested via ?service=<code> on the booking URL,
+  // once its card actually exists in the freshly-rendered catalog (Step 2 loads
+  // the catalog lazily, so this can't run any earlier than this point).
+  function applyPendingServiceCode() {
+    const code = window.__pendingServiceCode;
+    if (!code) return;
+    window.__pendingServiceCode = null;
+    if (document.getElementById('svc-' + code) && typeof window.toggleService === 'function' && !state.services.has(code)) {
+      window.toggleService(code);
+    }
   }
 
   function renderCatalogGrid() {

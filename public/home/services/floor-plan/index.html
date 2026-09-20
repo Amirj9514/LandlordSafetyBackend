@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Plan | Landlord Safety Inspection Limited</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body class="service-page service-page--floor-plan">
+    <!--#include header-->
+
+    <main>
+        <section class="service-hero" aria-labelledby="service-hero-title">
+            <div class="service-hero__media" aria-hidden="true"></div>
+            <div class="service-hero__overlay" aria-hidden="true"></div>
+            <div class="service-hero__inner">
+                <div class="service-hero__content">
+                    <h1 id="service-hero-title" class="service-hero__title">
+                        Professional
+                        <span class="service-hero__title-accent">Floor Plan</span>
+                    </h1>
+                    <p class="service-hero__lead">Professional floor plans for property listings, compliance records, and EPC assessments.</p>
+                    <div class="service-hero__actions">
+                        <div class="service-hero__price-pill">
+                            <span>Starting from</span>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <strong>&pound;60</strong>
+                        </div>
+                        <a href="#book-floorplan" class="btn-primary btn-primary--header service-hero__book-btn">
+                            <span class="btn-primary__label">Book Now</span>
+                            <span class="btn-primary__arrow" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-layout">
+            <div class="service-layout__inner">
+                <div class="service-layout__main">
+                    <div class="service-detail" aria-labelledby="service-detail-title">
+                        <h2 id="service-detail-title" class="service-detail__title">
+                            Professional
+                            <span class="service-detail__title-accent">Floor Plan</span>
+                        </h2>
+                        <div class="service-detail__copy">
+                            <p>Accurate floor plans help market your property, support EPC assessments, and provide clear documentation for tenants and compliance records.</p>
+                            <p>Our surveyors produce scaled plans showing room layouts and key dimensions suitable for listings and regulatory use.</p>
+                            <p>Floor plans start from £60 for standard residential properties across London and the M25.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="service-book-card" id="book-floorplan" aria-label="Book floor plan">
+                    <div class="service-book-card__header">
+                        <h3 class="service-book-card__title">Book floor plan now!</h3>
+                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.</p>
+                    </div>
+
+                    <form class="service-book-form quote-form" action="#" method="post" novalidate data-service="floorplan">
+                        <input type="hidden" name="property-type" value="residential">
+                        <div class="quote-form__field">
+                            <label class="field-label" for="postcode">Postcode</label>
+                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA" autocomplete="postal-code" required>
+                        </div>
+                        <div class="quote-form__field">
+                            <label class="field-label" for="contact">Email or Phone</label>
+                            <input class="field-input" type="text" id="contact" name="contact" placeholder="you@example.com or 07700 000000" autocomplete="email" required>
+                        </div>
+                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
+                            <span class="btn-primary__spinner" aria-hidden="true"></span>
+                            <span class="btn-primary__label">Book Now</span>
+                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
+                        </button>
+                    </form>
+
+                    <p class="service-book-card__whatsapp">
+                        Prefer to call? <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp 07350 538874</a>
+                    </p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="services services--related" aria-labelledby="related-services-title">
+            <div class="services__inner">
+                <div class="services__header">
+                    <div class="services__intro">
+                        <h2 id="related-services-title" class="services__title">
+                            Explore More
+                            <span class="services__title-accent">Services</span>
+                        </h2>
+                        <p class="services__lead">View our full range of landlord compliance certificates and inspections.</p>
+                    </div>
+                </div>
+                <div class="services-grid services-grid--compact">
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../pictures/CP12.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Gas Safety Certificate (CP12)</h3>
+                            <p class="service-card__desc">Annual Gas Safety inspection Required By Law For All Rental Properties.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;47.99</span>
+                                </div>
+                                <a href="/services/cp12/" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../pictures/EICR.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Electrical Certificate (EICR)</h3>
+                            <p class="service-card__desc">BS7671 Periodic In-depth Electrical Inspection for All Rental properties.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;180</span>
+                                </div>
+                                <a href="/services/eicr/" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card__media">
+                            <img src="../../pictures/EPC.png" alt="" width="480" height="200">
+                        </div>
+                        <div class="service-card__content">
+                            <h3 class="service-card__name">Energy Performance Certificate (EPC)</h3>
+                            <p class="service-card__desc">Minimum E Rating Required For All Rental Properties.</p>
+                            <div class="service-card__meta">
+                                <div class="service-card__pricing">
+                                    <span class="service-card__from">Starting from</span>
+                                    <span class="service-card__price">&pound;60</span>
+                                </div>
+                                <a href="/services/epc/" class="service-card__cta">
+                                    <span>Book Now</span>
+                                    <span class="service-card__cta-arrow" aria-hidden="true">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!--#include footer-->
+
+    <script src="/header-mega-menu.js"></script>
+    <script src="/service-lead-form.js"></script>
+</body>
+
+</html>
