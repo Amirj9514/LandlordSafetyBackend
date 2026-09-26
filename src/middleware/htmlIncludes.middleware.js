@@ -3,16 +3,24 @@ const path = require('path');
 
 const PARTIAL_PATTERN = /<!--\s*#include\s+(\w+)\s*-->/g;
 
-const loadPartial = (partialsDir, name) =>
-  fs.readFileSync(path.join(partialsDir, `${name}.html`), 'utf8');
+const PARTIAL_NAMES = ['header', 'footer', 'services'];
 
 const htmlIncludes = (homeDir) => {
   const partialsDir = path.join(homeDir, 'partials');
-  const partials = {
-    header: loadPartial(partialsDir, 'header'),
-    footer: loadPartial(partialsDir, 'footer'),
-    services: loadPartial(partialsDir, 'services'),
+  const cache = {};
+
+  // Re-reads a partial only when its file changes, so edits show without a restart.
+  const getPartial = (name) => {
+    const file = path.join(partialsDir, `${name}.html`);
+    const { mtimeMs } = fs.statSync(file);
+    const cached = cache[name];
+    if (!cached || cached.mtimeMs !== mtimeMs) {
+      cache[name] = { mtimeMs, html: fs.readFileSync(file, 'utf8') };
+    }
+    return cache[name].html;
   };
+
+  PARTIAL_NAMES.forEach(getPartial);
 
   return (req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') return next();
@@ -28,7 +36,7 @@ const htmlIncludes = (homeDir) => {
       if (err) return next();
 
       const rendered = html.replace(PARTIAL_PATTERN, (match, name) =>
-        Object.prototype.hasOwnProperty.call(partials, name) ? partials[name] : match
+        PARTIAL_NAMES.includes(name) ? getPartial(name) : match
       );
 
       res.type('html').send(rendered);

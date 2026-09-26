@@ -46,6 +46,7 @@
       item.classList.toggle('is-active', item.getAttribute('data-mega') === panelKey);
     });
 
+    header.style.setProperty('--site-header-bottom', header.getBoundingClientRect().bottom + 'px');
     header.classList.add('site-header--mega-open');
     megaMenu.setAttribute('aria-hidden', 'false');
   }
@@ -128,6 +129,13 @@
 
     megaMenu.addEventListener('mouseenter', cancelHideMegaMenu);
     megaMenu.addEventListener('mouseleave', scheduleHideMegaMenu);
+
+    var megaBackdrop = header.querySelector('.site-header__backdrop');
+    if (megaBackdrop) {
+      megaBackdrop.addEventListener('click', function () {
+        if (isDesktop()) hideMegaMenu();
+      });
+    }
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') hideMegaMenu();
