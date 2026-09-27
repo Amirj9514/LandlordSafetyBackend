@@ -5580,7 +5580,36 @@ body {
 }
 
 .service-page--installation .service-hero__media {
-  background-image: url("images/service-gas.png");
+  background-image: url("servicesImages/Installation  DiagnosticWorks.png");
+}
+
+.service-page-CGSC .service-hero__media {
+  background-image: url("servicesImages/CP42.png");
+}
+
+.service-page-CEICR .service-hero__media {
+  background-image: url("servicesImages/CEICR.png");
+}
+.service-page-CEPC .service-hero__media {
+  background-image: url("servicesImages/CEPC.png");
+}
+.service-page-CFSC .service-hero__media {
+  background-image: url("servicesImages/CFSC.png");
+}
+.service-page-CFRA .service-hero__media {
+  background-image: url("servicesImages/CFRA.png");
+}
+.service-page-CELC .service-hero__media {
+  background-image: url("servicesImages/CELC.png");
+}
+.service-page-CPAT .service-hero__media {
+  background-image: url("servicesImages/CPAT.png");
+}
+.service-page-Asbestos .service-hero__media {
+  background-image: url("servicesImages/C-servey.png");
+}
+.service-page-Installation .service-hero__media {
+  background-image: url("servicesImages/Cinstall.png");
 }
 
 .service-hero__overlay {
@@ -5732,13 +5761,13 @@ body {
 
 .service-pricing__grid {
   display: grid;
-  gap: var(--space-5);
+  gap: 16px
 }
 
 @media (min-width: 48rem) {
   .service-pricing__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-6);
+    gap: 16px
   }
 
   .service-pricing-card--wide {
@@ -6068,6 +6097,35 @@ body {
   color: #6b7a8f;
 }
 
+.service-included--stacked .service-included__subtitle {
+  max-width: none;
+  text-align: justify;
+}
+
+.service-included__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.service-included--stacked .service-included-card {
+  padding: 16px 16px 18px;
+  border-color: #d6dde6;
+  border-radius: var(--radius-xl);
+}
+
+.service-included--stacked .service-included-card__title {
+  margin-bottom: 6px;
+  font-family: var(--font-family-hero);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.service-included--stacked .service-included-card__text {
+  max-width: 44rem;
+}
+
 .service-requirements {
   padding: 0;
   background: transparent;
@@ -6109,7 +6167,7 @@ body {
   display: flex;
   align-items: flex-start;
   gap: var(--space-5);
-  padding: var(--space-6) 0;
+  padding: 16px 0;
   border-top: 1px solid #c4cdd9;
 }
 
