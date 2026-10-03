@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   createLead,
+  createEnquiry,
   listLeads,
   getLead,
   updateLeadStatus,
@@ -11,6 +12,7 @@ const {
 } = require('../controllers/lead.controller');
 const {
   createLeadValidator,
+  createEnquiryValidator,
   listLeadsValidator,
   leadIdParam,
   updateLeadStatusValidator,
@@ -25,6 +27,7 @@ const { ROLES } = require('../constants/roles');
 const router = express.Router();
 
 router.post('/', createLeadValidator, validate, createLead);
+router.post('/enquiry', createEnquiryValidator, validate, createEnquiry);
 
 router.use(authenticate);
 router.use(requireMinRole(ROLES.ADMIN));

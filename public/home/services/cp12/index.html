@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;54.99</strong>
                         </div>
-                        <a href="#book-cp12" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=gsc" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -98,7 +98,7 @@
                                         <span class="service-pricing-card__price">£54.99</span>
                                         <span class="service-pricing-card__unit">Meter & 1 Appliance</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=residential&amp;service=gsc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -124,7 +124,7 @@
                                         <span class="service-pricing-card__price">£14.99</span>
                                         <span class="service-pricing-card__unit">Each additional Appliance</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=residential&amp;service=gsc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -144,9 +144,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -310,38 +309,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-cp12" aria-label="Book Gas Safety engineer">
+                <aside class="service-book-card" id="book-cp12" aria-label="Enquire about CP12"
+                    data-service="CP12" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book Gas Engineer now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About CP12</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" id="service-book-form" action="#" method="post"
-                        novalidate data-service="gsc">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="../../icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
-                                height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -450,7 +425,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-cp12" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=gsc" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -497,14 +472,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every 12 months, without exception. You can carry out the check up to 2 months
-                                        before the current certificate expires without losing your renewal date.</p>
+                                    <p>Every 12 months. You can carry out the check up to 2 months before the current certificate expires and keep your original renewal date.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if I don&rsquo;t have a valid CP12?</span>
+                                    <span>What happens if I don't have a valid CP12?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -517,10 +491,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>It&rsquo;s a criminal offence, not just an administrative one &mdash; it can lead
-                                        to unlimited fines and, in serious cases, prosecution. A missing or expired
-                                        certificate also invalidates a Section 21 notice, so you can&rsquo;t regain
-                                        possession of the property without a valid record in place.</p>
+                                    <p>It's a criminal offence under the Gas Safety (Installation and Use) Regulations 1998. Landlords can face unlimited fines and, in serious cases, imprisonment.</p>
                                 </div>
                             </details>
 
@@ -539,9 +510,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every gas appliance, pipe, fitting and flue you provide as landlord &mdash;
-                                        boilers, hobs, gas fires, cookers &mdash; checked for leaks, safe combustion,
-                                        and correct ventilation.</p>
+                                    <p>Every gas appliance, flue and fitting you provide as landlord, such as boilers, hobs, cookers and gas fires, plus a tightness test of the gas pipework. Each is checked for leaks, safe combustion, correct operation and adequate ventilation.</p>
                                 </div>
                             </details>
 
@@ -560,9 +529,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. A copy must go to tenants within 28 days of the check, and to new tenants
-                                        before they move in. You&rsquo;re required to keep records for at least 2 years.
-                                    </p>
+                                    <p>Yes. A copy must be given to existing tenants within 28 days of the check, and to new tenants before they move in. You must keep records for at least 2 years.</p>
                                 </div>
                             </details>
 
@@ -581,11 +548,64 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>The appliance will be marked as &ldquo;At Risk&rdquo; or &ldquo;Immediately
-                                        Dangerous&rdquo; on the certificate and must not be used until repaired by a Gas
-                                        Safe registered engineer. Your engineer will explain the fault and what remedial
-                                        work is needed. We can re-inspect once repairs are complete so you can obtain a
-                                        compliant CP12.</p>
+                                    <p>The engineer will flag it and record it on the certificate. If it's an immediate danger, it will be disconnected with your permission. You'll get a clear breakdown of the remedial work needed, after which the appliance can be retested.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Does the certificate cover appliances my tenant brought themselves?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>No. Only appliances and fittings you provide as landlord are covered.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Who's allowed to carry out the inspection?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Only a Gas Safe registered engineer can legally inspect gas appliances and issue a CP12.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do you cover gas safety inspections outside London?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

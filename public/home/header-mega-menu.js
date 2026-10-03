@@ -32,6 +32,11 @@
       panel.hidden = !isActive;
       panel.classList.toggle('services-grid--active', isActive);
     });
+
+    // All Services page: the FAQ follows the selected tab.
+    document.querySelectorAll('[data-faq-panel]').forEach(function (list) {
+      list.hidden = list.getAttribute('data-faq-panel') !== tabKey;
+    });
   }
 
   function showMegaPanel(panelKey) {
@@ -186,6 +191,18 @@
     });
   });
 
+  // "All Installation Services" etc. link to /services/?tab=<key>: open that tab and show its services.
+  (function openTabFromUrl() {
+    var tabKey = new URLSearchParams(window.location.search).get('tab');
+    if (!tabKey || !/^[a-z-]+$/.test(tabKey)) return;
+    if (!document.querySelector('.services-tabs__btn[data-services-tab="' + tabKey + '"]')) return;
+    activateServicesTab(tabKey);
+    var section = document.getElementById('services');
+    if (!section) return;
+    var headerHeight = header ? header.offsetHeight : 0;
+    window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - headerHeight });
+  })();
+
   document.querySelectorAll('.services-tabs').forEach(function (tabs) {
     tabs.addEventListener('click', function (event) {
       var btn = event.target.closest('.services-tabs__btn');
@@ -198,16 +215,16 @@
 })();
 
 (function () {
-  var list = document.querySelector('.faq__list');
-  if (!list) return;
-
-  list.addEventListener('toggle', function (event) {
-    var item = event.target;
-    if (!item.open || !item.classList.contains('faq-item')) return;
-    list.querySelectorAll('.faq-item[open]').forEach(function (other) {
-      if (other !== item) other.removeAttribute('open');
-    });
-  }, true);
+  // One open answer at a time, per FAQ list (the All Services page has one list per tab).
+  document.querySelectorAll('.faq__list').forEach(function (list) {
+    list.addEventListener('toggle', function (event) {
+      var item = event.target;
+      if (!item.open || !item.classList.contains('faq-item')) return;
+      list.querySelectorAll('.faq-item[open]').forEach(function (other) {
+        if (other !== item) other.removeAttribute('open');
+      });
+    }, true);
+  });
 })();
 
 (function () {

@@ -12,6 +12,15 @@ describe('lead routes', () => {
     assert.ok(postLayer, 'expected POST / on leads router');
   });
 
+  it('registers public POST /enquiry before the auth middleware', () => {
+    const enquiryIndex = leadRoutes.stack.findIndex(
+      (layer) => layer.route?.path === '/enquiry' && layer.route.methods.post
+    );
+    const authIndex = leadRoutes.stack.findIndex((layer) => layer.name === 'authenticate');
+    assert.ok(enquiryIndex >= 0, 'expected POST /enquiry on leads router');
+    assert.ok(authIndex < 0 || enquiryIndex < authIndex, 'expected /enquiry to be public');
+  });
+
   it('registers admin note routes on the leads router', () => {
     const noteListLayer = leadRoutes.stack.find(
       (layer) => layer.route?.path === '/:id/notes' && layer.route.methods.get

@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-fra" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=fra" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -101,7 +101,7 @@
                                         <span class="service-pricing-card__unit">small Flat or 1 floor included
                                             building</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=residential&amp;service=fra"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -127,7 +127,7 @@
                                         <span class="service-pricing-card__price">£20</span>
                                         <span class="service-pricing-card__unit">Each additional Bedroom</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=residential&amp;service=fra"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -147,9 +147,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -294,36 +293,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-fra" aria-label="Book FRA assessor">
+                <aside class="service-book-card" id="book-fra" aria-label="Enquire about FRA"
+                    data-service="FRA" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book an Assessor for Your FRA Now</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About FRA</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" action="#" method="post" novalidate data-service="fra">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -427,7 +404,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-fra" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=fra" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -461,7 +438,7 @@
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How quickly will I receive my certificate after the inspection?</span>
+                                    <span>Do I need a Fire Risk Assessment for my property?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -474,15 +451,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every certificate is issued within 24 hours of the inspection &mdash; usually the
-                                        same evening. You receive it by email as an official PDF, ready to share with
-                                        tenants or agents.</p>
+                                    <p>It's a legal requirement under the Regulatory Reform (Fire Safety) Order 2005 for the common areas of HMOs and blocks of flats. It doesn't apply inside a single private dwelling. Since October 2023, the assessment must be recorded in writing in full.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Are your engineers Gas Safe registered?</span>
+                                    <span>How often should a Fire Risk Assessment be reviewed?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -495,14 +470,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. Every gas engineer we send is Gas Safe registered. Electrical work is
-                                        carried out by NICEIC affiliated electricians.</p>
+                                    <p>There's no fixed legal interval. It should be reviewed regularly and whenever there's a significant change, such as a layout change, new occupants or new fire risks.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often does a landlord need a Gas Safety Certificate?</span>
+                                    <span>What does the assessment cover?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -515,15 +489,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Landlords must have gas appliances and flues checked every 12 months. A new CP12
-                                        is required before a new tenancy starts if the current certificate has expired.
-                                    </p>
+                                    <p>Fire hazards and the people at risk, escape routes, fire doors, alarm systems, emergency lighting, signage, and the overall fire safety management of the building.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often is an EICR required for rental properties?</span>
+                                    <span>What happens if the assessment finds problems?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -536,15 +508,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Residential rental properties in England need an EICR at least every 5 years, or
-                                        at the start of a new tenancy. HMOs and commercial properties may have different
-                                        requirements.</p>
+                                    <p>An FRA isn't a pass or fail. You'll receive a clear, prioritised list of actions to bring the property into compliance, with recommended timeframes for each.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do I need an EPC for my rental property?</span>
+                                    <span>Is a Fire Risk Assessment required for HMO licensing?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -557,14 +527,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. A valid EPC (minimum rating E) must be provided to tenants before marketing
-                                        a property and is required for every new tenancy.</p>
+                                    <p>Councils typically ask for a current Fire Risk Assessment as part of HMO licence applications and renewals.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if my property fails an inspection?</span>
+                                    <span>Who can carry out a Fire Risk Assessment?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -577,15 +546,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Your engineer will explain any issues found and advise on remedial work. We can
-                                        often return to re-inspect once faults are fixed so you can obtain a compliant
-                                        certificate.</p>
+                                    <p>The responsible person can appoint someone to carry it out, and that person must be competent, with the relevant fire safety training and experience. Their name must be recorded in the assessment.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do you cover my area?</span>
+                                    <span>Do you cover Fire Risk Assessments outside London?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -598,30 +565,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>We cover all 32 London boroughs and the wider M25 corridor, including Essex,
-                                        Kent, Surrey, Hertfordshire, and surrounding counties. WhatsApp us with your
-                                        postcode to confirm.</p>
-                                </div>
-                            </details>
-
-                            <details class="faq-item">
-                                <summary class="faq-item__question">
-                                    <span>Can I book multiple certificates for the same property?</span>
-                                    <span class="faq-item__icon" aria-hidden="true">
-                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
-                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
-                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </summary>
-                                <div class="faq-item__answer">
-                                    <p>Absolutely. You can book gas, electrical, fire, and EPC certificates in one visit
-                                        where possible &mdash; saving time and reducing disruption for you and your
-                                        tenants.</p>
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

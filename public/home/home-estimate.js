@@ -6,8 +6,38 @@
 (function () {
   const API = '/api';
   const PROPERTY_TYPE = 'residential';
+  // Used only to fetch indicative "from" prices while the postcode field is empty; never shown in the field.
   const DEFAULT_POSTCODE = 'SW1A 1AA';
   const MOBILE_MQ = '(max-width: 63.99rem)';
+  const CACHE_KEY = 'lsi-estimate-catalog-v1';
+  const UK_POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+
+  // Residential services (mirrors src/scripts/seed/catalogData.js) so the list renders instantly
+  // on a first visit; the live catalog replaces it as soon as it loads.
+  const FALLBACK_CATALOG = {
+    categories: [
+      { code: 'res_gas', name: 'Gas', displayOrder: 1, services: [
+        { code: 'gsc', name: 'Gas Safety Certificate (CP12)', displayOrder: 1 },
+        { code: 'boiler', name: 'Boiler Service', displayOrder: 2 },
+      ] },
+      { code: 'res_fire', name: 'Fire Safety', displayOrder: 2, services: [
+        { code: 'fsc', name: 'Fire Alarm Certificate (FSC)', displayOrder: 1 },
+        { code: 'elc', name: 'Emergency Light Certificate (ELC)', displayOrder: 2 },
+        { code: 'fra', name: 'Fire Safety Risk Assessment (FRA)', displayOrder: 3 },
+      ] },
+      { code: 'res_electrical', name: 'Electrical', displayOrder: 3, services: [
+        { code: 'eicr', name: 'Electrical Installation Condition Report (EICR)', displayOrder: 1 },
+        { code: 'pat', name: 'Portable Appliance Test (PAT)', displayOrder: 2 },
+      ] },
+      { code: 'res_epc', name: 'EPC & Survey', displayOrder: 4, services: [
+        { code: 'epc', name: 'Energy Performance Certificate (EPC)', displayOrder: 1 },
+        { code: 'floorplan', name: 'Floor Plan', displayOrder: 2 },
+      ] },
+      { code: 'res_other', name: 'Other', displayOrder: 5, services: [
+        { code: 'asbestos', name: 'Asbestos Survey', displayOrder: 1 },
+      ] },
+    ],
+  };
 
   const SERVICE_BLURBS = {
     gsc: 'Annual landlord requirement',
@@ -47,6 +77,11 @@
   if (!els.categories || !els.postcode) return;
 
   let catalog = null;
+  // catalogReady: questions are known (live or cached catalog), so previews can run.
+  let catalogReady = false;
+  // pricesLoading: live prices for the current postcode haven't arrived yet.
+  let pricesLoading = true;
+  let catalogSeq = 0;
   let selectedCategoryCode = null;
   let selectedServiceCode = null;
   let expandedMobileCode = null;
@@ -78,12 +113,34 @@
     return String(value || '').trim().toUpperCase().replace(/\s+/g, ' ');
   }
 
-  function getPostcode() {
+  // What the user actually typed (may be empty).
+  function typedPostcode() {
     const mobileInput = document.getElementById('estimate-postcode-mobile');
-    if (isMobileLayout() && mobileInput) {
-      return normalizePostcode(mobileInput.value) || DEFAULT_POSTCODE;
+    if (isMobileLayout() && mobileInput) return normalizePostcode(mobileInput.value);
+    return normalizePostcode(els.postcode.value);
+  }
+
+  // Postcode used for pricing: the typed one when complete, otherwise the indicative default.
+  function getPostcode() {
+    const typed = typedPostcode();
+    return UK_POSTCODE.test(typed) ? typed : DEFAULT_POSTCODE;
+  }
+
+  function readCachedCatalog() {
+    try {
+      const data = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      return Array.isArray(data?.categories) && data.categories.length ? data : null;
+    } catch {
+      return null;
     }
-    return normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
+  }
+
+  function writeCachedCatalog(data) {
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    } catch {
+      // Storage full or blocked: the fallback list still works.
+    }
   }
 
   function listLeafServices(category) {
@@ -169,6 +226,35 @@
     }
     if (anyTbc || service.pricingMode === 'quote_only') return { text: 'Quote', amount: null };
     return { text: 'from TBC', amount: null };
+  }
+
+  function priceHtml(service, className) {
+    if (pricesLoading) {
+      return `<span class="${className} estimate-price--loading" aria-hidden="true"></span>`;
+    }
+    return `<span class="${className}">${escapeHtml(serviceFromPrice(service).text)}</span>`;
+  }
+
+  // Update every "from £…" label without re-rendering (keeps focus, open panels and answers).
+  function updatePricesInPlace() {
+    els.categories
+      .querySelectorAll('.estimate-service__price, .estimate-mcard__from')
+      .forEach((el) => {
+        const code = el.closest('[data-service]')?.getAttribute('data-service');
+        const service = findService(code);
+        if (!service) return;
+        el.classList.toggle('estimate-price--loading', pricesLoading);
+        el.toggleAttribute('aria-hidden', pricesLoading);
+        el.textContent = pricesLoading ? '' : serviceFromPrice(service).text;
+      });
+  }
+
+  function questionsSkeletonHtml() {
+    return `
+      <div class="estimate-questions__skeleton" aria-hidden="true">
+        <span class="estimate-price--loading"></span>
+        <span class="estimate-price--loading"></span>
+      </div>`;
   }
 
   function serviceDescription(service) {
@@ -291,8 +377,9 @@
     const params = new URLSearchParams();
     params.set('propertyType', PROPERTY_TYPE);
     if (selectedServiceCode) params.set('service', selectedServiceCode);
-    const pc = getPostcode();
-    if (pc) params.set('postcode', pc);
+    // Only pass on a postcode the user actually entered.
+    const pc = typedPostcode();
+    if (UK_POSTCODE.test(pc)) params.set('postcode', pc);
     const qs = params.toString();
     return qs ? `/book-now/?${qs}` : '/book-now/';
   }
@@ -366,7 +453,7 @@
       els.questions.innerHTML = '';
       return;
     }
-    els.questions.innerHTML = questionsHtml(service);
+    els.questions.innerHTML = catalogReady ? questionsHtml(service) : questionsSkeletonHtml();
   }
 
   function renderCategories() {
@@ -407,14 +494,13 @@
                 ${services
                   .map((svc) => {
                     const selected = svc.code === selectedServiceCode;
-                    const from = serviceFromPrice(svc);
                     const desc = serviceDescription(svc);
                     return `
                       <li>
                         <button type="button" class="estimate-service${selected ? ' estimate-service--selected' : ''}"
                           data-service="${escapeHtml(svc.code)}" aria-pressed="${selected ? 'true' : 'false'}">
                           <span class="estimate-service__name">${escapeHtml(svc.name)}</span>
-                          <span class="estimate-service__price">${escapeHtml(from.text)}</span>
+                          ${priceHtml(svc, 'estimate-service__price')}
                           <span class="estimate-service__desc">${escapeHtml(desc)}</span>
                         </button>
                       </li>`;
@@ -428,17 +514,18 @@
   }
 
   function mobilePanelHtml(service) {
-    const pc = normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
+    const pc = normalizePostcode(els.postcode.value);
     return `
       <div class="estimate-mcard__fields">
         <div class="estimate-field">
           <label class="field-label" for="estimate-postcode-mobile">Your postcode</label>
-          <input class="field-input" type="text" id="estimate-postcode-mobile" name="postcode"
-            value="${escapeHtml(pc)}" autocomplete="postal-code" placeholder="e.g. SW1A 1AA">
+          <input class="field-input" type="text" id="estimate-postcode-mobile" name="estimate-postcode"
+            value="${escapeHtml(pc)}" autocomplete="off" autocapitalize="characters" spellcheck="false"
+            placeholder="e.g. SW1A 1AA">
           <p id="estimate-coverage-mobile" class="estimate-field__status" hidden></p>
         </div>
         <div class="estimate-mcard__questions">
-          ${questionsHtml(service)}
+          ${catalogReady ? questionsHtml(service) : questionsSkeletonHtml()}
         </div>
         <div class="estimate-mcard__price">
           <p class="estimate-mcard__price-label">Estimated price</p>
@@ -463,7 +550,6 @@
         ${services
           .map((svc) => {
             const open = svc.code === expandedMobileCode;
-            const from = serviceFromPrice(svc);
             const desc = serviceDescription(svc);
             return `
               <article class="estimate-mcard${open ? ' estimate-mcard--open' : ''}" data-service="${escapeHtml(svc.code)}">
@@ -472,7 +558,7 @@
                     <h4 class="estimate-mcard__name">${escapeHtml(svc.name)}</h4>
                     <p class="estimate-mcard__desc">${escapeHtml(desc)}</p>
                   </div>
-                  <span class="estimate-mcard__from">${escapeHtml(from.text)}</span>
+                  ${priceHtml(svc, 'estimate-mcard__from')}
                 </div>
                 <button type="button" class="estimate-mcard__toggle" aria-expanded="${open ? 'true' : 'false'}">
                   <span>${open ? 'Hide Calculator' : 'Get Estimate'}</span>
@@ -510,7 +596,19 @@
       els.layout.classList.toggle('estimate-layout--mobile', isMobileLayout());
     }
     if (isMobileLayout()) {
+      // The mobile postcode box lives inside the re-rendered list; keep the user's cursor in it.
+      const active = document.activeElement;
+      const refocus = active && active.id === 'estimate-postcode-mobile'
+        ? { start: active.selectionStart, end: active.selectionEnd }
+        : null;
       renderMobileCards();
+      if (refocus) {
+        const input = document.getElementById('estimate-postcode-mobile');
+        if (input) {
+          input.focus();
+          input.setSelectionRange(refocus.start, refocus.end);
+        }
+      }
     } else {
       expandedMobileCode = null;
       renderCategories();
@@ -621,7 +719,7 @@
       renderDesktopQuestions();
     }
     updateBookLink();
-    if (!skipPreview) schedulePreview();
+    if (!skipPreview && catalogReady) schedulePreview();
   }
 
   function toggleCategory(code) {
@@ -647,53 +745,81 @@
     selectService(code, { expandMobile: true });
   }
 
-  async function loadCatalog({ keepSelection } = {}) {
-    const previousService = keepSelection ? selectedServiceCode : null;
-    const previousExpanded = keepSelection ? expandedMobileCode : null;
-    els.categories.innerHTML = '<p class="estimate-accordion__status">Loading services…</p>';
-    setCoverage('muted', 'Checking coverage…');
+  function firstServiceCode() {
+    const categories = [...(catalog?.categories || [])].sort(
+      (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
+    );
+    return categories[0] ? listLeafServices(categories[0])[0]?.code || null : null;
+  }
 
-    try {
-      catalog = await fetchCatalog(getPostcode());
+  // Same categories and services in the same order => prices can be swapped in place.
+  function catalogShape(data) {
+    return [...(data?.categories || [])]
+      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+      .map((cat) => `${cat.code}:${cat.name}:${listLeafServices(cat).map((s) => `${s.code}=${s.name}`).join(',')}`)
+      .join('|');
+  }
 
-      if (catalog.hasPricing && catalog.resolvedRegion?.name) {
-        setCoverage('success', `Covered (${catalog.resolvedRegion.name})`);
-      } else if (catalog.hasPricing === false) {
-        setCoverage('error', 'Postcode not covered for instant pricing');
-      } else {
-        setCoverage('muted', 'Enter a postcode to check coverage');
-      }
-
-      const categories = [...(catalog.categories || [])].sort(
-        (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
-      );
-
-      let nextService = previousService && findService(previousService) ? previousService : null;
-      if (!nextService && !isMobileLayout()) {
-        const firstCat = categories[0];
-        nextService = firstCat ? listLeafServices(firstCat)[0]?.code : null;
-      }
-
-      if (previousExpanded && findService(previousExpanded)) {
-        expandedMobileCode = previousExpanded;
-      }
-
-      if (nextService) {
-        selectService(nextService, {
-          skipPreview: true,
-          expandMobile: isMobileLayout() && !!expandedMobileCode,
-        });
-      } else {
-        renderLayout();
-      }
-
-      if (selectedServiceCode) schedulePreview();
-      syncMobileCoverage();
-    } catch (err) {
-      console.error(err);
-      els.categories.innerHTML = `<p class="estimate-accordion__status estimate-accordion__status--error">${escapeHtml(err.message || 'Failed to load services')}</p>`;
-      setCoverage('error', 'Could not check coverage');
+  function showCoverage(data) {
+    if (!UK_POSTCODE.test(typedPostcode())) {
+      setCoverage('muted', 'Enter your postcode to check coverage');
+    } else if (data.hasPricing && data.resolvedRegion?.name) {
+      setCoverage('success', `Covered (${data.resolvedRegion.name})`);
+    } else if (data.hasPricing === false) {
+      setCoverage('error', 'Postcode not covered for instant pricing');
+    } else {
+      setCoverage('muted', 'Enter your postcode to check coverage');
     }
+  }
+
+  // Services stay on screen the whole time; only the prices show a placeholder while loading.
+  async function loadCatalog() {
+    const seq = ++catalogSeq;
+    pricesLoading = true;
+    updatePricesInPlace();
+    if (UK_POSTCODE.test(typedPostcode())) setCoverage('muted', 'Checking coverage…');
+
+    let data;
+    try {
+      data = await fetchCatalog(getPostcode());
+    } catch (err) {
+      if (seq !== catalogSeq) return;
+      console.error(err);
+      pricesLoading = false;
+      updatePricesInPlace();
+      setCoverage('error', 'Could not load prices right now. Please try again.');
+      return;
+    }
+    if (seq !== catalogSeq) return;
+
+    const wasReady = catalogReady;
+    const sameShape = catalogShape(data) === catalogShape(catalog);
+    catalog = data;
+    catalogReady = true;
+    pricesLoading = false;
+    writeCachedCatalog(data);
+    showCoverage(data);
+
+    if (selectedServiceCode && !findService(selectedServiceCode)) selectedServiceCode = null;
+    if (expandedMobileCode && !findService(expandedMobileCode)) expandedMobileCode = null;
+
+    if (!selectedServiceCode && !isMobileLayout()) {
+      const first = firstServiceCode();
+      if (first) selectService(first, { skipPreview: true });
+    } else if (selectedServiceCode && !wasReady) {
+      // Questions only became known now: start from their defaults.
+      answers = defaultAnswersForService(findService(selectedServiceCode));
+    }
+
+    if (sameShape && wasReady) {
+      updatePricesInPlace();
+    } else {
+      renderLayout();
+    }
+
+    syncMobileCoverage();
+    updateBookLink();
+    if (selectedServiceCode) schedulePreview();
   }
 
   function onFieldChange(event) {
@@ -721,9 +847,15 @@
       mobileInput.value = els.postcode.value;
     }
     updateBookLink();
-    postcodeTimer = setTimeout(() => {
-      loadCatalog({ keepSelection: true });
-    }, 450);
+
+    // Only re-price for a complete postcode (or when cleared back to the default),
+    // not on every keystroke of a partial one.
+    const typed = typedPostcode();
+    if (typed && !UK_POSTCODE.test(typed)) {
+      setCoverage('muted', 'Enter a full postcode, e.g. SW1A 1AA');
+      return;
+    }
+    postcodeTimer = setTimeout(loadCatalog, 450);
   }
 
   els.categories.addEventListener('click', (event) => {
@@ -756,12 +888,12 @@
 
   els.postcode.addEventListener('input', onPostcodeInput);
   els.postcode.addEventListener('blur', () => {
-    els.postcode.value = normalizePostcode(els.postcode.value) || DEFAULT_POSTCODE;
+    els.postcode.value = normalizePostcode(els.postcode.value);
   });
 
   els.categories.addEventListener('focusout', (event) => {
     if (event.target.id === 'estimate-postcode-mobile') {
-      event.target.value = normalizePostcode(event.target.value) || DEFAULT_POSTCODE;
+      event.target.value = normalizePostcode(event.target.value);
       els.postcode.value = event.target.value;
     }
   });
@@ -774,5 +906,17 @@
   if (media.addEventListener) media.addEventListener('change', onViewportChange);
   else media.addListener(onViewportChange);
 
+  // Render the services immediately (last-seen catalog, or the built-in list), then load prices.
+  const cached = readCachedCatalog();
+  catalog = cached || FALLBACK_CATALOG;
+  catalogReady = Boolean(cached);
+  if (!isMobileLayout()) {
+    const first = firstServiceCode();
+    if (first) selectService(first, { skipPreview: true });
+  } else {
+    renderLayout();
+  }
+  setCoverage('muted', 'Enter your postcode to check coverage');
+  if (els.priceAmount) els.priceAmount.classList.add('is-loading');
   loadCatalog();
 })();

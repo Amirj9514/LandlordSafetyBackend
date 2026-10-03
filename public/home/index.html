@@ -291,9 +291,7 @@
                             <h3 class="estimate-select__title">Select A Service</h3>
                         </div>
 
-                        <div id="estimate-categories" class="estimate-accordion" aria-live="polite">
-                            <p class="estimate-accordion__status">Loading services…</p>
-                        </div>
+                        <div id="estimate-categories" class="estimate-accordion" aria-live="polite"></div>
                     </div>
 
                     <aside class="estimate-calc" aria-label="Estimate calculator">
@@ -305,8 +303,9 @@
                         <div class="estimate-calc__card">
                             <div class="estimate-field">
                                 <label class="field-label" for="estimate-postcode">Your postcode</label>
-                                <input class="field-input" type="text" id="estimate-postcode" name="postcode"
-                                    value="SW1A 1AA" autocomplete="postal-code" placeholder="e.g. SW1A 1AA">
+                                <input class="field-input" type="text" id="estimate-postcode" name="estimate-postcode"
+                                    autocomplete="off" autocapitalize="characters" spellcheck="false"
+                                    placeholder="e.g. SW1A 1AA">
                                 <p id="estimate-coverage" class="estimate-field__status" hidden></p>
                             </div>
                             <div id="estimate-questions" class="estimate-questions"></div>
@@ -884,7 +883,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#estimate" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -931,10 +930,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Turnaround depends on the certificate &mdash; gas and electrical certificates are
-                                        typically issued within 24&ndash;48 hours of inspection, while EPC and Fire Risk
-                                        Assessments usually take a few days longer. You&rsquo;ll receive it by email as
-                                        an official PDF, ready to share with tenants or agents.</p>
+                                    <p>It depends on the certificate. Gas and electrical certificates are typically issued within 24–48 hours of the inspection, while EPCs and Fire Risk Assessments usually take a few days longer. You'll receive it by email as an official PDF, ready to share with tenants or agents.</p>
                                 </div>
                             </details>
 
@@ -953,8 +949,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. All our engineers are Gas Safe registered and NICEIC affiliated, depending
-                                        on the service required.</p>
+                                    <p>Yes. Gas work is carried out by Gas Safe registered engineers, electrical work by NICEIC or NAPIT registered electricians, and other services by qualified assessors, matched to each service.</p>
                                 </div>
                             </details>
 
@@ -973,8 +968,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every 12 months, without exception, carried out by a Gas Safe registered
-                                        engineer.</p>
+                                    <p>Every 12 months, carried out by a Gas Safe registered engineer, under the Gas Safety (Installation and Use) Regulations 1998.</p>
                                 </div>
                             </details>
 
@@ -993,8 +987,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>At least every 5 years, or sooner if a previous report specifies a shorter
-                                        interval, certified to BS7671.</p>
+                                    <p>At least every 5 years, or sooner if the previous report specifies a shorter interval, under the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020.</p>
                                 </div>
                             </details>
 
@@ -1013,8 +1006,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. All rental properties must hold a valid EPC with a minimum E rating before
-                                        they can be legally let.</p>
+                                    <p>Yes. A rental property needs a valid EPC, and under current rules it must be rated E or above to be let, unless a valid exemption is registered. The government has confirmed plans to raise this to EPC C by 1 October 2030.</p>
                                 </div>
                             </details>
 
@@ -1033,8 +1025,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>We&rsquo;ll flag any faults on site and provide a clear breakdown of the remedial
-                                        work needed before a certificate can be issued.</p>
+                                    <p>We'll flag any faults on site, record them on your report, and provide a clear breakdown and quote for the remedial work needed. Once the work is done, the property can be retested and certified.</p>
                                 </div>
                             </details>
 
@@ -1072,8 +1063,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes &mdash; many landlords book gas, electrical, fire and EPC certificates
-                                        together in a single visit to save time.</p>
+                                    <p>Yes. Many landlords book gas, electrical, fire and EPC certificates together in a single visit to save time.</p>
                                 </div>
                             </details>
                         </div>

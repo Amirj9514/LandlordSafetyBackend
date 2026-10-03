@@ -18,6 +18,35 @@ const createLeadValidator = [
     }),
 ];
 
+const createEnquiryValidator = [
+  body('fullName')
+    .trim()
+    .notEmpty()
+    .withMessage('Full name is required')
+    .isLength({ max: 150 })
+    .withMessage('Full name is too long'),
+  body('email').trim().isEmail().withMessage('A valid email address is required'),
+  body('phone')
+    .optional({ values: 'falsy' })
+    .trim()
+    .matches(/^[\d\s+().-]{7,20}$/)
+    .withMessage('Phone must be a valid phone number'),
+  body('message')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ max: 2000 })
+    .withMessage('Message must be 2000 characters or fewer'),
+  body('service')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Service is too long'),
+  body('propertyType')
+    .optional({ values: 'falsy' })
+    .isIn(ALL_PROPERTY_TYPES)
+    .withMessage('Invalid property type'),
+];
+
 const listLeadsValidator = [
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 100 }),
@@ -45,6 +74,7 @@ const deleteLeadNoteValidator = [
 
 module.exports = {
   createLeadValidator,
+  createEnquiryValidator,
   listLeadsValidator,
   leadIdParam,
   updateLeadStatusValidator,

@@ -4,6 +4,7 @@ const { LEAD_STATUS } = require('../constants/leadStatus');
 const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
 const { allocateLeadReference } = require('../utils/referenceNumber');
 const { parseContact } = require('../utils/contactParser');
+const { PROPERTY_TYPES } = require('../constants/propertyTypes');
 
 const notFound = (message) => {
   const error = new Error(message);
@@ -33,6 +34,31 @@ const createLead = async (body, { source = SUBMISSION_SOURCE.WEBSITE, metadata =
     metadata: {
       ...metadata,
       form: 'home_quote',
+    },
+  });
+};
+
+// Service-page enquiry form (name, email, phone, message). It has no postcode, and its extra
+// fields live in `metadata` so the leads table needs no new columns.
+const createEnquiry = async (body, { source = SUBMISSION_SOURCE.WEBSITE, metadata = {} } = {}) => {
+  const reference = await allocateLeadReference(Lead);
+  const phone = body.phone ? body.phone.replace(/\s+/g, ' ').trim() : null;
+
+  return Lead.create({
+    reference,
+    postcode: '',
+    email: body.email.trim().toLowerCase(),
+    phone,
+    contactType: 'email',
+    propertyType: body.propertyType || PROPERTY_TYPES.RESIDENTIAL,
+    status: LEAD_STATUS.NEW,
+    source,
+    metadata: {
+      ...metadata,
+      form: 'service_enquiry',
+      fullName: body.fullName.trim(),
+      message: body.message ? body.message.trim() : null,
+      service: body.service ? body.service.trim() : null,
     },
   });
 };
@@ -123,6 +149,7 @@ const deleteLeadNote = async (leadId, noteId) => {
 
 module.exports = {
   createLead,
+  createEnquiry,
   listLeads,
   getLeadById,
   updateLeadStatus,

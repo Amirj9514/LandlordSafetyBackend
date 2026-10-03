@@ -268,7 +268,149 @@
     if (body) body.scrollTop = 0;
   }
 
+  // ── Selected-card summary (answers grid + Edit / Delete) ──
+
+  const SMALL_WORDS = new Set(['of', 'and', 'or', 'the', 'a', 'an', 'per', 'to', 'in']);
+
+  function shortQuestionLabel(label) {
+    return String(label || '')
+      .replace(/^number of\s+/i, 'No of ')
+      .split(' ')
+      .map((word, i) => (i > 0 && SMALL_WORDS.has(word.toLowerCase()) ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1)))
+      .join(' ');
+  }
+
+  function displayAnswer(q, value) {
+    const option = normalizeOptions(q.options).find((o) => String(o.value) === String(value));
+    let text = String(option ? option.label ?? option.value : value)
+      .replace(/\s*[—–-]\s*£[\d,.]+.*$/, '') // price suffix
+      .replace(/\s+[—–]\s+.*$/, '') // notes like "— per unit"
+      .trim();
+    // "No of Bedrooms: 5 bedrooms" -> "05": the label already names the unit.
+    const count = text.match(/^(\d+(?:\s*[-–]\s*\d+)?\+?)\s+[a-z][\w\s]*$/i);
+    if (count && /^No of /.test(shortQuestionLabel(q.label))) text = count[1];
+    if (/^\d$/.test(text)) text = '0' + text;
+    return text;
+  }
+
+  function answersGridHtml(codes) {
+    const items = [];
+    for (const code of codes) {
+      const svc = catalogServicesByCode[code];
+      for (const q of [...(svc?.questions || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))) {
+        if (q.inputType === 'textarea' || !isQuestionVisible(code, q)) continue;
+        const value = readFieldValue(code, q.fieldKey, q.inputType);
+        if (value == null || value === '') continue;
+        items.push(`
+          <div class="svc-answer">
+            <div class="svc-answer__label">${escapeHtml(shortQuestionLabel(q.label))}</div>
+            <div class="svc-answer__value">${escapeHtml(displayAnswer(q, value))}</div>
+          </div>`);
+      }
+    }
+    return items.length ? `<div class="svc-card__answers">${items.join('')}</div>` : '';
+  }
+
+  const TRASH_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.667 4h10.666M6.667 7.333v4M9.333 7.333v4M3.333 4l.667 8.667A1.333 1.333 0 0 0 5.333 14h5.334A1.333 1.333 0 0 0 12 12.667L12.667 4M6 4V2.667A.667.667 0 0 1 6.667 2h2.666a.667.667 0 0 1 .667.667V4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function selectionFor(card) {
+    const bundleKey = card.dataset.bundleKey;
+    if (bundleKey) {
+      return {
+        kind: 'bundle',
+        key: bundleKey,
+        selected: state.activeBundles.has(bundleKey),
+        codes: window.BUNDLES[bundleKey]?.services || [],
+      };
+    }
+    const code = card.dataset.serviceCode;
+    return { kind: 'service', key: code, selected: state.services.has(code) && !coveredByBundle(code), codes: [code] };
+  }
+
+  // Selected cards show their answers and Edit / Delete buttons instead of the price.
+  function refreshSelectedCards() {
+    document.querySelectorAll('.svc-card[data-service-code], .svc-card[data-bundle-key]').forEach((card) => {
+      card.querySelector('.svc-card__actions')?.remove();
+      card.querySelector('.svc-card__answers')?.remove();
+      card.classList.remove('svc-card--summary');
+
+      const sel = selectionFor(card);
+      if (!sel.selected) return;
+
+      const name = card.querySelector('.svc-card__title')?.textContent.trim() || sel.key;
+      const editable = sel.codes.some((code) => serviceHasQuestions(code));
+      const actions = `
+        <div class="svc-card__actions">
+          <button type="button" class="svc-card__icon-btn" aria-label="Remove ${escapeHtml(name)}"
+            onclick="event.stopPropagation(); removeSelection('${sel.kind}', '${escapeHtml(sel.key)}')">${TRASH_ICON}</button>
+          ${editable ? `<button type="button" class="svc-card__edit-btn" aria-label="Edit ${escapeHtml(name)}"
+            onclick="event.stopPropagation(); editSelection('${sel.kind}', '${escapeHtml(sel.key)}')">Edit</button>` : ''}
+        </div>`;
+      card.querySelector('.svc-card__body')?.insertAdjacentHTML('beforeend', actions);
+
+      const answers = answersGridHtml(sel.codes);
+      if (answers) {
+        card.insertAdjacentHTML('beforeend', answers);
+        card.classList.add('svc-card--summary');
+      }
+    });
+  }
+
+  window.removeSelection = function removeSelection(kind, key) {
+    if (kind === 'bundle') window.toggleBundle(key, window.BUNDLES[key]?.services || []);
+    else window.toggleService(key);
+  };
+
+  function snapshotAnswers(codes) {
+    const values = {};
+    for (const code of codes) {
+      for (const q of catalogServicesByCode[code]?.questions || []) {
+        if (q.inputType === 'radio') continue;
+        const el = document.getElementById(fieldId(code, q.fieldKey));
+        if (el) values[fieldId(code, q.fieldKey)] = el.value;
+      }
+    }
+    return { radios: { ...state.radios }, values };
+  }
+
+  function restoreAnswers(snapshot) {
+    Object.keys(state.radios).forEach((k) => delete state.radios[k]);
+    Object.assign(state.radios, snapshot.radios);
+    Object.entries(snapshot.values).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    });
+  }
+
+  window.editSelection = function editSelection(kind, key) {
+    const codes = kind === 'bundle' ? window.BUNDLES[key]?.services || [] : [key];
+    const snapshot = snapshotAnswers(codes);
+    if (kind === 'bundle') openServiceModal('bundle', { bundleId: key, svcIds: codes, isEdit: true, snapshot });
+    else openServiceModal('service', { serviceCode: key, isEdit: true, snapshot });
+  };
+
+  window.onSvcCardClick = function onSvcCardClick(card) {
+    const sel = selectionFor(card);
+    // A selected card with answers opens Edit; removing is the bin button's job.
+    if (sel.selected && card.classList.contains('svc-card--summary')) {
+      window.editSelection(sel.kind, sel.key);
+      return;
+    }
+    if (sel.kind === 'bundle') window.toggleBundleFromEl(card);
+    else window.toggleService(sel.key);
+  };
+
   window.closeServiceModal = function closeServiceModal() {
+    // Cancelling an edit: put the answer inputs back in the store and undo any changes.
+    if (modalContext?.isEdit && !modalContext.confirmed) {
+      const ctx = modalContext;
+      persistModalToStore(getModalServiceCodes());
+      restoreAnswers(ctx.snapshot);
+      modalContext = null;
+      window.closeServiceModal();
+      renderSubQuestions();
+      return;
+    }
     const modal = document.getElementById('service-modal');
     const body = document.getElementById('service-modal-body');
     if (modal) {
@@ -325,6 +467,14 @@
     }
 
     persistModalToStore(codes);
+
+    if (modalContext.isEdit) {
+      // Already selected: just keep the new answers (re-finalizing a bundle would clear them).
+      modalContext.confirmed = true;
+      closeServiceModal();
+      renderSubQuestions();
+      return;
+    }
 
     if (modalContext.type === 'service') {
       const serviceCode = modalContext.serviceCode;
@@ -515,7 +665,7 @@
     const price = getServicePriceLabel(service);
     const desc = getServiceCardDesc(service);
     return `
-      <div class="svc-card" id="svc-${escapeHtml(code)}" data-service-code="${escapeHtml(code)}" onclick="toggleService('${escapeHtml(code)}')">
+      <div class="svc-card" id="svc-${escapeHtml(code)}" data-service-code="${escapeHtml(code)}" onclick="onSvcCardClick(this)">
         <div class="svc-card__body">
           <div class="svc-card__main">
             <div class="svc-card__title">${escapeHtml(getServiceCardTitle(service))}</div>
@@ -539,7 +689,7 @@
       <div class="svc-card svc-card--bundle${widthClass}${popularClass}" id="svc-${escapeHtml(key)}"
         data-bundle-key="${escapeHtml(key)}"
         data-bundle-services='${escapeHtml(services)}'
-        onclick="toggleBundleFromEl(this)">
+        onclick="onSvcCardClick(this)">
         ${popular ? '<span class="svc-card__badge">Popular</span>' : ''}
         <div class="svc-card__body">
           <div class="svc-card__main">
@@ -889,6 +1039,7 @@
       });
     });
 
+    refreshSelectedCards();
     calcAll();
     updateFloatBar();
   };

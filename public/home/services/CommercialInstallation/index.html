@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-cp12" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=installation" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -104,7 +104,7 @@
                                         <span class="service-pricing-card__unit">small Flat or 1 floor included
                                             building</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=installation"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Get a Quote</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -132,7 +132,7 @@
                                         <span class="service-pricing-card__price">£20</span>
                                         <span class="service-pricing-card__unit">Each additional Bedroom</span>
                                     </div>
-                                    <a href="#book-cp12"
+                                    <a href="/book-now/?propertyType=installation"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Get a Quote</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -152,9 +152,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -311,38 +310,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-cp12" aria-label="Book Gas Safety engineer">
+                <aside class="service-book-card" id="book-cp12" aria-label="Enquire about Commercial Installation"
+                    data-service="Commercial Installation" data-property-type="commercial">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book an Assessor for CELC now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About Commercial Installation</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" id="service-book-form" action="#" method="post"
-                        novalidate data-service="gsc">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="../../icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
-                                height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -450,7 +425,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-fra" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=installation" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -484,7 +459,7 @@
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How quickly will I receive my certificate after the inspection?</span>
+                                    <span>Do I need Building Regulations approval for a new fuse board?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -497,15 +472,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every certificate is issued within 24 hours of the inspection &mdash; usually the
-                                        same evening. You receive it by email as an official PDF, ready to share with
-                                        tenants or agents.</p>
+                                    <p>In homes, replacing a fuse board (consumer unit) is notifiable work under Part P of the Building Regulations. The work is carried out by NICEIC or NAPIT registered electricians who self-certify it, and you'll receive a Building Regulations compliance certificate once it's notified. Commercial installations aren't covered by Part P but are carried out to BS 7671.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Are your engineers Gas Safe registered?</span>
+                                    <span>What's included with a new boiler installation?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -518,14 +491,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. Every gas engineer we send is Gas Safe registered. Electrical work is
-                                        carried out by NICEIC affiliated electricians.</p>
+                                    <p>Full installation by a Gas Safe registered engineer, the manufacturer's Benchmark commissioning checklist to support your warranty, and a Building Regulations Compliance Certificate issued through Gas Safe Register.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often does a landlord need a Gas Safety Certificate?</span>
+                                    <span>Can you install a fire alarm system to match what my HMO licence requires?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -538,15 +510,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Landlords must have gas appliances and flues checked every 12 months. A new CP12
-                                        is required before a new tenancy starts if the current certificate has expired.
-                                    </p>
+                                    <p>Yes. We'll install to the grade and category your Fire Risk Assessment or council specifies, whether that's a Grade D1 interlinked system for a smaller property or a Grade A system with a central panel for a larger HMO.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often is an EICR required for rental properties?</span>
+                                    <span>Do all rental properties need smoke and CO alarms?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -559,15 +529,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Residential rental properties in England need an EICR at least every 5 years, or
-                                        at the start of a new tenancy. HMOs and commercial properties may have different
-                                        requirements.</p>
+                                    <p>Yes. Landlords must fit a smoke alarm on every storey used as living accommodation, and a carbon monoxide alarm in any room with a fixed combustion appliance, such as a gas boiler, gas fire or wood burner. Gas cookers are excluded.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do I need an EPC for my rental property?</span>
+                                    <span>What happens if your engineer finds a fault during diagnostics?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -580,14 +548,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. A valid EPC (minimum rating E) must be provided to tenants before marketing
-                                        a property and is required for every new tenancy.</p>
+                                    <p>You'll get a clear, itemised breakdown of the fault and the remedial work needed, along with a quote, before any further work goes ahead.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if my property fails an inspection?</span>
+                                    <span>Do you only install, or can you fix existing systems too?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -600,15 +567,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Your engineer will explain any issues found and advise on remedial work. We can
-                                        often return to re-inspect once faults are fixed so you can obtain a compliant
-                                        certificate.</p>
+                                    <p>Both. We handle new installations as well as fault finding and repair on existing boilers, electrics and fire systems.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do you cover my area?</span>
+                                    <span>Is emergency lighting a legal requirement for my building?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -621,15 +586,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>We cover all 32 London boroughs and the wider M25 corridor, including Essex,
-                                        Kent, Surrey, Hertfordshire, and surrounding counties. WhatsApp us with your
-                                        postcode to confirm.</p>
+                                    <p>It depends on the building. Under the Regulatory Reform (Fire Safety) Order 2005, commercial premises and the common areas of larger HMOs and blocks of flats need emergency lighting where the Fire Risk Assessment identifies it.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Can I book multiple certificates for the same property?</span>
+                                    <span>Do you cover installation work outside London?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -642,9 +605,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Absolutely. You can book gas, electrical, fire, and EPC certificates in one visit
-                                        where possible &mdash; saving time and reducing disruption for you and your
-                                        tenants.</p>
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

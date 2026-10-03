@@ -1,7 +1,16 @@
 (function () {
-  const API = '/api/leads';
+  const API = '/api/leads/enquiry';
+  const SUCCESS_MESSAGE =
+    'Thank you — your request has been sent. Our team will contact you within 1 to 2 hours.';
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const PHONE_REGEX = /^[\d\s+().-]{7,20}$/;
+
   const form = document.querySelector('.service-book-form');
   if (!form) return;
+
+  const card = form.closest('.service-book-card');
+  const serviceName = card?.dataset.service || document.title.split('|')[0].trim();
+  const propertyType = card?.dataset.propertyType || 'residential';
 
   const feedback = document.createElement('p');
   feedback.className = 'quote-form__feedback';
@@ -11,8 +20,15 @@
 
   const submitBtn = form.querySelector('button[type="submit"]');
   const submitLabel = submitBtn ? submitBtn.querySelector('.btn-primary__label') : null;
-  const defaultSubmitLabel = submitLabel ? submitLabel.textContent.trim() : 'Book Now';
-  const serviceName = form.dataset.service || 'service';
+  const defaultSubmitLabel = submitLabel ? submitLabel.textContent.trim() : 'Submit';
+
+  function field(name) {
+    return form.querySelector('[name="' + name + '"]');
+  }
+
+  function value(name) {
+    return field(name)?.value?.trim() || '';
+  }
 
   function setFeedback(type, message) {
     feedback.hidden = false;
@@ -27,9 +43,14 @@
   }
 
   function isFormComplete() {
-    const postcode = form.querySelector('#postcode')?.value?.trim() || '';
-    const contact = form.querySelector('#contact')?.value?.trim() || '';
-    return Boolean(postcode && contact);
+    return Boolean(value('fullName') && value('email'));
+  }
+
+  function validate() {
+    if (!value('fullName')) return 'Please enter your full name.';
+    if (!EMAIL_REGEX.test(value('email'))) return 'Please enter a valid email address.';
+    if (value('phone') && !PHONE_REGEX.test(value('phone'))) return 'Please enter a valid phone number.';
+    return null;
   }
 
   function updateSubmitState() {
@@ -54,7 +75,10 @@
     updateSubmitState();
   }
 
-  form.addEventListener('input', updateSubmitState);
+  form.addEventListener('input', function () {
+    if (feedback.classList.contains('quote-form__feedback--error')) clearFeedback();
+    updateSubmitState();
+  });
   form.addEventListener('change', updateSubmitState);
   updateSubmitState();
 
@@ -62,12 +86,9 @@
     event.preventDefault();
     clearFeedback();
 
-    const postcode = form.querySelector('#postcode')?.value?.trim() || '';
-    const contact = form.querySelector('#contact')?.value?.trim() || '';
-    const propertyType = form.querySelector('[name="property-type"]')?.value || 'residential';
-
-    if (!postcode || !contact) {
-      setFeedback('error', 'Please fill in postcode and email or phone.');
+    const error = validate();
+    if (error) {
+      setFeedback('error', error);
       return;
     }
 
@@ -77,38 +98,39 @@
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        postcode: postcode,
+        fullName: value('fullName'),
+        email: value('email'),
+        phone: value('phone'),
+        message: value('message'),
+        service: serviceName,
         propertyType: propertyType,
-        contact: contact,
+        page: window.location.pathname,
       }),
     })
       .then(function (response) {
-        return response.json().then(function (payload) {
-          return { ok: response.ok, payload: payload };
-        });
+        return response
+          .json()
+          .catch(function () { return {}; })
+          .then(function (payload) {
+            return { ok: response.ok, payload: payload };
+          });
       })
       .then(function (result) {
         if (!result.ok) {
           const message =
-            result.payload?.message ||
             (Array.isArray(result.payload?.data)
               ? result.payload.data.map(function (e) { return e.msg; }).join(', ')
               : null) ||
-            'Could not submit your booking request. Please try again.';
+            result.payload?.message ||
+            'Could not send your request. Please try again.';
           throw new Error(message);
         }
 
-        const reference = result.payload?.data?.reference;
-        setFeedback(
-          'success',
-          reference
-            ? 'Thanks — your booking request (' + reference + ') has been received. We will be in touch shortly.'
-            : 'Thanks — your booking request has been received. We will be in touch shortly.'
-        );
         form.reset();
+        setFeedback('success', SUCCESS_MESSAGE);
       })
-      .catch(function (error) {
-        setFeedback('error', error.message || 'Something went wrong. Please try again.');
+      .catch(function (err) {
+        setFeedback('error', err.message || 'Something went wrong. Please try again.');
       })
       .finally(function () {
         setFormBusy(false);

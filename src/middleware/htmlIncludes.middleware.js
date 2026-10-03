@@ -3,10 +3,10 @@ const path = require('path');
 
 const PARTIAL_PATTERN = /<!--\s*#include\s+(\w+)\s*-->/g;
 
-const PARTIAL_NAMES = ['header', 'footer', 'services'];
+const PARTIAL_NAMES = ['header', 'footer', 'services', 'enquiry'];
 
-const htmlIncludes = (homeDir) => {
-  const partialsDir = path.join(homeDir, 'partials');
+// `partialsDir` lets another static root (e.g. /book-now) reuse the main site's header/footer.
+const htmlIncludes = (homeDir, { partialsDir = path.join(homeDir, 'partials') } = {}) => {
   const cache = {};
 
   // Re-reads a partial only when its file changes, so edits show without a restart.
@@ -25,7 +25,15 @@ const htmlIncludes = (homeDir) => {
   return (req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') return next();
 
-    let relativePath = req.path.endsWith('/') ? `${req.path}index.html` : req.path;
+    // Decode so folders with special characters (e.g. "Gas Repair&Diagnostics" sent as %26) resolve.
+    let requestPath;
+    try {
+      requestPath = decodeURIComponent(req.path);
+    } catch {
+      return next();
+    }
+
+    let relativePath = requestPath.endsWith('/') ? `${requestPath}index.html` : requestPath;
     if (!relativePath.endsWith('.html')) return next();
 
     const filePath = path.join(homeDir, relativePath);

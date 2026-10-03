@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-boilerservice" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=boiler" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -92,7 +92,7 @@
                                     <h3 class="service-plan__name">Boiler Basic Service</h3>
                                     <p class="service-plan__desc">Quick maintenance for basic needs</p>
                                     <p class="service-plan__price">From &pound;79.99</p>
-                                    <a href="#book-boilerservice" class="btn-primary service-plan__cta">
+                                    <a href="/book-now/?propertyType=residential&amp;service=boiler" class="btn-primary service-plan__cta">
                                         Book Now
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                             <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
@@ -114,7 +114,7 @@
                                     <h3 class="service-plan__name">Comfort Care</h3>
                                     <p class="service-plan__desc">Regular upkeep with essential care</p>
                                     <p class="service-plan__price">From &pound;119.99</p>
-                                    <a href="#book-boilerservice" class="btn-primary service-plan__cta">
+                                    <a href="/book-now/?propertyType=residential&amp;service=boiler" class="btn-primary service-plan__cta">
                                         Book Now
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                             <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
@@ -139,7 +139,7 @@
                                     <h3 class="service-plan__name">Comfort Care Plus</h3>
                                     <p class="service-plan__desc">Regular upkeep with essential care</p>
                                     <p class="service-plan__price">From &pound;119.99</p>
-                                    <a href="#book-boilerservice" class="btn-primary service-plan__cta">
+                                    <a href="/book-now/?propertyType=residential&amp;service=boiler" class="btn-primary service-plan__cta">
                                         Book Now
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                             <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
@@ -298,37 +298,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-boilerservice" aria-label="Book boiler service">
+                <aside class="service-book-card" id="book-boilerservice" aria-label="Enquire about Boiler Service"
+                    data-service="Boiler Service" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book boiler service now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About Boiler Service</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" action="#" method="post" novalidate
-                        data-service="boiler">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -420,6 +397,184 @@
                             </div>
                         </div>
                     </article>
+                </div>
+            </div>
+        </section>
+    <section id="faq" class="faq" aria-labelledby="faq-title">
+            <div class="faq__inner">
+                <div class="faq__layout">
+                    <div class="faq__intro">
+                        <h2 id="faq-title" class="faq__title">
+                            Questions <br /><span class="faq__title-accent">Answered FAQ</span>
+                        </h2>
+                        <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
+                            same-week availability, and certificates sent within 24 hours.</p>
+                        <a href="/book-now/?propertyType=residential&amp;service=boiler" class="btn-primary btn-primary--header faq__book">
+                            <span class="btn-primary__label">Book an inspection</span>
+                            <span class="btn-primary__arrow" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </a>
+
+                        <aside class="faq-help" aria-label="More help">
+                            <div class="faq-help__top">
+                                <div class="faq-help__avatars" aria-hidden="true">
+                                    <span class="faq-help__avatar">A</span>
+                                    <span class="faq-help__avatar">S</span>
+                                    <span class="faq-help__avatar">J</span>
+                                </div>
+                                <div class="faq-help__copy">
+                                    <p class="faq-help__title">Have more questions?</p>
+                                    <p class="faq-help__subtitle">Our team replies in minutes</p>
+                                </div>
+                            </div>
+                            <a href="https://wa.me/447350538874" class="faq-help__whatsapp" target="_blank"
+                                rel="noopener noreferrer">
+                                <img src="/icons/message.svg" alt="" width="16" height="16">
+                                Chat on WhatsApp
+                            </a>
+                        </aside>
+                    </div>
+
+                    <div class="faq__panel">
+                        <div class="faq__list">
+                            <details class="faq-item" open>
+                                <summary class="faq-item__question">
+                                    <span>Is an annual boiler service a legal requirement?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Not for homeowners or landlords. Landlords must have an annual gas safety check, which is different from a service. However, most boiler manufacturers require an annual service to keep the warranty valid, and regular servicing keeps the boiler running safely and efficiently.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>What's the difference between a boiler service and a Gas Safety Certificate?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>A gas safety check confirms your gas appliances are safe to use. A boiler service goes further: the engineer inspects, cleans and adjusts the boiler's internal components so it runs efficiently and reliably.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Can I book a boiler service with my Gas Safety Certificate?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Yes. Booking both in the same visit saves time and costs less than booking them separately.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>What's checked during a boiler service?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>The engineer follows the manufacturer's instructions, typically checking combustion and flue gas readings, the flue, seals, burner and heat exchanger, controls, system pressure and safety devices. The service is recorded in the boiler's Benchmark service record.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>How long does a boiler service take?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Usually around an hour, depending on the boiler and its condition.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Who can service my boiler?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Only a Gas Safe registered engineer can legally work on gas boilers, including servicing.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do you cover boiler servicing outside London?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

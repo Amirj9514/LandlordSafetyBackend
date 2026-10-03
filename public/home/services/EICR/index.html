@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-eicr" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=eicr" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -99,7 +99,7 @@
                                         <span class="service-pricing-card__price">£99.99</span>
                                         <span class="service-pricing-card__unit">Studio & 1 Fuse board included</span>
                                     </div>
-                                    <a href="#book-eicr"
+                                    <a href="/book-now/?propertyType=residential&amp;service=eicr"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -125,7 +125,7 @@
                                         <span class="service-pricing-card__price">£20</span>
                                         <span class="service-pricing-card__unit">Each additional bedroom</span>
                                     </div>
-                                    <a href="#book-eicr"
+                                    <a href="/book-now/?propertyType=residential&amp;service=eicr"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -145,9 +145,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -301,38 +300,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-eicr" aria-label="Book EICR assessor">
+                <aside class="service-book-card" id="book-eicr" aria-label="Enquire about EICR"
+                    data-service="EICR" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book Electrician for EICR now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About EICR</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" id="service-book-form" action="#" method="post"
-                        novalidate data-service="eicr">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="../../icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
-                                height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -437,7 +412,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-eicr" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=eicr" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -471,7 +446,7 @@
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How often do I need an EICR?</span>
+                                    <span>How often is an EICR required for rental properties?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -484,16 +459,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>At least every 5 years for most rental properties, or sooner if your previous
-                                        report recommends an earlier reinspection. You can carry out the check up to
-                                        2 months before the current certificate expires without losing your renewal
-                                        date.</p>
+                                    <p>At least every 5 years, or sooner if the previous report specifies a shorter interval. It's a legal requirement under the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if I don&rsquo;t have a valid EICR?</span>
+                                    <span>What does BS 7671 mean?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -506,16 +478,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Local authorities can issue civil penalties of up to &pound;30,000 per breach.
-                                        A missing or expired EICR can also block a valid Section 21 or Section 8
-                                        possession notice, so you can&rsquo;t regain possession of the property
-                                        without a valid record in place.</p>
+                                    <p>It's the UK standard for electrical wiring and installations that an EICR is assessed against.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What does the inspection actually check?</span>
+                                    <span>What happens if my property fails the inspection?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -528,16 +497,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>The consumer unit, earthing and bonding, and every circuit in the property
-                                        &mdash; tested for continuity, insulation resistance and correct operation,
-                                        with any issues coded C1, C2 or C3, or flagged for further investigation
-                                        (F1).</p>
+                                    <p>Observations are coded C1 (danger present), C2 (potentially dangerous), C3 (improvement recommended) or FI (further investigation). Any C1, C2 or FI must be fixed or investigated within 28 days, or sooner if the report says so. You must then give written confirmation of the completed work to tenants and the local authority within 28 days. Councils can issue civil penalties of up to £30,000 for breaches.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do I need to give tenants a copy?</span>
+                                    <span>Do I need to give tenants a copy of the EICR?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -550,15 +516,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. New tenants must receive a copy before they move in, existing tenants
-                                        within 28 days of the inspection, and your local authority within 7 days if
-                                        they request one.</p>
+                                    <p>Yes. Existing tenants must receive a copy within 28 days of the inspection, and new tenants before they move in. The local authority must receive a copy within 7 days if it asks for one.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What if the inspection finds a fault?</span>
+                                    <span>What's checked during an EICR?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -571,10 +535,45 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Any C1 (danger present) or C2 (potentially dangerous) observation must be
-                                        remediated within 28 days, or sooner if the report specifies. C3 items are
-                                        recommended but not mandatory. We can re-inspect once repairs are complete so
-                                        you can obtain a compliant EICR.</p>
+                                    <p>The condition of the fuse board, wiring, sockets, switches, light fittings, and earthing and bonding throughout the property, checked for damage, wear and compliance with current safety standards.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>How long does an EICR inspection take?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>Typically 1–3 hours for a standard residential property, depending on size and the number of circuits.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do you cover EICR inspections outside London?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

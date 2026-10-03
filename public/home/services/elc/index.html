@@ -33,7 +33,7 @@
                             </svg>
                             <strong>&pound;74.99</strong>
                         </div>
-                        <a href="#book-elc" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=elc" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -83,7 +83,7 @@
                                         <span class="service-pricing-card__price">£74.99</span>
                                         <span class="service-pricing-card__unit">Upto 3 lights Included</span>
                                     </div>
-                                    <a href="#book-elc"
+                                    <a href="/book-now/?propertyType=residential&amp;service=elc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -109,7 +109,7 @@
                                         <span class="service-pricing-card__price">£20</span>
                                         <span class="service-pricing-card__unit">Each additional Light</span>
                                     </div>
-                                    <a href="#book-elc"
+                                    <a href="/book-now/?propertyType=residential&amp;service=elc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -129,9 +129,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -269,36 +268,14 @@ licensing or compliance records.</p>
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-elc" aria-label="Book ELC engineer">
+                <aside class="service-book-card" id="book-elc" aria-label="Enquire about ELC"
+                    data-service="ELC" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book an Engineer for Your ELC Now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About ELC</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" action="#" method="post" novalidate data-service="elc">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -404,7 +381,7 @@ licensing or compliance records.</p>
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates issued within 1&ndash;2 days.</p>
-                        <a href="#book-elc" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=elc" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -438,7 +415,7 @@ licensing or compliance records.</p>
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How often does emergency lighting need to be tested?</span>
+                                    <span>Is emergency lighting a legal requirement for my property?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -451,16 +428,13 @@ licensing or compliance records.</p>
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>BS 5266 requires a short monthly function test and a full annual duration test
-                                        that checks every fitting operates for its full rated duration &mdash;
-                                        typically 3 hours &mdash; if mains power fails. We carry out the annual test
-                                        and issue your certificate.</p>
+                                    <p>It depends on the building. Under the Regulatory Reform (Fire Safety) Order 2005, escape routes in the common areas of HMOs and blocks of flats need emergency lighting where the Fire Risk Assessment identifies it, typically in larger buildings or where escape routes lack natural light.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Is an Emergency Light Certificate a legal requirement?</span>
+                                    <span>How often does emergency lighting need testing?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -473,9 +447,26 @@ licensing or compliance records.</p>
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes, for most commercial premises, HMOs and multi-occupancy buildings, under
-                                        the Regulatory Reform (Fire Safety) Order 2005. The responsible person must
-                                        keep escape routes lit and be able to show evidence of regular testing.</p>
+                                    <p>BS 5266-1 and BS EN 50172 recommend a brief monthly functional test of every light and a full rated-duration test once a year, with results recorded in a logbook.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>What does a full annual test check?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>That every emergency light runs on battery power for its full rated duration during a simulated power failure. This is usually 3 hours, though some systems are designed for 1 hour.</p>
                                 </div>
                             </details>
 
@@ -494,15 +485,13 @@ licensing or compliance records.</p>
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Any faulty or non-compliant fitting is flagged on site, with the fault and its
-                                        location noted on your report. Once the fitting is repaired or replaced, we
-                                        can carry out a quick re-test to bring the certificate up to date.</p>
+                                    <p>We'll record the fault, advise on any interim safety measures, and provide a clear breakdown of the repair or replacement needed.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do all rental properties need emergency lighting?</span>
+                                    <span>Who can test and certify emergency lighting?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -515,16 +504,13 @@ licensing or compliance records.</p>
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Not every single let &mdash; it&rsquo;s mandatory for HMOs, blocks of flats
-                                        with communal escape routes, and other multi-occupancy or commercial
-                                        buildings. If you&rsquo;re unsure whether your property needs it, message us
-                                        your address and we&rsquo;ll confirm.</p>
+                                    <p>A competent person. Monthly checks can be done by a trained responsible person, while the annual test and certification should be carried out by a qualified engineer.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How long does the inspection take?</span>
+                                    <span>Do you cover emergency lighting testing outside London?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -537,30 +523,7 @@ licensing or compliance records.</p>
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Typically 30&ndash;90 minutes, depending on the number of fittings and the
-                                        size of the building. Larger blocks or bulk inspections can be scheduled
-                                        around your access times &mdash; just message us on WhatsApp.</p>
-                                </div>
-                            </details>
-
-                            <details class="faq-item">
-                                <summary class="faq-item__question">
-                                    <span>How quickly will I receive my certificate after the inspection?</span>
-                                    <span class="faq-item__icon" aria-hidden="true">
-                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
-                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
-                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </summary>
-                                <div class="faq-item__answer">
-                                    <p>Your official Emergency Light Certificate is issued within 1&ndash;2 days of
-                                        the inspection, sent by email as a PDF that&rsquo;s ready for HMO licensing,
-                                        fire risk assessment records, or your own compliance file.</p>
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

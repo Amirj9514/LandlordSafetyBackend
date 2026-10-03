@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-eicr" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=fsc" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -99,7 +99,7 @@
                                         <span class="service-pricing-card__unit">Grade D Upto 3 detectors
                                             Included</span>
                                     </div>
-                                    <a href="#book-eicr"
+                                    <a href="/book-now/?propertyType=residential&amp;service=fsc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -126,7 +126,7 @@
                                         <span class="service-pricing-card__unit">Each additional smoke or heat
                                             detector</span>
                                     </div>
-                                    <a href="#book-eicr"
+                                    <a href="/book-now/?propertyType=residential&amp;service=fsc"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -146,9 +146,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -305,38 +304,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-eicr" aria-label="Book EICR assessor">
+                <aside class="service-book-card" id="book-eicr" aria-label="Enquire about FSC"
+                    data-service="FSC" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book Fire Alarm Testing Now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About FSC</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" id="service-book-form" action="#" method="post"
-                        novalidate data-service="eicr">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="../../icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16"
-                                height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -441,7 +416,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-eicr" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=fsc" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -488,7 +463,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>At intervals not exceeding six months, carried out by a competent person.</p>
+                                    <p>It depends on the system grade. Panel-based Grade A systems should be inspected and serviced by a competent person at least every 6 months under BS 5839-6. Interlinked Grade D alarms should be tested regularly, at least monthly, and replaced in line with the manufacturer's guidance.</p>
                                 </div>
                             </details>
 
@@ -507,11 +482,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>It depends on your property type and fire risk assessment. Most standard rental
-                                        homes use Grade D &mdash; mains-powered, interlinked detectors. HMOs and larger
-                                        or higher-risk properties often require Grade A, with a central control panel,
-                                        call points and detectors. Your local council&rsquo;s HMO licence conditions
-                                        will confirm the grade required.</p>
+                                    <p>It depends on your property and your local council's requirements. Most single lets and smaller HMOs need Grade D1 interlinked alarms. Larger HMOs, typically those with three or more storeys, usually need a Grade A system with a central control panel.</p>
                                 </div>
                             </details>
 
@@ -530,10 +501,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. Licensed HMOs must have a suitable fire detection system maintained to BS
-                                        5839-6. Councils typically require an inspection and servicing certificate,
-                                        kept on file and produced within 7 days if requested. Without a valid, in-date
-                                        certificate, your HMO licence can be refused or revoked.</p>
+                                    <p>In most cases, yes. Councils typically ask for a current fire alarm certificate with HMO licence applications and renewals, and a missing certificate can delay or prevent approval.</p>
                                 </div>
                             </details>
 
@@ -552,16 +520,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Any faults are recorded on the certificate and reported to you. Defective
-                                        detectors, sounders, batteries or panel equipment must be repaired or replaced
-                                        before the system is considered fully compliant. We can return to re-test once
-                                        remedial work is complete.</p>
+                                    <p>We'll record any faults or non-compliant detectors and provide a clear breakdown and quote for the work needed to bring the system back into compliance.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Who is allowed to test and certify a fire alarm system?</span>
+                                    <span>Who's allowed to test and certify a fire alarm system?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -574,11 +539,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Periodic inspection and servicing must be carried out by a competent person with
-                                        specialist knowledge of fire detection and alarm systems. For Grade A systems
-                                        this is normally a qualified fire alarm engineer. Routine weekly or monthly
-                                        tests on simpler Grade D systems can be done by the occupier, but certification
-                                        should always be issued by a competent specialist.</p>
+                                    <p>A competent person with the relevant training and experience in fire detection and alarm systems.</p>
                                 </div>
                             </details>
 
@@ -597,10 +558,26 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>The certificate confirms your system was compliant at the time of inspection.
-                                        Under BS 5839-6, Grade A systems must be inspected and serviced at least every
-                                        six months, so you should renew on that schedule. HMO landlords may also need
-                                        to submit updated certificates to their local council every six months.</p>
+                                    <p>A certificate confirms the system was working at the time of the visit. For Grade A systems, a new servicing certificate is issued at each 6-monthly service. Check your HMO licence for any specific renewal requirements.</p>
+                                </div>
+                            </details>
+
+                            <details class="faq-item">
+                                <summary class="faq-item__question">
+                                    <span>Do you cover fire alarm testing outside London?</span>
+                                    <span class="faq-item__icon" aria-hidden="true">
+                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
+                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
+                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

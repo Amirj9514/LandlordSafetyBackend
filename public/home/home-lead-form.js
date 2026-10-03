@@ -1,5 +1,8 @@
 (function () {
   const API = '/api/leads';
+  // Same rules as src/utils/contactParser.js.
+  var EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var PHONE_REGEX = /^[\d\s+().-]{7,20}$/;
   const form = document.querySelector('.quote-form');
   if (!form) return;
 
@@ -64,6 +67,11 @@
   form.addEventListener('change', updateSubmitState);
   updateSubmitState();
 
+  // Coming back from the booking page via Back restores this page from cache: unlock the form.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) setFormBusy(false);
+  });
+
   form.addEventListener('submit', function (event) {
     event.preventDefault();
     clearFeedback();
@@ -77,45 +85,32 @@
       return;
     }
 
+    var isEmail = EMAIL_REGEX.test(contact);
+    if (!isEmail && !PHONE_REGEX.test(contact)) {
+      setFeedback('error', 'Please enter a valid email address or phone number.');
+      return;
+    }
+
     setFormBusy(true);
 
-    fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ postcode: postcode, propertyType: propertyType, contact: contact }),
-    })
-      .then(function (response) {
-        return response.json().then(function (payload) {
-          return { ok: response.ok, payload: payload };
-        });
-      })
-      .then(function (result) {
-        if (!result.ok) {
-          var message =
-            result.payload?.message ||
-            (Array.isArray(result.payload?.data)
-              ? result.payload.data.map(function (e) { return e.msg; }).join(', ')
-              : null) ||
-            'Could not submit your quote request. Please try again.';
-          throw new Error(message);
-        }
+    // Record the lead in the background (keepalive survives the page change); the booking
+    // page doesn't wait on it, so a slow or failed save never blocks the visitor.
+    try {
+      fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postcode: postcode, propertyType: propertyType, contact: contact }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {
+      // Ignore: going to the booking page matters more than the lead record.
+    }
 
-        var reference = result.payload?.data?.reference;
-        setFeedback(
-          'success',
-          reference
-            ? 'Thanks — your quote request (' + reference + ') has been received. We will be in touch shortly.'
-            : 'Thanks — your quote request has been received. We will be in touch shortly.'
-        );
-        form.reset();
-        var residential = form.querySelector('input[name="property-type"][value="residential"]');
-        if (residential) residential.checked = true;
-      })
-      .catch(function (error) {
-        setFeedback('error', error.message || 'Something went wrong. Please try again.');
-      })
-      .finally(function () {
-        setFormBusy(false);
-      });
+    // Continue on the booking page with these details already filled in.
+    var params = new URLSearchParams();
+    params.set('propertyType', propertyType);
+    params.set('postcode', postcode.toUpperCase().replace(/\s+/g, ' '));
+    params.set(isEmail ? 'email' : 'phone', contact);
+    window.location.href = '/book-now/?' + params.toString();
   });
 })();

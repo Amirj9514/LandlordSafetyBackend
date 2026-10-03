@@ -37,7 +37,7 @@
                             </svg>
                             <strong>&pound;119.99</strong>
                         </div>
-                        <a href="#book-floorplan" class="btn-primary btn-primary--header service-hero__book-btn">
+                        <a href="/book-now/?propertyType=residential&amp;service=floorplan" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -98,7 +98,7 @@
                                         <span class="service-pricing-card__price">£59.99</span>
                                         <span class="service-pricing-card__unit">Upto 10 appliances included</span>
                                     </div>
-                                    <a href="#book-asbestos"
+                                    <a href="/book-now/?propertyType=residential&amp;service=floorplan"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -124,7 +124,7 @@
                                         <span class="service-pricing-card__price">£2</span>
                                         <span class="service-pricing-card__unit">Each additional appliance</span>
                                     </div>
-                                    <a href="#book-asbestos"
+                                    <a href="/book-now/?propertyType=residential&amp;service=floorplan"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Book Now</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
@@ -144,9 +144,8 @@
                                         <p class="service-pricing-card__desc">Discount available Upto 20% on bulk or
                                             Block inspections</p>
                                     </div>
-                                    <a href="https://wa.me/447350538874"
-                                        class="btn-primary btn-primary--header service-pricing-card__cta"
-                                        target="_blank" rel="noopener noreferrer">
+                                    <a href="/contact/"
+                                        class="btn-primary btn-primary--header service-pricing-card__cta">
                                         <span class="btn-primary__label">Contact Us</span>
                                         <span class="btn-primary__arrow" aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -299,37 +298,14 @@
                     </section>
                 </div>
 
-                <aside class="service-book-card" id="book-floorplan" aria-label="Book floor plan">
+                <aside class="service-book-card" id="book-floorplan" aria-label="Enquire about Floor Plans"
+                    data-service="Floor Plans" data-property-type="residential">
                     <div class="service-book-card__header">
-                        <h3 class="service-book-card__title">Book a Surveyor for Floor Plan Now!</h3>
-                        <p class="service-book-card__subtitle">Quick booking &mdash; pay by invoice after confirmation.
-                        </p>
+                        <h3 class="service-book-card__title">Enquire About Floor Plans</h3>
+                        <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-                    <form class="service-book-form quote-form" action="#" method="post" novalidate
-                        data-service="floorplan">
-                        <input type="hidden" name="property-type" value="residential">
-                        <div class="quote-form__field">
-                            <label class="field-label" for="postcode">Postcode</label>
-                            <input class="field-input" type="text" id="postcode" name="postcode" placeholder="SW1A 1AA"
-                                autocomplete="postal-code" required>
-                        </div>
-                        <div class="quote-form__field">
-                            <label class="field-label" for="contact">Email or Phone</label>
-                            <input class="field-input" type="text" id="contact" name="contact"
-                                placeholder="you@example.com or 07700 000000" autocomplete="email" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
-                            <span class="btn-primary__spinner" aria-hidden="true"></span>
-                            <span class="btn-primary__label">Book Now</span>
-                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
-                        </button>
-                    </form>
-
-                    <p class="service-book-card__whatsapp">
-                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank"
-                            rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                    </p>
+<!--#include enquiry-->
                 </aside>
             </div>
         </section>
@@ -432,7 +408,7 @@
                         </h2>
                         <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
                             same-week availability, and certificates sent within 24 hours.</p>
-                        <a href="#book-asbestos" class="btn-primary btn-primary--header faq__book">
+                        <a href="/book-now/?propertyType=residential&amp;service=floorplan" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -466,7 +442,7 @@
                         <div class="faq__list">
                             <details class="faq-item" open>
                                 <summary class="faq-item__question">
-                                    <span>How quickly will I receive my certificate after the inspection?</span>
+                                    <span>What's included in a floor plan?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -479,15 +455,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Every certificate is issued within 24 hours of the inspection &mdash; usually the
-                                        same evening. You receive it by email as an official PDF, ready to share with
-                                        tenants or agents.</p>
+                                    <p>A measured floor plan of the property showing the layout, room names, room dimensions and total floor area, supplied digitally and ready to use in listings or applications.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Are your engineers Gas Safe registered?</span>
+                                    <span>Do I need a floor plan to let or sell a property?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -500,14 +474,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. Every gas engineer we send is Gas Safe registered. Electrical work is
-                                        carried out by NICEIC affiliated electricians.</p>
+                                    <p>It isn't a legal requirement, but floor plans are widely used in property listings and are often requested by letting agents and buyers.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often does a landlord need a Gas Safety Certificate?</span>
+                                    <span>Can a floor plan be used for an HMO licence application?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -520,15 +493,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Landlords must have gas appliances and flues checked every 12 months. A new CP12
-                                        is required before a new tenancy starts if the current certificate has expired.
-                                    </p>
+                                    <p>Yes. Councils usually ask for a floor plan with HMO licence applications, showing room sizes and uses. Since 2018, bedrooms in licensed HMOs must meet minimum sizes: 6.51 sq m for one adult, 10.22 sq m for two adults, and 4.64 sq m for a child under 10. Tell us what your council's application requires when you book.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>How often is an EICR required for rental properties?</span>
+                                    <span>Can I book a floor plan with my EPC?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -541,15 +512,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Residential rental properties in England need an EICR at least every 5 years, or
-                                        at the start of a new tenancy. HMOs and commercial properties may have different
-                                        requirements.</p>
+                                    <p>Yes. Many landlords book both in the same visit, since the property is measured for both.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>Do I need an EPC for my rental property?</span>
+                                    <span>How accurate are the measurements?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -562,14 +531,13 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Yes. A valid EPC (minimum rating E) must be provided to tenants before marketing
-                                        a property and is required for every new tenancy.</p>
+                                    <p>Rooms are measured on site, and plans show approximate dimensions suitable for listings and licensing. They aren't intended as architectural or building survey drawings.</p>
                                 </div>
                             </details>
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What happens if my property fails an inspection?</span>
+                                    <span>Do you cover floor plans outside London?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -582,51 +550,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>Your engineer will explain any issues found and advise on remedial work. We can
-                                        often return to re-inspect once faults are fixed so you can obtain a compliant
-                                        certificate.</p>
-                                </div>
-                            </details>
-
-                            <details class="faq-item">
-                                <summary class="faq-item__question">
-                                    <span>Do you cover my area?</span>
-                                    <span class="faq-item__icon" aria-hidden="true">
-                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
-                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
-                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </summary>
-                                <div class="faq-item__answer">
-                                    <p>We cover all 32 London boroughs and the wider M25 corridor, including Essex,
-                                        Kent, Surrey, Hertfordshire, and surrounding counties. WhatsApp us with your
-                                        postcode to confirm.</p>
-                                </div>
-                            </details>
-
-                            <details class="faq-item">
-                                <summary class="faq-item__question">
-                                    <span>Can I book multiple certificates for the same property?</span>
-                                    <span class="faq-item__icon" aria-hidden="true">
-                                        <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
-                                            <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <svg class="faq-item__icon-open" viewBox="0 0 14 14" fill="none">
-                                            <path d="M4.5 9.5L9.5 4.5M9.5 4.5H5.5M9.5 4.5V8.5" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </summary>
-                                <div class="faq-item__answer">
-                                    <p>Absolutely. You can book gas, electrical, fire, and EPC certificates in one visit
-                                        where possible &mdash; saving time and reducing disruption for you and your
-                                        tenants.</p>
+                                    <p>We cover all 32 London boroughs and within M25 London.</p>
                                 </div>
                             </details>
                         </div>

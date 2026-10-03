@@ -17,6 +17,21 @@ const createLead = asyncHandler(async (req, res) => {
   });
 });
 
+const createEnquiry = asyncHandler(async (req, res) => {
+  const data = await leadService.createEnquiry(req.body, {
+    metadata: {
+      userAgent: req.get('user-agent') || null,
+      ip: req.ip || null,
+      page: req.body.page ? String(req.body.page).slice(0, 200) : null,
+    },
+  });
+  return sendSuccess(res, {
+    data,
+    message: 'Enquiry submitted successfully',
+    status: httpStatus.CREATED,
+  });
+});
+
 const listLeads = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 20;
@@ -93,6 +108,7 @@ const deleteLeadNote = asyncHandler(async (req, res) => {
 
 module.exports = {
   createLead,
+  createEnquiry,
   listLeads,
   getLead,
   updateLeadStatus,

@@ -26,6 +26,7 @@ app.use(express.static(homeDir));
 app.use('/home', htmlIncludes(homeDir));
 app.use('/home', express.static(homeDir));
 
+app.use('/book-now', htmlIncludes(bookNowDir, { partialsDir: path.join(homeDir, 'partials') }));
 app.get('/book-now', (_req, res) => {
   res.sendFile(path.join(bookNowDir, 'index.html'));
 });
