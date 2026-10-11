@@ -39,9 +39,30 @@
     ],
   };
 
+  // Display order and names for the "Select A Service" accordion (overrides the API's order).
+  const CATEGORY_ORDER = ['res_gas', 'res_electrical', 'res_fire', 'res_epc', 'res_other'];
+  const CATEGORY_NAMES = { res_epc: 'Energy Rating' };
+
+  // Boiler Service tiers mirror the Boiler Service page; priced here rather than by the API.
+  const BOILER_CODE = 'boiler';
+  const BOILER_QUESTION = {
+    fieldKey: 'serviceLevel',
+    inputType: 'radio',
+    label: 'Service Level',
+    sortOrder: 1,
+    options: [
+      { value: 'essential', label: 'Essential Service', price: 79.99,
+        description: 'A standard boiler check to keep it running safely' },
+      { value: 'standard', label: 'Standard Service', price: 139.99,
+        description: 'A full service with cleaning and performance checks' },
+      { value: 'premium', label: 'Premium Service', price: 239.99,
+        description: 'Our most thorough service for long-term reliability' },
+    ],
+  };
+
   const SERVICE_BLURBS = {
     gsc: 'Annual landlord requirement',
-    boiler: 'Certificate plus boiler health check',
+    boiler: 'Annual service by Gas Safe engineers',
     eicr: 'Electrical safety for rentals',
     pat: 'Portable appliance testing',
     fsc: 'Fire alarm certification',
@@ -53,7 +74,7 @@
   };
 
   const FIELD_LABELS = {
-    applianceCount: 'Gas appliances',
+    applianceCount: 'Number of Appliances',
     bedrooms: 'Number of bedrooms',
     communalAreas: 'Number of communal areas',
     fuseBoards: 'Number of fuse boards',
@@ -79,8 +100,6 @@
   let catalog = null;
   // catalogReady: questions are known (live or cached catalog), so previews can run.
   let catalogReady = false;
-  // pricesLoading: live prices for the current postcode haven't arrived yet.
-  let pricesLoading = true;
   let catalogSeq = 0;
   let selectedCategoryCode = null;
   let selectedServiceCode = null;
@@ -106,7 +125,7 @@
   function fmtMoney(n) {
     const num = Number(n);
     if (!Number.isFinite(num)) return '—';
-    return '£' + (Number.isInteger(num) ? String(num) : num.toFixed(2).replace(/\.00$/, ''));
+    return '£' + num.toFixed(2);
   }
 
   function normalizePostcode(value) {
@@ -141,6 +160,37 @@
     } catch {
       // Storage full or blocked: the fallback list still works.
     }
+  }
+
+  // Apply the homepage's category order/names and the Boiler Service tiers to any catalog
+  // (built-in, cached or live) so every source renders the same way.
+  function normalizeCatalog(data) {
+    const categories = (data?.categories || []).map((cat) => {
+      const rank = CATEGORY_ORDER.indexOf(cat.code);
+      return {
+        ...cat,
+        name: CATEGORY_NAMES[cat.code] || cat.name,
+        displayOrder: rank === -1 ? CATEGORY_ORDER.length + (cat.displayOrder || 0) : rank,
+        services: (cat.services || []).map((svc) =>
+          svc.code === BOILER_CODE
+            ? {
+                ...svc,
+                name: 'Boiler Service',
+                metadata: { ...(svc.metadata || {}), shortDescription: SERVICE_BLURBS.boiler },
+                questions: [BOILER_QUESTION],
+                localPricing: true,
+              }
+            : svc
+        ),
+      };
+    });
+    return { ...data, categories };
+  }
+
+  function regionLabel(name) {
+    return String(name || '')
+      .replace(/^Zone\s*\d+\s*[—–-]\s*/i, '')
+      .replace(/\s+Boroughs$/i, '');
   }
 
   function listLeafServices(category) {
@@ -208,45 +258,9 @@
     return FIELD_LABELS[q.fieldKey] || q.label || q.fieldKey;
   }
 
-  function serviceFromPrice(service) {
-    let lowest = null;
-    let anyTbc = false;
-    for (const q of service.questions || []) {
-      for (const opt of q.options || []) {
-        if (opt.isTbc) anyTbc = true;
-        if (opt.price != null && opt.price !== '' && Number(opt.price) > 0) {
-          const amount = Number(opt.price);
-          if (lowest == null || amount < lowest) lowest = amount;
-        }
-      }
-    }
-    if (lowest != null) return { text: 'from ' + fmtMoney(lowest), amount: lowest };
-    if (service.metadata?.startsFrom != null) {
-      return { text: 'from ' + fmtMoney(service.metadata.startsFrom), amount: Number(service.metadata.startsFrom) };
-    }
-    if (anyTbc || service.pricingMode === 'quote_only') return { text: 'Quote', amount: null };
-    return { text: 'from TBC', amount: null };
-  }
-
-  function priceHtml(service, className) {
-    if (pricesLoading) {
-      return `<span class="${className} estimate-price--loading" aria-hidden="true"></span>`;
-    }
-    return `<span class="${className}">${escapeHtml(serviceFromPrice(service).text)}</span>`;
-  }
-
-  // Update every "from £…" label without re-rendering (keeps focus, open panels and answers).
-  function updatePricesInPlace() {
-    els.categories
-      .querySelectorAll('.estimate-service__price, .estimate-mcard__from')
-      .forEach((el) => {
-        const code = el.closest('[data-service]')?.getAttribute('data-service');
-        const service = findService(code);
-        if (!service) return;
-        el.classList.toggle('estimate-price--loading', pricesLoading);
-        el.toggleAttribute('aria-hidden', pricesLoading);
-        el.textContent = pricesLoading ? '' : serviceFromPrice(service).text;
-      });
+  // Locally priced services (Boiler Service) don't wait for the API.
+  function questionsKnown(service) {
+    return catalogReady || Boolean(service?.localPricing);
   }
 
   function questionsSkeletonHtml() {
@@ -310,6 +324,7 @@
 
   function useChipUi(question) {
     if (!question?.options?.length) return false;
+    if (question.fieldKey === BOILER_QUESTION.fieldKey) return true;
     if (question.options.length > 8) return false;
     return question.options.every(
       (opt) => String(optionLabel(opt, question.fieldKey) || opt.value).length <= 12
@@ -325,9 +340,20 @@
     return json.data;
   }
 
+  // Same shape as /api/quotes/preview's response, for services priced on this page.
+  function localQuote(service) {
+    const question = service.questions[0];
+    const opt = question.options.find((o) => o.value === answers[question.fieldKey]) || question.options[0];
+    return {
+      total: opt.price,
+      lines: [{ serviceCode: service.code, total: opt.price, sub: opt.label }],
+    };
+  }
+
   async function fetchPreview() {
     const service = findService(selectedServiceCode);
     if (!service) return null;
+    if (service.localPricing) return localQuote(service);
 
     const payload = {
       propertyType: PROPERTY_TYPE,
@@ -392,6 +418,13 @@
     });
   }
 
+  // One-line description of the selected option, for options that carry one (Boiler Service tiers).
+  function optionHintHtml(q, current) {
+    if (!q.options.some((opt) => opt.description)) return '';
+    const opt = q.options.find((o) => String(o.value) === String(current));
+    return `<p class="estimate-field__hint" data-hint-for="${escapeHtml(q.fieldKey)}">${escapeHtml(opt?.description || '')}</p>`;
+  }
+
   function questionsHtml(service) {
     const questions = visibleQuestions(service).filter((q) =>
       ['select', 'radio', 'number'].includes(q.inputType)
@@ -427,6 +460,7 @@
                   })
                   .join('')}
               </div>
+              ${optionHintHtml(q, current)}
             </fieldset>`;
         }
 
@@ -453,7 +487,7 @@
       els.questions.innerHTML = '';
       return;
     }
-    els.questions.innerHTML = catalogReady ? questionsHtml(service) : questionsSkeletonHtml();
+    els.questions.innerHTML = questionsKnown(service) ? questionsHtml(service) : questionsSkeletonHtml();
   }
 
   function renderCategories() {
@@ -500,7 +534,6 @@
                         <button type="button" class="estimate-service${selected ? ' estimate-service--selected' : ''}"
                           data-service="${escapeHtml(svc.code)}" aria-pressed="${selected ? 'true' : 'false'}">
                           <span class="estimate-service__name">${escapeHtml(svc.name)}</span>
-                          ${priceHtml(svc, 'estimate-service__price')}
                           <span class="estimate-service__desc">${escapeHtml(desc)}</span>
                         </button>
                       </li>`;
@@ -518,14 +551,14 @@
     return `
       <div class="estimate-mcard__fields">
         <div class="estimate-field">
-          <label class="field-label" for="estimate-postcode-mobile">Your postcode</label>
+          <label class="field-label" for="estimate-postcode-mobile">Your postcode*</label>
           <input class="field-input" type="text" id="estimate-postcode-mobile" name="estimate-postcode"
             value="${escapeHtml(pc)}" autocomplete="off" autocapitalize="characters" spellcheck="false"
             placeholder="e.g. SW1A 1AA">
           <p id="estimate-coverage-mobile" class="estimate-field__status" hidden></p>
         </div>
         <div class="estimate-mcard__questions">
-          ${catalogReady ? questionsHtml(service) : questionsSkeletonHtml()}
+          ${questionsKnown(service) ? questionsHtml(service) : questionsSkeletonHtml()}
         </div>
         <div class="estimate-mcard__price">
           <p class="estimate-mcard__price-label">Estimated price</p>
@@ -558,7 +591,6 @@
                     <h4 class="estimate-mcard__name">${escapeHtml(svc.name)}</h4>
                     <p class="estimate-mcard__desc">${escapeHtml(desc)}</p>
                   </div>
-                  ${priceHtml(svc, 'estimate-mcard__from')}
                 </div>
                 <button type="button" class="estimate-mcard__toggle" aria-expanded="${open ? 'true' : 'false'}">
                   <span>${open ? 'Hide Calculator' : 'Get Estimate'}</span>
@@ -719,7 +751,7 @@
       renderDesktopQuestions();
     }
     updateBookLink();
-    if (!skipPreview && catalogReady) schedulePreview();
+    if (!skipPreview && questionsKnown(service)) schedulePreview();
   }
 
   function toggleCategory(code) {
@@ -764,7 +796,7 @@
     if (!UK_POSTCODE.test(typedPostcode())) {
       setCoverage('muted', 'Enter your postcode to check coverage');
     } else if (data.hasPricing && data.resolvedRegion?.name) {
-      setCoverage('success', `Covered (${data.resolvedRegion.name})`);
+      setCoverage('success', `Covered (${regionLabel(data.resolvedRegion.name)})`);
     } else if (data.hasPricing === false) {
       setCoverage('error', 'Postcode not covered for instant pricing');
     } else {
@@ -772,32 +804,28 @@
     }
   }
 
-  // Services stay on screen the whole time; only the prices show a placeholder while loading.
+  // Services stay on screen the whole time; the live catalog replaces them when it arrives.
   async function loadCatalog() {
     const seq = ++catalogSeq;
-    pricesLoading = true;
-    updatePricesInPlace();
     if (UK_POSTCODE.test(typedPostcode())) setCoverage('muted', 'Checking coverage…');
 
-    let data;
+    let raw;
     try {
-      data = await fetchCatalog(getPostcode());
+      raw = await fetchCatalog(getPostcode());
     } catch (err) {
       if (seq !== catalogSeq) return;
       console.error(err);
-      pricesLoading = false;
-      updatePricesInPlace();
       setCoverage('error', 'Could not load prices right now. Please try again.');
       return;
     }
     if (seq !== catalogSeq) return;
 
+    const data = normalizeCatalog(raw);
     const wasReady = catalogReady;
     const sameShape = catalogShape(data) === catalogShape(catalog);
     catalog = data;
     catalogReady = true;
-    pricesLoading = false;
-    writeCachedCatalog(data);
+    writeCachedCatalog(raw);
     showCoverage(data);
 
     if (selectedServiceCode && !findService(selectedServiceCode)) selectedServiceCode = null;
@@ -811,11 +839,8 @@
       answers = defaultAnswersForService(findService(selectedServiceCode));
     }
 
-    if (sameShape && wasReady) {
-      updatePricesInPlace();
-    } else {
-      renderLayout();
-    }
+    // Same services in the same order: nothing visible changed, so keep focus and open panels.
+    if (!(sameShape && wasReady)) renderLayout();
 
     syncMobileCoverage();
     updateBookLink();
@@ -828,6 +853,11 @@
     const service = findService(selectedServiceCode);
     const beforeKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
     answers[field] = event.target.value;
+    const question = (service?.questions || []).find((q) => q.fieldKey === field);
+    const chosen = question?.options?.find((o) => String(o.value) === String(event.target.value));
+    document.querySelectorAll(`[data-hint-for="${field}"]`).forEach((el) => {
+      el.textContent = chosen?.description || '';
+    });
     const afterKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
     if (beforeKeys !== afterKeys) {
       if (isMobileLayout()) renderMobileCards();
@@ -908,7 +938,7 @@
 
   // Render the services immediately (last-seen catalog, or the built-in list), then load prices.
   const cached = readCachedCatalog();
-  catalog = cached || FALLBACK_CATALOG;
+  catalog = normalizeCatalog(cached || FALLBACK_CATALOG);
   catalogReady = Boolean(cached);
   if (!isMobileLayout()) {
     const first = firstServiceCode();

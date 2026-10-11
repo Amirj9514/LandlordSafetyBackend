@@ -21,6 +21,12 @@ function serviceCard({ img, name, desc, price, priceLabel = 'Starting from', hre
   return `                    <article class="service-card">
                         <div class="service-card__media">
                             <img src="${img}" alt="" width="480" height="200">
+                            <a href="${href}" class="service-card__corner" aria-label="View ${name}">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M4.667 11.333 11.333 4.667M5.333 4.667h6v6" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name">${name}</h3>
@@ -53,13 +59,13 @@ const residentialServices = [
 ];
 
 const commercialServices = [
-  { img: '/images/service-gas.png', name: 'Commercial Gas Safety Certificate (CP42)', desc: 'CP15, CP17, CP42 and CP16 gas safety inspections for boilers and kitchen appliances.', price: '150', href: '/book-now/?propertyType=commercial&service=cgsc', cta: 'Get a Quote' },
-  { img: '/images/service-eicr.png', name: 'Commercial Electrical Certificate (CEICR)', desc: 'Mandatory periodic electrical inspection for commercial premises, certified to BS7671.', price: '199.99', href: '/book-now/?propertyType=commercial&service=com_eicr', cta: 'Get a Quote' },
-  { img: '/images/service-epc.png', name: 'Commercial Energy Performance Certificate (CEPC)', desc: 'Required for commercial buildings being sold, let, or constructed.', price: '219.99', href: '/book-now/?propertyType=commercial&service=cepc', cta: 'Get a Quote' },
-  { img: '/images/service-fire-alarm.png', name: 'Commercial Fire Alarm Certificate (CFSC)', desc: 'Fire alarm testing and certification to BS 5839 for commercial premises.', price: '129.99', href: '/book-now/?propertyType=commercial&service=cfsc', cta: 'Get a Quote' },
-  { img: '/images/service-fra.png', name: 'Commercial Fire Safety Risk Assessment (CFRA)', desc: 'Mandatory fire risk assessments for commercial and multi-occupancy premises.', price: '180', href: '/book-now/?propertyType=commercial&service=com_fra', cta: 'Get a Quote' },
-  { img: '/images/service-fire-alarm.png', name: 'Commercial Emergency Lighting Certificate (ELC)', desc: 'Testing and certification of emergency lighting systems to BS 5266.', price: '119.99', href: '/book-now/?propertyType=commercial&service=celc', cta: 'Get a Quote' },
-  { img: '/images/service-eicr.png', name: 'Portable Appliance Testing (PAT)', desc: 'Regular PAT testing for all portable electrical equipment on commercial premises.', price: '180', href: '/services/pat/', cta: 'Book Now' },
+  { img: '/images/service-gas.png', name: 'Commercial Gas Safety Certificate (CP42)', desc: 'CP15, CP17, CP42 and CP16 gas safety inspections for boilers and kitchen appliances.', price: '159.99', href: '/book-now/?propertyType=commercial&service=cgsc', cta: 'Get a Quote' },
+  { img: '/images/service-eicr.png', name: 'Commercial Electrical Certificate (CEICR)', desc: 'Mandatory periodic electrical inspection for commercial premises, certified to BS7671.', price: '179.99', href: '/book-now/?propertyType=commercial&service=com_eicr', cta: 'Get a Quote' },
+  { img: '/images/service-epc.png', name: 'Commercial Energy Performance Certificate (CEPC)', desc: 'Required for commercial buildings being sold, let, or constructed.', price: '199.99', href: '/book-now/?propertyType=commercial&service=cepc', cta: 'Get a Quote' },
+  { img: '/images/service-fire-alarm.png', name: 'Commercial Fire Alarm Certificate (CFSC)', desc: 'Fire alarm testing and certification to BS 5839 for commercial premises.', price: '139.99', href: '/book-now/?propertyType=commercial&service=cfsc', cta: 'Get a Quote' },
+  { img: '/images/service-fra.png', name: 'Commercial Fire Safety Risk Assessment (CFRA)', desc: 'Mandatory fire risk assessments for commercial and multi-occupancy premises.', price: '179.99', href: '/book-now/?propertyType=commercial&service=com_fra', cta: 'Get a Quote' },
+  { img: '/images/service-fire-alarm.png', name: 'Commercial Emergency Lighting Certificate (ELC)', desc: 'Testing and certification of emergency lighting systems to BS 5266.', price: '199.99', href: '/book-now/?propertyType=commercial&service=celc', cta: 'Get a Quote' },
+  { img: '/images/service-eicr.png', name: 'Portable Appliance Testing (PAT)', desc: 'Regular PAT testing for all portable electrical equipment on commercial premises.', price: '69.99', href: '/services/pat/', cta: 'Book Now' },
 ];
 
 const installationServices = [
@@ -419,7 +425,7 @@ ${detailParagraphs}
                     </form>
 
                     <p class="service-book-card__whatsapp">
-                        Prefer to call? <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp 07350 538874</a>
+                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help.
                     </p>
                 </aside>
             </div>

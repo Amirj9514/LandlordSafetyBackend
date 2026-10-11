@@ -35,7 +35,7 @@
                                 <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <strong>&pound;119.99</strong>
+                            <strong>&pound;349.99 <span class="price-novat">No VAT</span></strong>
                         </div>
                         <a href="/book-now/?propertyType=residential&amp;service=asbestos" class="btn-primary btn-primary--header service-hero__book-btn">
                             <span class="btn-primary__label">Book Now</span>
@@ -89,15 +89,15 @@
                         <div class="service-pricing__grid">
                             <article class="service-pricing-card">
                                 <div class="service-pricing-card__top">
-                                    <h3 class="service-pricing-card__name">Flats or Small property</h3>
+                                    <h3 class="service-pricing-card__name">Partial or Small property</h3>
                                     <p class="service-pricing-card__desc">Price vary - based on property type</p>
                                 </div>
                                 <hr class="service-pricing-card__divider">
                                 <div class="service-pricing-card__bottom">
                                     <div class="service-pricing-card__pricing">
                                         <span class="service-pricing-card__from">Starting from</span>
-                                        <span class="service-pricing-card__price">£59.99</span>
-                                        <span class="service-pricing-card__unit">Upto 10 appliances included</span>
+                                        <span class="service-pricing-card__price">&pound;349.99 <span class="price-novat">No VAT</span></span>
+                                        <span class="service-pricing-card__unit">Up to 2 samples</span>
                                     </div>
                                     <a href="/book-now/?propertyType=residential&amp;service=asbestos"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
@@ -114,7 +114,7 @@
 
                             <article class="service-pricing-card">
                                 <div class="service-pricing-card__top">
-                                    <h3 class="service-pricing-card__name">Additional Light</h3>
+                                    <h3 class="service-pricing-card__name">Full Property Survey</h3>
                                     <p class="service-pricing-card__desc">Quick booking — pay by invoice after
                                         confirmation.</p>
                                 </div>
@@ -122,8 +122,8 @@
                                 <div class="service-pricing-card__bottom">
                                     <div class="service-pricing-card__pricing">
                                         <span class="service-pricing-card__from">Starting from</span>
-                                        <span class="service-pricing-card__price">£2</span>
-                                        <span class="service-pricing-card__unit">Each additional appliance</span>
+                                        <span class="service-pricing-card__price">&pound;599.99 <span class="price-novat">No VAT</span></span>
+                                        <span class="service-pricing-card__unit">Multiple Samples </span>
                                     </div>
                                     <a href="/book-now/?propertyType=residential&amp;service=asbestos"
                                         class="btn-primary btn-primary--header service-pricing-card__cta">
@@ -167,7 +167,7 @@
                                 <span class="service-included__title-accent">Included</span>
                             </h2>
                             <p class="service-included__subtitle">Thorough asbestos surveys by accredited surveyors,
-                                with your report issued within 1-3 days.</p>
+                                with your report issued within 5&ndash;8 days.</p>
                         </header>
 
                         <div class="service-included__grid">
@@ -212,7 +212,7 @@
                                 Requirements You
                                 <span class="service-requirements__title-accent">Should Know</span>
                             </h2>
-                            <p class="service-requirements__subtitle">The fire safety rules landlords need to stay on top of — clearly explained.</p>
+                            <p class="service-requirements__subtitle">What landlords and duty holders need to know about asbestos.</p>
                         </header>
 
                         <ol class="service-requirements__list">
@@ -270,7 +270,7 @@
                                     <img src="../../icons/pdf-document.svg" alt="" class="service-sample-card__icon"
                                         width="48" height="48">
                                     <h3 class="service-sample-card__title">Sample Asbestos Report</h3>
-                                    <p class="service-sample-card__meta">PDF &ndash; Anonymised example</p>
+                                    <p class="service-sample-card__meta">PDF &middot; Anonymised example</p>
                                     <a href="../../documents/sample-epc-certificate.pdf"
                                         class="btn-primary btn-primary--header service-sample-card__cta" download>
                                         <span class="btn-primary__label">Download Sample</span>
@@ -282,8 +282,8 @@
                                         </span>
                                     </a>
                                 </article>
-                                <p class="service-sample__caption">Download a sample certificate below to see exactly
-                                    what you&rsquo;ll receive.</p>
+                                <p class="service-sample__caption">For reference only &mdash; your final report may
+                                    differ.</p>
                             </div>
                         </div>
                     </section>
@@ -296,7 +296,39 @@
                         <p class="service-book-card__subtitle">Tell us what you need &mdash; we&rsquo;ll get back to you!</p>
                     </div>
 
-<!--#include enquiry-->
+                    <form class="service-book-form quote-form" action="#" method="post" novalidate>
+                        <div class="quote-form__field">
+                            <label class="field-label" for="enquiry-name">Full Name <span
+                                    class="field-required" aria-hidden="true">*</span></label>
+                            <input class="field-input" type="text" id="enquiry-name" name="fullName"
+                                placeholder="Name" autocomplete="name" maxlength="150" required>
+                        </div>
+                        <div class="quote-form__field">
+                            <label class="field-label" for="enquiry-email">Email <span class="field-required"
+                                    aria-hidden="true">*</span></label>
+                            <input class="field-input" type="email" id="enquiry-email" name="email"
+                                placeholder="you@example.com" autocomplete="email" required>
+                        </div>
+                        <div class="quote-form__field">
+                            <label class="field-label" for="enquiry-phone">Phone</label>
+                            <input class="field-input" type="tel" id="enquiry-phone" name="phone"
+                                placeholder="07700 000000" autocomplete="tel">
+                        </div>
+                        <div class="quote-form__field">
+                            <label class="field-label" for="enquiry-message">Message</label>
+                            <textarea class="field-input field-input--textarea" id="enquiry-message" name="message"
+                                rows="4" maxlength="2000"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary btn-primary--block service-book-card__submit" disabled>
+                            <span class="btn-primary__spinner" aria-hidden="true"></span>
+                            <span class="btn-primary__label">Book Now</span>
+                            <img src="/icons/arrow-right.svg" alt="" class="btn-primary__icon" width="16" height="16">
+                        </button>
+                    </form>
+
+                    <p class="service-book-card__whatsapp">
+                        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help.
+                    </p>
                 </aside>
             </div>
         </section>
@@ -317,6 +349,12 @@
                    <article class="service-card">
                         <div class="service-card__media">
                             <img src="/servicesImages/FSC.png" alt="" width="480" height="200">
+                            <a href="/services/fsc/" class="service-card__corner" aria-label="View Fire Alarm Certificate (FSC)">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M4.667 11.333 11.333 4.667M5.333 4.667h6v6" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name"><a href="/services/fsc/" class="service-card__link">Fire Alarm Certificate (FSC)</a></h3>
@@ -324,7 +362,7 @@
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;84.99</span>
+                                    <span class="service-card__price">&pound;69.99 <span class="price-novat">No VAT</span></span>
                                 </div>
                                 <a href="/book-now/?propertyType=residential&amp;service=fsc" class="service-card__cta">
                                     <span>Book Now</span>
@@ -342,6 +380,12 @@
                     <article class="service-card">
                         <div class="service-card__media">
                             <img src="/servicesImages/FRA.png" alt="" width="480" height="200">
+                            <a href="/services/fra/" class="service-card__corner" aria-label="View Fire Safety Risk Assessment (FRA)">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M4.667 11.333 11.333 4.667M5.333 4.667h6v6" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name"><a href="/services/fra/" class="service-card__link">Fire Safety Risk Assessment (FRA)</a></h3>
@@ -349,7 +393,7 @@
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;175.95</span>
+                                    <span class="service-card__price">&pound;159.99 <span class="price-novat">No VAT</span></span>
                                 </div>
                                 <a href="/book-now/?propertyType=residential&amp;service=fra" class="service-card__cta">
                                     <span>Book Now</span>
@@ -367,6 +411,12 @@
                     <article class="service-card">
                         <div class="service-card__media">
                             <img src="/servicesImages/PAT.png" alt="" width="480" height="200">
+                            <a href="/services/pat/" class="service-card__corner" aria-label="View Portable Appliance (PAT)">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M4.667 11.333 11.333 4.667M5.333 4.667h6v6" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
                         </div>
                         <div class="service-card__content">
                             <h3 class="service-card__name"><a href="/services/pat/" class="service-card__link">Portable Appliance (PAT)</a></h3>
@@ -374,7 +424,7 @@
                             <div class="service-card__meta">
                                 <div class="service-card__pricing">
                                     <span class="service-card__from">Starting from</span>
-                                    <span class="service-card__price">&pound;180</span>
+                                    <span class="service-card__price">&pound;54.99 <span class="price-novat">No VAT</span></span>
                                 </div>
                                 <a href="/book-now/?propertyType=residential&amp;service=pat" class="service-card__cta">
                                     <span>Book Now</span>
@@ -399,8 +449,7 @@
                         <h2 id="faq-title" class="faq__title">
                             Questions <br/><span class="faq__title-accent">Answered FAQ</span>
                         </h2>
-                        <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
-                            same-week availability, and certificates sent within 24 hours.</p>
+                        <p class="faq__lead">Accredited engineers across London and the M25. Same-week visits, and Asbestos Report issued within 5&ndash;8 working days.</p>
                         <a href="/book-now/?propertyType=residential&amp;service=asbestos" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
@@ -425,7 +474,7 @@
                             </div>
                             <a href="https://wa.me/447350538874" class="faq-help__whatsapp" target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="../../icons/message.svg" alt="" width="16" height="16">
+                                <img src="../../icons/whatsapp.svg" alt="" width="16" height="16">
                                 Chat on WhatsApp
                             </a>
                         </aside>
@@ -454,7 +503,7 @@
 
                             <details class="faq-item">
                                 <summary class="faq-item__question">
-                                    <span>What's the difference between a management survey and a refurbishment survey?</span>
+                                    <span>What&rsquo;s the difference between a management survey and a refurbishment survey?</span>
                                     <span class="faq-item__icon" aria-hidden="true">
                                         <svg class="faq-item__icon-closed" viewBox="0 0 14 14" fill="none">
                                             <path d="M3.5 7H10.5M10.5 7L7.5 4M10.5 7L7.5 10" stroke="currentColor"
@@ -505,7 +554,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>You'll receive a clear report on its location and condition, with recommendations on whether it can be safely managed in place or should be removed. Higher-risk removal work must be carried out by an HSE-licensed contractor.</p>
+                                    <p>You&rsquo;ll receive a clear report on its location and condition, with recommendations on whether it can be safely managed in place or should be removed. Higher-risk removal work must be carried out by an HSE-licensed contractor.</p>
                                 </div>
                             </details>
 
@@ -524,7 +573,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>The duty to manage doesn't apply inside a single private dwelling. A refurbishment survey is still needed before building work that could disturb asbestos.</p>
+                                    <p>The duty to manage doesn&rsquo;t apply inside a single private dwelling. A refurbishment survey is still needed before building work that could disturb asbestos.</p>
                                 </div>
                             </details>
 

@@ -148,9 +148,8 @@
                         </form>
 
                         <p class="quote-card__footer">
-                            Prefer to talk?
-                            <a href="https://wa.me/447350538874" class="quote-card__whatsapp" target="_blank"
-                                rel="noopener noreferrer">WhatsApp 07350 538874</a>
+                            Prefer to talk? <a href="https://wa.me/447350538874" class="quote-card__whatsapp" target="_blank"
+                                rel="noopener noreferrer">WhatsApp us</a> for instant help.
                         </p>
                     </aside>
                 </div>
@@ -254,7 +253,7 @@
                             Work Backed by Customer
                             <span class="why-cta__accent">Satisfaction</span>
                         </h3>
-                        <p class="why-cta__text">WWe ensure everything works perfectly and you're completely satisfied before we leave — trusted by landlords and letting agents across London..</p>
+                        <p class="why-cta__text">We ensure everything works perfectly and you're completely satisfied before we leave — trusted by landlords and letting agents across London.</p>
                         <a href="#services" class="why-cta__btn">
                             <span>Explore all our services</span>
                             <span class="why-cta__btn-arrow" aria-hidden="true">
@@ -302,7 +301,7 @@
 
                         <div class="estimate-calc__card">
                             <div class="estimate-field">
-                                <label class="field-label" for="estimate-postcode">Your postcode</label>
+                                <label class="field-label" for="estimate-postcode">Your postcode*</label>
                                 <input class="field-input" type="text" id="estimate-postcode" name="estimate-postcode"
                                     autocomplete="off" autocapitalize="characters" spellcheck="false"
                                     placeholder="e.g. SW1A 1AA">
@@ -329,8 +328,8 @@
                                     height="16">
                             </a>
                             <p class="estimate-price-box__whatsapp">
-                                Or <a href="https://wa.me/447350538874" class="estimate-price-box__whatsapp-link"
-                                    target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help
+                                Prefer to talk? <a href="https://wa.me/447350538874" class="estimate-price-box__whatsapp-link"
+                                    target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help.
                             </p>
                         </div>
                     </aside>
@@ -411,112 +410,122 @@
                         Every London Borough.
                         <span class="coverage__title-accent">Every Property Type.</span>
                     </h2>
-                    <p class="coverage__lead">We&rsquo;ve streamlined the process to get your property certified with
-                        zero hassle</p>
+                    <p class="coverage__lead">Full coverage across all 32 London boroughs and in and around the M25 &mdash;
+                        residential, commercial and everything in between.</p>
 
-                    <div class="coverage-acc" id="coverage-acc">
-                        <details class="coverage-acc__item" open>
-                            <summary class="coverage-acc__summary">
-                                <span class="coverage-acc__copy">
-                                    <span class="coverage-acc__name">Inner London</span>
-                                    <span class="coverage-acc__meta">Zone 1–2</span>
-                                </span>
-                                <span class="coverage-acc__icon" aria-hidden="true"></span>
-                            </summary>
-                            <div class="coverage-acc__body">
-                                <ul>
-                                    <li>Hammersmith &amp; Fulham</li>
-                                    <li>Kensington &amp; Chelsea</li>
-                                    <li>Westminster</li>
-                                    <li>Southwark</li>
-                                </ul>
+                    <div class="coverage-zones" id="coverage-zones">
+                        <div class="coverage-zone coverage-zone--active">
+                            <button type="button" class="coverage-zone__tab" id="coverage-tab-inner" data-zone="inner"
+                                aria-pressed="true" aria-controls="coverage-list-inner coverage-map">
+                                <span class="coverage-zone__name">Inner London</span>
+                                <span class="coverage-zone__icon" aria-hidden="true"></span>
+                            </button>
+                            <div class="coverage-zone__list" id="coverage-list-inner">
                                 <ul>
                                     <li>City of London</li>
-                                    <li>Tower Hamlets</li>
-                                    <li>Camden</li>
                                     <li>Hackney</li>
+                                    <li>Kensington &amp; Chelsea</li>
+                                    <li>Southwark</li>
+                                    <li>Westminster</li>
                                 </ul>
                                 <ul>
-                                    <li>Wandsworth</li>
-                                    <li>Lewisham</li>
+                                    <li>Camden</li>
+                                    <li>Hammersmith &amp; Fulham</li>
                                     <li>Lambeth</li>
+                                    <li>Tower Hamlets</li>
+                                    <li>Wandsworth</li>
+                                </ul>
+                                <ul>
+                                    <li>Greenwich</li>
                                     <li>Islington</li>
+                                    <li>Lewisham</li>
                                 </ul>
                             </div>
-                        </details>
+                        </div>
 
-                        <details class="coverage-acc__item">
-                            <summary class="coverage-acc__summary">
-                                <span class="coverage-acc__copy">
-                                    <span class="coverage-acc__name">Outer London</span>
-                                    <span class="coverage-acc__meta">Zone 3–6</span>
-                                </span>
-                                <span class="coverage-acc__icon" aria-hidden="true"></span>
-                            </summary>
-                            <div class="coverage-acc__body">
+                        <div class="coverage-zone">
+                            <button type="button" class="coverage-zone__tab" id="coverage-tab-outer" data-zone="outer"
+                                aria-pressed="false" aria-controls="coverage-list-outer coverage-map">
+                                <span class="coverage-zone__name">Outer London</span>
+                                <span class="coverage-zone__icon" aria-hidden="true"></span>
+                            </button>
+                            <div class="coverage-zone__list" id="coverage-list-outer" hidden>
                                 <ul>
+                                    <li>Barking &amp; Dagenham</li>
                                     <li>Barnet</li>
+                                    <li>Bexley</li>
                                     <li>Brent</li>
+                                    <li>Bromley</li>
                                     <li>Croydon</li>
                                     <li>Ealing</li>
                                 </ul>
                                 <ul>
                                     <li>Enfield</li>
+                                    <li>Haringey</li>
                                     <li>Harrow</li>
-                                    <li>Hounslow</li>
-                                    <li>Redbridge</li>
-                                </ul>
-                                <ul>
-                                    <li>Waltham Forest</li>
-                                    <li>Bromley</li>
                                     <li>Havering</li>
+                                    <li>Hillingdon</li>
+                                    <li>Hounslow</li>
+                                    <li>Kingston upon Thames</li>
+                                </ul>
+                                <ul>
+                                    <li>Merton</li>
+                                    <li>Newham</li>
+                                    <li>Redbridge</li>
+                                    <li>Richmond upon Thames</li>
                                     <li>Sutton</li>
+                                    <li>Waltham Forest</li>
                                 </ul>
                             </div>
-                        </details>
+                        </div>
 
-                        <details class="coverage-acc__item">
-                            <summary class="coverage-acc__summary">
-                                <span class="coverage-acc__copy">
-                                    <span class="coverage-acc__name">M25 Corridor</span>
-                                    <span class="coverage-acc__meta">Greater South East</span>
-                                </span>
-                                <span class="coverage-acc__icon" aria-hidden="true"></span>
-                            </summary>
-                            <div class="coverage-acc__body">
-                                <ul>
-                                    <li>Watford</li>
-                                    <li>St Albans</li>
-                                    <li>Luton</li>
-                                    <li>Reading</li>
-                                </ul>
-                                <ul>
-                                    <li>Slough</li>
-                                    <li>Windsor</li>
-                                    <li>Guildford</li>
-                                    <li>Woking</li>
-                                </ul>
-                                <ul>
-                                    <li>Sevenoaks</li>
-                                    <li>Dartford</li>
-                                    <li>Crawley</li>
-                                    <li>Chelmsford</li>
-                                </ul>
+                        <div class="coverage-zone">
+                            <button type="button" class="coverage-zone__tab" id="coverage-tab-m25" data-zone="m25"
+                                aria-pressed="false" aria-controls="coverage-list-m25 coverage-map">
+                                <span class="coverage-zone__name">M25 London</span>
+                                <span class="coverage-zone__icon" aria-hidden="true"></span>
+                            </button>
+                            <div class="coverage-zone__list" id="coverage-list-m25" hidden>
+                                <div class="coverage-zone__group">
+                                    <p class="coverage-zone__group-title">Hertfordshire</p>
+                                    <ul>
+                                        <li>Watford</li>
+                                        <li>Rickmansworth</li>
+                                        <li>Borehamwood</li>
+                                        <li>Potters Bar</li>
+                                        <li>Cheshunt</li>
+                                    </ul>
+                                </div>
+                                <div class="coverage-zone__group">
+                                    <p class="coverage-zone__group-title">Surrey</p>
+                                    <ul>
+                                        <li>Esher</li>
+                                        <li>Walton-on-Thames</li>
+                                        <li>Weybridge</li>
+                                        <li>Epsom</li>
+                                        <li>Leatherhead</li>
+                                        <li>Caterham</li>
+                                        <li>Banstead</li>
+                                    </ul>
+                                </div>
+                                <div class="coverage-zone__group">
+                                    <p class="coverage-zone__group-title">Kent &amp; Essex</p>
+                                    <ul>
+                                        <li>Dartford</li>
+                                        <li>Swanley</li>
+                                        <li>Waltham Abbey</li>
+                                        <li>Loughton</li>
+                                        <li>Buckhurst Hill</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </details>
+                        </div>
                     </div>
                 </div>
 
-                <div class="coverage__map" aria-label="London coverage map">
-                    <img src="images/coverage-map.png" alt="Map of London coverage areas" class="coverage__map-img"
-                        width="572" height="580">
-                    <div class="coverage__legend">
-                        <span class="coverage__legend-dot" aria-hidden="true"></span>
-                        <div>
-                            <p class="coverage__legend-title">Inner London <span>· Same-day</span></p>
-                            <p class="coverage__legend-meta">12 areas covered</p>
-                        </div>
-                    </div>
+                <div class="coverage__map" id="coverage-map">
+                    <img src="images/coverage-map-inner.webp" alt="Map of Inner London coverage" class="coverage__map-img"
+                        width="1448" height="1086" decoding="async">
                 </div>
             </div>
         </section>
@@ -881,8 +890,7 @@
                         <h2 id="faq-title" class="faq__title">
                             Questions <br/><span class="faq__title-accent">Answered FAQ</span>
                         </h2>
-                        <p class="faq__lead">Our certified engineers cover all London properties. Fast bookings,
-                            same-week availability, and certificates sent within 24 hours.</p>
+                        <p class="faq__lead">Accredited engineers across London and the M25. Same-week visits, and most certificates issued within 24&ndash;48 hours.</p>
                         <a href="/book-now/" class="btn-primary btn-primary--header faq__book">
                             <span class="btn-primary__label">Book an inspection</span>
                             <span class="btn-primary__arrow" aria-hidden="true">
@@ -907,7 +915,7 @@
                             </div>
                             <a href="https://wa.me/447350538874" class="faq-help__whatsapp" target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="icons/message.svg" alt="" width="16" height="16">
+                                <img src="icons/whatsapp.svg" alt="" width="16" height="16">
                                 Chat on WhatsApp
                             </a>
                         </aside>
@@ -930,7 +938,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>It depends on the certificate. Gas and electrical certificates are typically issued within 24–48 hours of the inspection, while EPCs and Fire Risk Assessments usually take a few days longer. You'll receive it by email as an official PDF, ready to share with tenants or agents.</p>
+                                    <p>It depends on the certificate. Gas and electrical certificates are typically issued within 24&ndash;48 hours of the inspection, while EPCs and Fire Risk Assessments usually take a few days longer. You&rsquo;ll receive it by email as an official PDF, ready to share with tenants or agents.</p>
                                 </div>
                             </details>
 
@@ -1025,7 +1033,7 @@
                                     </span>
                                 </summary>
                                 <div class="faq-item__answer">
-                                    <p>We'll flag any faults on site, record them on your report, and provide a clear breakdown and quote for the remedial work needed. Once the work is done, the property can be retested and certified.</p>
+                                    <p>We&rsquo;ll flag any faults on site, record them on your report, and provide a clear breakdown and quote for the remedial work needed. Once the work is done, the property can be retested and certified.</p>
                                 </div>
                             </details>
 
@@ -1101,15 +1109,43 @@
         })();
 
         (function () {
-            var acc = document.getElementById('coverage-acc');
-            if (!acc) return;
-            acc.addEventListener('toggle', function (event) {
-                var item = event.target;
-                if (!item.open || !item.classList.contains('coverage-acc__item')) return;
-                acc.querySelectorAll('.coverage-acc__item[open]').forEach(function (other) {
-                    if (other !== item) other.removeAttribute('open');
+            var zones = document.getElementById('coverage-zones');
+            var img = document.querySelector('#coverage-map .coverage__map-img');
+            if (!zones || !img) return;
+            var MAPS = {
+                inner: { src: 'images/coverage-map-inner.webp', alt: 'Map of Inner London coverage' },
+                outer: { src: 'images/coverage-map-outer.webp', alt: 'Map of Outer London coverage' },
+                m25: { src: 'images/coverage-map-m25.webp', alt: 'Map of M25 London coverage' }
+            };
+            var swapTimer = null;
+
+            // Warm the cache so switching zones doesn't wait on the network.
+            Object.keys(MAPS).forEach(function (key) { new Image().src = MAPS[key].src; });
+
+            function showMap(key) {
+                var map = MAPS[key];
+                if (!map || img.getAttribute('src') === map.src) return;
+                clearTimeout(swapTimer);
+                img.classList.add('is-fading');
+                swapTimer = setTimeout(function () {
+                    img.src = map.src;
+                    img.alt = map.alt;
+                    img.classList.remove('is-fading');
+                }, 100);
+            }
+
+            zones.addEventListener('click', function (event) {
+                var tab = event.target.closest('.coverage-zone__tab');
+                if (!tab || tab.getAttribute('aria-pressed') === 'true') return;
+                zones.querySelectorAll('.coverage-zone').forEach(function (zone) {
+                    var btn = zone.querySelector('.coverage-zone__tab');
+                    var active = btn === tab;
+                    zone.classList.toggle('coverage-zone--active', active);
+                    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+                    zone.querySelector('.coverage-zone__list').hidden = !active;
                 });
-            }, true);
+                showMap(tab.getAttribute('data-zone'));
+            });
         })();
 
     </script>
