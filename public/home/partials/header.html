@@ -5,12 +5,17 @@
         </a>
 
         <div class="site-header__nav-wrap" id="site-nav-drawer">
-            <button type="button" class="site-header__drawer-close" aria-label="Close menu">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" />
-                </svg>
-            </button>
+            <div class="site-header__drawer-head">
+                <a href="/" class="site-header__drawer-logo" aria-label="Landlord Safety Inspection home">
+                    <img src="/icons/LandlordIcon.svg" alt="" width="145" height="32">
+                </a>
+                <button type="button" class="site-header__drawer-close" aria-label="Close menu">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
             <nav class="nav" aria-label="Main navigation">
                 <div class="nav-item nav-item--mega" data-mega="residential">
                     <a href="#services" class="nav-link nav-link--dropdown" data-services-tab-link="residential">
@@ -70,7 +75,25 @@
                     </div>
                 </div>
                 <a href="/area-coverage/" class="nav-link">Area Coverage</a>
+                <a href="/about-us/" class="nav-link nav-link--mobile-only">About Us</a>
+                <a href="/contact/" class="nav-link nav-link--mobile-only">Contact Us</a>
             </nav>
+            <div class="site-header__drawer-footer">
+                <a href="/book-now/" class="btn-primary btn-primary--header site-header__drawer-book">
+                    <span class="btn-primary__label">Book Now</span>
+                    <span class="btn-primary__arrow" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                </a>
+                <ul class="site-header__drawer-contact">
+                    <li><a href="tel:+442045818191">020 4581 8191</a></li>
+                    <li><a href="mailto:sales@landlordsafetyinspection.co.uk">sales@landlordsafetyinspection.co.uk</a></li>
+                    <li>Mon&ndash;Fri: 8AM&ndash;6PM</li>
+                </ul>
+            </div>
         </div>
 
         <div class="site-header__actions">

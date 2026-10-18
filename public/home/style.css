@@ -7956,3 +7956,326 @@ html {
     bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* Mobile action bar: floating white card, no border, tinted icon buttons, full-width Book Now */
+@media (max-width: 47.99rem) {
+  .mobile-action-bar {
+    gap: var(--space-3);
+    padding: 6px;
+    background: var(--color-neutral-white);
+    border: 0;
+    box-shadow: 0 8px 24px rgba(10, 15, 46, 0.16), 0 0 0 1px rgba(10, 15, 46, 0.04);
+  }
+
+  .mobile-action-bar__icon {
+    width: 44px;
+    height: 44px;
+    color: var(--color-neutral-midnight);
+    background: var(--color-brand-blue-50);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .mobile-action-bar__icon:active {
+    color: var(--color-neutral-white);
+    background: var(--color-primary);
+  }
+
+  .mobile-action-bar__book {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 var(--space-4);
+    font-size: var(--font-size-body-sm);
+    text-align: center;
+  }
+}
+
+/* Mobile action bar: compact Book Now, softer corners */
+@media (max-width: 47.99rem) {
+  .mobile-action-bar {
+    justify-content: space-between;
+    border-radius: var(--radius-lg);
+  }
+
+  .mobile-action-bar__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+  }
+
+  .mobile-action-bar__book {
+    flex: 0 0 auto;
+    height: 40px;
+    padding: 0 var(--space-5);
+    font-size: 14px;
+    border-radius: var(--radius-md);
+  }
+}
+
+/* Mobile action bar: Book Now uses the site's primary pill button (label + arrow circle), rounder card */
+@media (max-width: 47.99rem) {
+  .mobile-action-bar {
+    border-radius: var(--radius-xl);
+  }
+
+  .mobile-action-bar__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+  }
+
+  .mobile-action-bar__book.btn-primary--header {
+    flex: 0 0 auto;
+    height: auto;
+    padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+    font: var(--text-ui-button);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-full);
+  }
+}
+
+/* ==========================================================================
+   Mobile navigation drawer — full screen (below 1000px)
+   ========================================================================== */
+
+.site-header__drawer-head,
+.site-header__drawer-footer {
+  display: none;
+}
+
+@media (max-width: 62.49rem) {
+  .site-header__nav-wrap {
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--color-neutral-white);
+    box-shadow: none;
+    transform: translateY(-12px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, visibility 0s linear 0.3s;
+  }
+
+  .site-header__nav-wrap.is-open {
+    transform: none;
+    opacity: 1;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, visibility 0s;
+  }
+
+  .site-header__drawer-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--layout-pad-x);
+    background: var(--color-neutral-white);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__drawer-logo img {
+    display: block;
+    height: 32px;
+    width: auto;
+  }
+
+  .site-header__drawer-close {
+    align-self: auto;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    color: var(--color-neutral-midnight);
+    background: var(--color-brand-blue-50);
+    border: 0;
+    border-radius: var(--radius-full);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .site-header__drawer-close:hover,
+  .site-header__drawer-close:active {
+    color: var(--color-neutral-white);
+    background: var(--color-primary);
+  }
+
+  .site-header__nav-wrap .nav {
+    flex: 1 0 auto;
+    width: 100%;
+    gap: 0;
+    padding: var(--space-4) var(--layout-pad-x) var(--space-6);
+    box-sizing: border-box;
+  }
+
+  .site-header__nav-wrap .nav-item,
+  .site-header__nav-wrap .nav > .nav-link {
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__nav-wrap .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) 0;
+    font-family: var(--font-family-hero);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    color: var(--color-neutral-midnight);
+  }
+
+  .site-header__nav-wrap .nav-link__icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  /* Animated accordion instead of display toggling */
+  .nav-item__mobile-panel {
+    display: block;
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+  }
+
+  .nav-item--mega.is-open .nav-item__mobile-panel {
+    max-height: 48rem;
+    padding: 0 0 var(--space-4);
+    opacity: 1;
+  }
+
+  .nav-item__mobile-list a {
+    padding: var(--space-3) 0 var(--space-3) var(--space-4);
+    font-size: 15px;
+    line-height: 22px;
+    color: #6b7a99;
+    border-left: 2px solid var(--color-border);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .nav-item__mobile-list a:hover,
+  .nav-item__mobile-list a:active {
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+  }
+
+  .nav-item__mobile-all {
+    margin: var(--space-2) 0 0 var(--space-4);
+    padding-top: 0;
+    border-top: 0;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .site-header__drawer-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--layout-pad-x) calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+    background: var(--color-brand-blue-50);
+  }
+
+  .site-header__drawer-book {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    font-size: 16px;
+  }
+
+  .site-header__drawer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-header__drawer-contact li,
+  .site-header__drawer-contact a {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    line-height: 22px;
+    color: #6b7a99;
+    text-decoration: none;
+  }
+
+  .site-header__drawer-contact a:hover {
+    color: var(--color-primary);
+  }
+
+  /* Drawer sits above the floating action bar and back-to-top button */
+  .site-header__nav-wrap {
+    z-index: 300;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header__nav-wrap,
+  .nav-item__mobile-panel {
+    transition: none;
+  }
+}
+
+/* About Us / Contact Us appear in the nav only inside the mobile drawer */
+.nav-link--mobile-only {
+  display: none;
+}
+
+@media (max-width: 62.49rem) {
+  .site-header__nav-wrap .nav-link.nav-link--mobile-only {
+    display: flex;
+  }
+}
+
+/* CTA banner on mobile: call and Book Now buttons share the same width and height */
+@media (max-width: 47.99rem) {
+  .cta-book__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .cta-book__actions .btn-cta,
+  .cta-book__actions .btn-primary {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .cta-book__actions .btn-primary--header {
+    justify-content: space-between;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  }
+}
+
+/* Mobile CTA buttons: capped at 166px wide */
+@media (max-width: 47.99rem) {
+  .cta-book__actions {
+    align-items: center;
+    max-width: none;
+  }
+
+  .cta-book__actions .btn-cta,
+  .cta-book__actions .btn-primary {
+    width: 100%;
+    max-width: 166px;
+  }
+
+  .cta-book__actions .btn-cta {
+    padding-inline: 12px;
+  }
+
+  .cta-book__actions .btn-primary--header {
+    padding-left: 1rem;
+  }
+}
