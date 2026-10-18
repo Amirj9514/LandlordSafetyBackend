@@ -301,3 +301,65 @@
     if (event.matches) closeNavDrawer();
   });
 })();
+
+// Smooth in-page scrolling, hash landing (e.g. /#faq) and a floating back-to-top button.
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var behavior = reduceMotion ? 'auto' : 'smooth';
+
+  function headerOffset() {
+    var header = document.querySelector('.site-header');
+    return header ? header.offsetHeight : 0;
+  }
+
+  function scrollToHash(hash, smooth) {
+    if (!hash || hash.length < 2) return false;
+    var target;
+    try { target = document.getElementById(decodeURIComponent(hash.slice(1))); } catch (e) { return false; }
+    if (!target) return false;
+    var top = target.getBoundingClientRect().top + window.scrollY - headerOffset();
+    window.scrollTo({ top: top, behavior: smooth ? behavior : 'auto' });
+    return true;
+  }
+
+  // Same-page anchor links (including "/#faq" while already on the home page).
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest('a[href*="#"]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    var url = new URL(link.href, window.location.href);
+    if (url.pathname.replace(/\/$/, '') !== window.location.pathname.replace(/\/$/, '') || url.search !== window.location.search) return;
+    if (scrollToHash(url.hash, true)) {
+      event.preventDefault();
+      history.pushState(null, '', url.hash);
+    }
+  });
+
+  // Landing on another page's anchor: wait for layout, then glide to it.
+  if (window.location.hash) {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    window.addEventListener('load', function () {
+      setTimeout(function () { scrollToHash(window.location.hash, true); }, 150);
+    });
+  }
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'back-to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: behavior });
+  });
+  document.body.appendChild(btn);
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    btn.classList.toggle('is-visible', window.scrollY > 600);
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+})();
