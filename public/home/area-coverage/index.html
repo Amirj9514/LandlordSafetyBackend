@@ -72,8 +72,7 @@
                             Find your
                             <span class="area-finder__title-accent">Borough</span>
                         </h2>
-                        <p class="area-finder__lead">We cover all 32 London boroughs plus the M25 corridor &mdash;
-                            find your area below, then book online for an instant, accurate price.</p>
+                        <p class="area-finder__lead">Find your borough below, or search by postcode to confirm we cover your area.</p>
                     </div>
 
                     <div class="area-finder__controls">
@@ -84,8 +83,6 @@
                                 aria-controls="panel-outer-london" aria-selected="false" data-area-tab="outer-london">Outer London</button>
                             <button type="button" class="area-tabs__btn" role="tab" id="tab-m25-areas"
                                 aria-controls="panel-m25-areas" aria-selected="false" data-area-tab="m25-areas">M25 London</button>
-                            <button type="button" class="area-tabs__btn" role="tab" id="tab-central-london"
-                                aria-controls="panel-central-london" aria-selected="false" data-area-tab="central-london">Central London</button>
                         </div>
                         <div class="area-search" id="area-search">
                             <label class="area-search__label" for="area-search-input">Search by postcode or area</label>
@@ -117,11 +114,11 @@
                             </div>
                             <div class="area-group__stats">
                                 <p class="area-group__count">12 Boroughs</p>
-                                <p class="area-group__postcodes">71 postcodes.</p>
+                                <p class="area-group__postcodes">71 postcodes</p>
                             </div>
                         </header>
                         <div class="area-group__grid">
-                            <article class="area-card" data-area-search="city of london ec1 ec2 ec3 ec4">
+                            <article class="area-card" data-not-borough data-area-search="city of london ec1 ec2 ec3 ec4">
                                 <div class="area-card__top">
                                     <h4 class="area-card__name">City of London</h4>
                                     <p class="area-card__desc">Converted offices, serviced apartments.</p>
@@ -495,7 +492,7 @@
                             </div>
                             <div class="area-group__stats">
                                 <p class="area-group__count">20 Boroughs</p>
-                                <p class="area-group__postcodes">130 postcodes.</p>
+                                <p class="area-group__postcodes">130 postcodes</p>
                             </div>
                         </header>
                         <div class="area-group__grid">
@@ -1075,349 +1072,132 @@
                     <div class="area-group" id="panel-m25-areas" role="tabpanel" aria-labelledby="tab-m25-areas" data-area-panel="m25-areas" hidden>
                         <header class="area-group__header">
                             <div class="area-group__intro">
-                                <h3 class="area-group__name">M25 Areas</h3>
-                                <p class="area-group__desc">Towns just beyond Greater London across Hertfordshire, Essex, Surrey, Kent, Berkshire and beyond.</p>
+                                <h3 class="area-group__name">M25 London</h3>
+                                <p class="area-group__desc">Coverage extending beyond Greater London into Hertfordshire, Surrey, Kent and Essex &mdash; everywhere within the M25 boundary.</p>
                             </div>
                             <div class="area-group__stats">
-                                <p class="area-group__count">13 Areas</p>
-                                <p class="area-group__postcodes">44 postcodes.</p>
+                                <p class="area-group__count" data-count-static>Multiple Areas</p>
+                                <p class="area-group__postcodes">44 postcodes</p>
                             </div>
                         </header>
                         <div class="area-group__grid">
-                            <article class="area-card" data-area-search="watford wd17 wd18 wd19 wd23 wd24 wd25">
+                            <article class="area-card" data-area-search="hertfordshire watford st albans luton wd17 wd18 wd19 wd23 wd24 wd25 al1 al2 al3 al4 al5 lu1 lu2 lu3 lu4">
                                 <div class="area-card__top">
-                                    <h4 class="area-card__name">Watford</h4>
-                                    <p class="area-card__desc">Suburban semis, new-build apartments.</p>
+                                    <h4 class="area-card__name">Hertfordshire</h4>
+                                    <p class="area-card__desc">Commuter towns and new-build apartments north of London.</p>
                                 </div>
                                 <div class="area-card__mid">
                                     <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Watford">
+                                    <ul class="area-card__codes" aria-label="Postcodes covered in Hertfordshire">
                                         <li>WD17</li>
                                         <li>WD18</li>
                                         <li>WD19</li>
                                         <li>WD23</li>
                                         <li>WD24</li>
                                         <li>WD25</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="st albans al1 al2 al3 al4 al5">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">St Albans</h4>
-                                    <p class="area-card__desc">Period homes, commuter semis.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in St Albans">
                                         <li>AL1</li>
                                         <li>AL2</li>
                                         <li>AL3</li>
                                         <li>AL4</li>
-                                        <li>AL5</li>
+                                        <li hidden>AL5</li>
+                                        <li hidden>LU1</li>
+                                        <li hidden>LU2</li>
+                                        <li hidden>LU3</li>
+                                        <li hidden>LU4</li>
+                                        <li class="area-card__more-item"><button type="button" class="area-card__more">+5 more</button></li>
                                     </ul>
                                 </div>
                                 <div class="area-card__bottom">
                                     <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
+                                        <span class="btn-primary__label">Book Now</span>
+                                        <span class="btn-primary__arrow" aria-hidden="true">
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                                <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
                                     </a>
                                 </div>
                             </article>
-                            <article class="area-card" data-area-search="luton lu1 lu2 lu3 lu4">
+                            <article class="area-card" data-area-search="surrey guildford woking reading slough windsor crawley gu1 gu2 gu4 gu21 gu22 kt14 rg1 rg2 rg4 rg30 sl1 sl2 sl3 sl4 rh10 rh11">
                                 <div class="area-card__top">
-                                    <h4 class="area-card__name">Luton</h4>
-                                    <p class="area-card__desc">Terraced houses, HMOs.</p>
+                                    <h4 class="area-card__name">Surrey</h4>
+                                    <p class="area-card__desc">Surrey and the Thames Valley towns within the M25.</p>
                                 </div>
                                 <div class="area-card__mid">
                                     <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Luton">
-                                        <li>LU1</li>
-                                        <li>LU2</li>
-                                        <li>LU3</li>
-                                        <li>LU4</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="chelmsford cm1 cm2 cm3">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Chelmsford</h4>
-                                    <p class="area-card__desc">Family homes, new-build estates.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Chelmsford">
-                                        <li>CM1</li>
-                                        <li>CM2</li>
-                                        <li>CM3</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="brentwood cm13 cm14 cm15">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Brentwood</h4>
-                                    <p class="area-card__desc">Detached homes, commuter semis.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Brentwood">
-                                        <li>CM13</li>
-                                        <li>CM14</li>
-                                        <li>CM15</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="reading rg1 rg2 rg4 rg30">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Reading</h4>
-                                    <p class="area-card__desc">Victorian terraces, student HMOs.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Reading">
+                                    <ul class="area-card__codes" aria-label="Postcodes covered in Surrey">
+                                        <li>GU1</li>
+                                        <li>GU2</li>
+                                        <li>GU4</li>
+                                        <li>GU21</li>
+                                        <li>GU22</li>
+                                        <li>KT14</li>
                                         <li>RG1</li>
                                         <li>RG2</li>
                                         <li>RG4</li>
                                         <li>RG30</li>
+                                        <li hidden>SL1</li>
+                                        <li hidden>SL2</li>
+                                        <li hidden>SL3</li>
+                                        <li hidden>SL4</li>
+                                        <li hidden>RH10</li>
+                                        <li hidden>RH11</li>
+                                        <li class="area-card__more-item"><button type="button" class="area-card__more">+6 more</button></li>
                                     </ul>
                                 </div>
                                 <div class="area-card__bottom">
                                     <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
+                                        <span class="btn-primary__label">Book Now</span>
+                                        <span class="btn-primary__arrow" aria-hidden="true">
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                                <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
                                     </a>
                                 </div>
                             </article>
-                            <article class="area-card" data-area-search="slough sl1 sl2 sl3">
+                            <article class="area-card" data-area-search="kent and essex kent essex chelmsford brentwood sevenoaks dartford cm1 cm2 cm3 cm13 cm14 cm15 tn13 tn14 tn15 br8 da1 da2 da10">
                                 <div class="area-card__top">
-                                    <h4 class="area-card__name">Slough</h4>
-                                    <p class="area-card__desc">Terraced houses, new-build flats.</p>
+                                    <h4 class="area-card__name">Kent &amp; Essex</h4>
+                                    <p class="area-card__desc">Market towns and commuter belt east and south-east of London.</p>
                                 </div>
                                 <div class="area-card__mid">
                                     <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Slough">
-                                        <li>SL1</li>
-                                        <li>SL2</li>
-                                        <li>SL3</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="windsor sl4">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Windsor</h4>
-                                    <p class="area-card__desc">Period homes, riverside apartments.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Windsor">
-                                        <li>SL4</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="guildford gu1 gu2 gu4">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Guildford</h4>
-                                    <p class="area-card__desc">Family homes, student lets.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Guildford">
-                                        <li>GU1</li>
-                                        <li>GU2</li>
-                                        <li>GU4</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="woking gu21 gu22 kt14">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Woking</h4>
-                                    <p class="area-card__desc">Commuter semis, new-build apartments.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Woking">
-                                        <li>GU21</li>
-                                        <li>GU22</li>
-                                        <li>KT14</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="sevenoaks tn13 tn14 tn15 br8">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Sevenoaks</h4>
-                                    <p class="area-card__desc">Detached homes, period cottages.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Sevenoaks">
+                                    <ul class="area-card__codes" aria-label="Postcodes covered in Kent &amp; Essex">
+                                        <li>CM1</li>
+                                        <li>CM2</li>
+                                        <li>CM3</li>
+                                        <li>CM13</li>
+                                        <li>CM14</li>
+                                        <li>CM15</li>
                                         <li>TN13</li>
                                         <li>TN14</li>
                                         <li>TN15</li>
                                         <li>BR8</li>
+                                        <li hidden>DA1</li>
+                                        <li hidden>DA2</li>
+                                        <li hidden>DA10</li>
+                                        <li class="area-card__more-item"><button type="button" class="area-card__more">+3 more</button></li>
                                     </ul>
                                 </div>
                                 <div class="area-card__bottom">
                                     <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="dartford da1 da2 da10">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Dartford</h4>
-                                    <p class="area-card__desc">Terraced houses, new-build estates.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Dartford">
-                                        <li>DA1</li>
-                                        <li>DA2</li>
-                                        <li>DA10</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="area-card" data-area-search="crawley rh10 rh11">
-                                <div class="area-card__top">
-                                    <h4 class="area-card__name">Crawley</h4>
-                                    <p class="area-card__desc">Semi-detached homes, new-build flats.</p>
-                                </div>
-                                <div class="area-card__mid">
-                                    <p class="area-card__label">Postcodes Covered</p>
-                                    <ul class="area-card__codes" aria-label="Postcodes covered in Crawley">
-                                        <li>RH10</li>
-                                        <li>RH11</li>
-                                    </ul>
-                                </div>
-                                <div class="area-card__bottom">
-                                    <a href="/book-now/" class="btn-primary btn-primary--header area-card__cta">
-                                    <span class="btn-primary__label">Book Now</span>
-                                    <span class="btn-primary__arrow" aria-hidden="true">
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    </span>
+                                        <span class="btn-primary__label">Book Now</span>
+                                        <span class="btn-primary__arrow" aria-hidden="true">
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                                <path d="M3.333 8h9.334M8 3.333 12.667 8 8 12.667" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
                                     </a>
                                 </div>
                             </article>
                         </div>
                     </div>
 
-                    <div class="area-group" id="panel-central-london" role="tabpanel" aria-labelledby="tab-central-london" data-area-panel="central-london" hidden>
+                    <div class="area-group" id="panel-central-london" role="tabpanel" aria-labelledby="tab-central-london" data-area-panel="central-london" data-area-excluded hidden aria-hidden="true">
                         <header class="area-group__header">
                             <div class="area-group__intro">
                                 <h3 class="area-group__name">Central London</h3>
@@ -1425,11 +1205,11 @@
                             </div>
                             <div class="area-group__stats">
                                 <p class="area-group__count">5 Areas</p>
-                                <p class="area-group__postcodes">57 postcodes.</p>
+                                <p class="area-group__postcodes">57 postcodes</p>
                             </div>
                         </header>
                         <div class="area-group__grid">
-                            <article class="area-card" data-area-search="city of london ec2a ec2m ec2n ec2r ec2v ec2y ec3a ec3m ec3n ec3r ec3v ec4a ec4m ec4n ec4r ec4v ec4y">
+                            <article class="area-card" data-not-borough data-area-search="city of london ec2a ec2m ec2n ec2r ec2v ec2y ec3a ec3m ec3n ec3r ec3v ec4a ec4m ec4n ec4r ec4v ec4y">
                                 <div class="area-card__top">
                                     <h4 class="area-card__name">City of London</h4>
                                     <p class="area-card__desc">Converted offices, serviced apartments, mixed-use.</p>
@@ -1604,9 +1384,9 @@
 
                     <div class="area-empty" id="area-empty" hidden>
                         <p class="area-empty__title">No matching area found</p>
-                        <p class="area-empty__text">We may still cover you &mdash; message us your postcode on
-                            <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp 07350 538874</a>
-                            and we&rsquo;ll confirm straight away.</p>
+                        <p class="area-empty__text">We may still cover you &mdash;
+                            <a href="https://wa.me/447350536874" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+                            your postcode and we&rsquo;ll confirm straight away.</p>
                     </div>
                 </div>
             </div>
@@ -1641,7 +1421,7 @@
                                     <p class="faq-help__subtitle">Our team replies in minutes</p>
                                 </div>
                             </div>
-                            <a href="https://wa.me/447350538874" class="faq-help__whatsapp" target="_blank"
+                            <a href="https://wa.me/447350536874" class="faq-help__whatsapp" target="_blank"
                                 rel="noopener noreferrer">
                                 <img src="/icons/whatsapp.svg" alt="" width="16" height="16">
                                 Chat on WhatsApp

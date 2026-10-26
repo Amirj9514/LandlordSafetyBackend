@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const { LEAD_STATUS } = require('../constants/leadStatus');
 const { SUBMISSION_SOURCE } = require('../constants/submissionSource');
 const { allocateLeadReference } = require('../utils/referenceNumber');
-const { parseContact } = require('../utils/contactParser');
+const { parseContactFields } = require('../utils/contactParser');
 const { PROPERTY_TYPES } = require('../constants/propertyTypes');
 
 const notFound = (message) => {
@@ -13,9 +13,10 @@ const notFound = (message) => {
 };
 
 const createLead = async (body, { source = SUBMISSION_SOURCE.WEBSITE, metadata = {} } = {}) => {
-  const contact = parseContact(body.contact);
+  // Homepage quote form sends `email` and/or `phone`; older copies send a single `contact`.
+  const contact = parseContactFields(body);
   if (!contact.valid) {
-    const error = new Error('Contact must be a valid email address or phone number');
+    const error = new Error(Object.values(contact.errors)[0]);
     error.status = 400;
     throw error;
   }
@@ -57,6 +58,7 @@ const createEnquiry = async (body, { source = SUBMISSION_SOURCE.WEBSITE, metadat
       ...metadata,
       form: 'service_enquiry',
       fullName: body.fullName.trim(),
+      subject: body.subject ? body.subject.trim() : null,
       message: body.message ? body.message.trim() : null,
       service: body.service ? body.service.trim() : null,
     },

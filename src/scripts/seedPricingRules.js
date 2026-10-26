@@ -21,7 +21,7 @@ const serviceIdByCode = async (code) => {
 const residentialRules = async () => {
   const ids = {};
   for (const code of [
-    'gsc', 'boiler', 'eicr', 'pat', 'fsc', 'elc', 'fra', 'epc', 'floorplan', 'asbestos',
+    'gsc', 'boiler', 'eicr', 'pat', 'fsc', 'elc', 'fra', 'epc', 'floorplan', 'asbestos', 'callout',
   ]) {
     ids[code] = await serviceIdByCode(code);
   }
@@ -194,6 +194,16 @@ const residentialRules = async () => {
     sortOrder: 1,
     config: {
       fieldKey: 'configuration',
+    },
+  });
+
+  await upsertRule('callout_line', {
+    ruleType: RULE_TYPES.OPTION_TIER_LOOKUP,
+    scope: RULE_SCOPES.SERVICE_LINE,
+    serviceId: ids.callout,
+    sortOrder: 1,
+    config: {
+      fieldKey: 'faultType',
     },
   });
 

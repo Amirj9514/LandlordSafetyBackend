@@ -21,6 +21,20 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// The Installation / Diagnostic pages became the Non-Emergency Callout pages: keep the old URLs working.
+const MOVED_SERVICE_PAGES = {
+  '/services/installation': '/services/non-emergency-callout/',
+  '/services/commercialinstallation': '/services/CommercialNonEmergencyCallout/',
+};
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  const match = req.path.match(/^(\/home)?(\/services\/[^/]+?)\/?$/i);
+  const target = match && MOVED_SERVICE_PAGES[match[2].toLowerCase()];
+  if (!target) return next();
+  const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+  return res.redirect(301, (match[1] || '') + target + query);
+});
+
 app.use(htmlIncludes(homeDir));
 app.use(express.static(homeDir));
 app.use('/home', htmlIncludes(homeDir));

@@ -111,6 +111,7 @@ const SHARED = {
   fp_bed_extra: 20,
   fp_floor_extra: 39.99,
   co_alarm_install: 35,
+  callout_base: 119.99,
   zone_premium: 0,
   congestion_charge: 18,
   parking_charge: 5,

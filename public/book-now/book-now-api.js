@@ -572,16 +572,17 @@
   };
 
   const SERVICE_UI = {
-    gsc: { title: 'CP12 Gas Safety Certificate', desc: 'Annual Landlord Requirement' },
-    boiler: { title: 'Annual Boiler Service', desc: 'Certificate Plus Boiler Health Check' },
-    eicr: { title: 'EICR', desc: 'Annual Landlord Requirement' },
-    pat: { title: 'PAT Testing', desc: 'Portable Appliance Testing' },
-    fsc: { title: 'Fire Alarm Certificate', desc: 'Annual Landlord Requirement' },
-    elc: { title: 'Emergency Light Certificate', desc: 'Annual Compliance Check' },
-    fra: { title: 'Fire Risk Assessment', desc: 'Commercial & HMO Requirement' },
-    epc: { title: 'Energy Performance Certificate', desc: 'Valid for 10 Years' },
+    gsc: { title: 'Gas Safety Certificate (CP12)', desc: 'Required every 12 months' },
+    boiler: { title: 'Boiler Service', desc: 'Recommended every 12 months' },
+    eicr: { title: 'Electrical Certificate (EICR)', desc: 'Required every 5 years' },
+    pat: { title: 'Portable Appliance Test (PAT)', desc: 'Recommended every 12 months' },
+    fsc: { title: 'Fire Alarm Certificate (FSC)', desc: 'Required every 12 months' },
+    elc: { title: 'Emergency Lighting (ELC)', desc: 'Required every 12 months' },
+    fra: { title: 'Fire Risk Assessment (FRA)', desc: 'HMO & Commercial Review' },
+    epc: { title: 'Energy Performance Certificate', desc: 'Valid for 10 years' },
     floorplan: { title: 'Floor Plan', desc: 'Professional Property Survey' },
     asbestos: { title: 'Asbestos Survey', desc: 'Pre-Renovation Assessment' },
+    callout: { title: 'Non-Emergency Callout', desc: 'Fault finding: Gas, Electric, Fire' },
   };
 
   function categoryTabLabel(name) {
@@ -627,14 +628,14 @@
   function getServicePriceLabel(service) {
     const meta = service.metadata || {};
     if (meta.startsFrom != null) {
-      return `from £${Math.round(Number(meta.startsFrom))}`;
+      return `£${Math.round(Number(meta.startsFrom))}`;
     }
     if (meta.startsFromTierKey) {
       const amount = tierAmount(meta.startsFromTierKey);
-      if (amount != null) return `from £${Math.round(amount)}`;
+      if (amount != null) return `£${Math.round(amount)}`;
     }
     const min = minOptionPrice(service);
-    if (min != null) return `from £${Math.round(min)}`;
+    if (min != null) return `£${Math.round(min)}`;
     if (service.pricingMode === 'quote_only') return 'Quote';
     return '';
   }
@@ -774,6 +775,7 @@
     catalogLoadPromise = fetchCatalog(propertyType)
       .then((data) => {
         catalog = data;
+        catalog.bundles = []; // bundle cards are no longer offered
         Object.keys(catalogServicesByCode).forEach((k) => delete catalogServicesByCode[k]);
         for (const cat of catalog.categories || []) {
           for (const svc of cat.services || []) {
@@ -974,7 +976,7 @@
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
           <label for="${id}">${escapeHtml(q.label)} ${req}</label>
-          <textarea id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" oninput="calcAll()"></textarea>
+          <textarea id="${id}" data-field-key="${escapeHtml(q.fieldKey)}"${q.validation?.placeholder ? ` placeholder="${escapeHtml(q.validation.placeholder)}"` : ''} oninput="calcAll()"></textarea>
         </div>`;
       case 'text':
       default:
@@ -1132,15 +1134,11 @@
     return { ...quote, lines, ...summary };
   }
 
+  // Auto-select the congestion zone from the postcode. A manual choice is kept until the postcode changes.
   function applyZoneDefaultsForDetails() {
-    const regionName =
-      lastQuote?.resolvedRegion?.name ||
-      catalog?.resolvedRegion?.name ||
-      regionPrices?.resolvedRegion?.name ||
-      '';
-    if (!/Zone 1/i.test(regionName)) return;
-    if (typeof window.selectZone === 'function') window.selectZone(true);
-    if (typeof window.selectParking === 'function') window.selectParking(false);
+    const pc = getPostcode();
+    if (state.zoneManualFor && state.zoneManualFor === pc) return;
+    if (typeof window.selectZone === 'function') window.selectZone(BN.inCongestionZone(pc));
   }
 
   function buildQuotePayload() {
@@ -1155,7 +1153,7 @@
       services,
       activeBundleKeys: [...state.activeBundles],
       congestionZone: shouldIncludeSurcharges() ? !!state.congestion : false,
-      parkingAvailable: shouldIncludeSurcharges() ? !!state.parking : true,
+      parkingAvailable: shouldIncludeSurcharges() ? state.parking !== false : true,
     };
   }
 
@@ -1398,6 +1396,7 @@
     updateQuoteRegionLabel(displayQuote);
     updateFloatBar();
     updateSubmitCta(displayQuote);
+    if (getCurrentStep() === 4) window.buildBillingTable();
   }
 
   async function refreshQuote() {
@@ -1471,27 +1470,36 @@
       document.getElementById('b-lastName')?.value?.trim() ||
       document.getElementById('lastName')?.value?.trim();
 
+    const val = (id) => document.getElementById(id)?.value?.trim() || '';
+    const mobile = val('b-phone') || val('phone');
+    const landline = val('b-phone2') || val('phone2');
+    const company = val('b-company') || val('company');
+    const comment = val('b-comment');
+    const preferLandline = mobile && landline && document.getElementById('b-pref-landline')?.checked;
+
+    const access = val('access-provider');
+    const accessName = val('access-name');
+    const accessPhone = val('access-phone');
+    const accessArrangements =
+      access && access !== 'me' && (accessName || accessPhone)
+        ? `Access contact: ${accessName}${accessPhone ? ', ' + accessPhone : ''}`
+        : undefined;
+
     return {
       ...quotePayload,
       firstName,
       lastName,
-      email:
-        document.getElementById('b-email')?.value?.trim() ||
-        document.getElementById('email')?.value?.trim(),
-      phone:
-        document.getElementById('b-phone')?.value?.trim() ||
-        document.getElementById('phone')?.value?.trim(),
-      secondaryPhone: document.getElementById('b-phone2')?.value?.trim() || undefined,
-      postcode:
-        document.getElementById('b-postcode')?.value?.trim() ||
-        document.getElementById('postcode')?.value?.trim(),
-      appointmentAddress: document.getElementById('b-address')?.value?.trim(),
-      preferredDate: document.getElementById('b-date')?.value || undefined,
+      email: val('b-email') || val('email'),
+      // The API takes one primary number plus an optional second.
+      phone: mobile || landline,
+      secondaryPhone: mobile && landline ? landline : undefined,
+      postcode: val('b-postcode') || val('postcode'),
+      appointmentAddress: BN.fullAddress(),
+      preferredDate: val('b-date') || undefined,
       preferredTimeSlot: state.slot || undefined,
-      accessProvider: document.getElementById('access-provider')?.value,
-      accessArrangements:
-        document.getElementById('access-arrangements')?.value?.trim() || undefined,
-      comment: document.getElementById('b-comment')?.value?.trim() || undefined,
+      accessProvider: access,
+      accessArrangements,
+      comment: [company ? `Company: ${company}` : '', preferLandline ? 'Preferred contact: landline' : '', comment].filter(Boolean).join('\n') || undefined,
     };
   }
 
@@ -1578,28 +1586,49 @@
   function validateBookingForm() {
     clearValidationErrors();
     const missing = [];
+    const fail = (label) => missing.push({ serviceName: 'Booking details', label });
 
-    const required = [
-      ['b-firstName', 'firstName', 'b-firstName-error', 'First name is required.'],
-      ['b-lastName',  'lastName',  'b-lastName-error',  'Last name is required.'],
-      ['b-phone',     'phone',     'b-phone-error',     'Phone number is required.'],
-      ['b-email',     'email',     'b-email-error',     'Email address is required.'],
-      ['b-address',   null,        'b-address-error',   'Appointment address is required.'],
-      ['b-date',      null,        'b-date-error',      'Preferred date is required.'],
-    ];
+    if (typeof BN.syncBookingName === 'function') BN.syncBookingName();
+    const nameEl = document.getElementById('b-fullName');
+    if (!nameEl?.value?.trim()) {
+      BN.setError(nameEl, 'b-fullName-error', 'Full name is required.');
+      fail('Full name');
+    } else if (!document.getElementById('b-lastName')?.value?.trim()) {
+      BN.setError(nameEl, 'b-fullName-error', 'Please enter your first and last name.');
+      fail('Last name');
+    }
 
-    for (const [bid, sid, errId, errMsg] of required) {
-      const el = document.getElementById(bid) || (sid ? document.getElementById(sid) : null);
-      if (!el?.value?.trim()) {
-        if (el) el.classList.add('field-error');
-        const errEl = document.getElementById(errId);
-        if (errEl) { errEl.textContent = errMsg; errEl.style.display = 'block'; }
-        missing.push({ serviceName: 'Booking details', label: errMsg });
-      }
+    if (!BN.validatePhones('b-')) fail('Phone number');
+
+    const emailEl = document.getElementById('b-email');
+    if (!emailEl?.value?.trim()) {
+      BN.setError(emailEl, 'b-email-error', 'Email address is required.');
+      fail('Email');
+    }
+
+    const addrEl = document.getElementById('b-address');
+    const addr = addrEl?.value?.trim() || '';
+    if (!addr) {
+      BN.setError(addrEl, 'b-address-error', 'Address line 1 is required.');
+      fail('Address line 1');
+    } else if (!/\d/.test(addr)) {
+      BN.setError(addrEl, 'b-address-error', 'Please include your house or flat number.');
+      fail('House or flat number');
+    }
+
+    const cityEl = document.getElementById('b-city');
+    if (!cityEl?.value?.trim()) {
+      BN.setError(cityEl, 'b-city-error', 'Town / City is required.');
+      fail('Town / City');
+    }
+
+    if (!document.getElementById('b-date')?.value) {
+      BN.setError(document.getElementById('b-date-display'), 'b-date-error', 'Preferred date is required.');
+      fail('Preferred date');
     }
 
     if (!state.slot) {
-      missing.push({ serviceName: 'Booking details', label: 'Preferred time slot' });
+      fail('Preferred time slot');
       document.querySelectorAll('.time-slot').forEach((t) => t.classList.add('field-error'));
       const slotErr = document.getElementById('b-slot-error');
       if (slotErr) { slotErr.textContent = 'Please select a preferred time slot.'; slotErr.style.display = 'block'; }
@@ -1607,24 +1636,36 @@
 
     const access = document.getElementById('access-provider')?.value;
     if (access && access !== 'me') {
-      const arr = document.getElementById('access-arrangements')?.value?.trim();
-      if (!arr) {
-        const arrEl = document.getElementById('access-arrangements');
-        if (arrEl) arrEl.classList.add('field-error');
-        const arrErrEl = document.getElementById('access-arrangements-error');
-        if (arrErrEl) { arrErrEl.textContent = 'Please describe the access arrangements.'; arrErrEl.style.display = 'block'; }
-        missing.push({ serviceName: 'Booking details', label: 'Access arrangements' });
+      const nameInput = document.getElementById('access-name');
+      if (!nameInput?.value?.trim()) {
+        BN.setError(nameInput, 'access-name-error', 'Please enter the access contact\u2019s name.');
+        fail('Access contact name');
       }
+      const phoneInput = document.getElementById('access-phone');
+      if (!phoneInput?.value?.trim()) {
+        BN.setError(phoneInput, 'access-phone-error', 'Please enter the access contact\u2019s phone number.');
+        fail('Access contact phone');
+      } else if (!BN.isValidAnyPhone(phoneInput.value)) {
+        BN.setError(phoneInput, 'access-phone-error', 'Enter a valid UK phone number.');
+        fail('Access contact phone');
+      }
+    }
+
+    if (state.parking === null || state.parking === undefined) {
+      document.querySelectorAll('#parking-toggle .zone-opt').forEach((o) => o.classList.add('field-error'));
+      const parkErr = document.getElementById('parking-error');
+      if (parkErr) parkErr.style.display = 'block';
+      fail('Parking');
     }
 
     const serviceMissing = getMissingRequiredServiceFields();
     const allMissing = [...missing, ...serviceMissing];
 
     if (allMissing.length) {
-      const firstField = document.querySelector('.field-error');
+      const firstField = document.querySelector('#step3 .field-error') || document.querySelector('.field-error');
       if (firstField) firstField.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (typeof showToast === 'function') {
-        showToast('Please complete all required fields before booking.');
+        showToast('Please complete all required fields before continuing.');
       }
       return false;
     }
@@ -1635,6 +1676,17 @@
     schedulePreview();
     return quoteLines;
   };
+
+  function canEditLine(l) {
+    return Boolean(
+      l.serviceCode &&
+        !l.discount &&
+        !l.isAddon &&
+        !l.componentFieldKey &&
+        state.services.has(l.serviceCode) &&
+        serviceHasQuestions(l.serviceCode)
+    );
+  }
 
   window.buildBillingTable = function buildBillingTableApi() {
     const tbody = document.getElementById('billing-tbody');
@@ -1651,7 +1703,7 @@
       <td class="qty-cell" style="text-align:center">1</td>
       <td class="price-cell" style="text-align:right">${l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
       <td style="text-align:right">${l.quoteOnly ? 'TBC' : l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)}</td>
-      <td><button class="edit-btn" onclick="goToStep(2)">✎ Edit</button></td>
+      <td>${canEditLine(l) ? `<button type="button" class="edit-btn" onclick="BN.editLine('${escapeHtml(l.serviceCode)}')">✎ Edit</button>` : ''}</td>
     </tr>
   `
       )
@@ -1756,11 +1808,14 @@
     if (typeof updateStepProgress === 'function') updateStepProgress(n);
     currentStep = n;
     window.currentStep = n;
+    document.body.classList.toggle('is-review', n === 4);
+    document.body.classList.remove('is-confirm');
 
     if (n === 3) {
       syncBookingFields();
       applyZoneDefaultsForDetails();
     }
+    if (n === 4) BN.onTermsChange();
 
     if ((n === 2 || n === 3) && (state.services.size > 0 || state.activeBundles.size > 0)) {
       try {
@@ -1774,6 +1829,13 @@
   };
 
   window.submitBooking = async function submitBookingApi() {
+    const terms = document.getElementById('terms-agree');
+    if (!terms?.checked) {
+      document.getElementById('terms-check')?.classList.add('field-error');
+      const termsErr = document.getElementById('terms-error');
+      if (termsErr) termsErr.style.display = 'block';
+      return;
+    }
     if (!validateBookingForm()) return;
 
     const btn = document.getElementById('btn-submit-booking') || document.querySelector('.btn-book');
@@ -1817,6 +1879,8 @@
 
       document.querySelectorAll('.step-panel').forEach((p) => p.classList.remove('active'));
       document.getElementById('step-confirm').classList.add('active');
+      document.body.classList.remove('is-review');
+      document.body.classList.add('is-confirm');
       document.querySelectorAll('.step-tab').forEach((t) => {
         t.classList.remove('active');
         t.classList.add('done');
@@ -1828,24 +1892,14 @@
       const lastName =
         document.getElementById('b-lastName')?.value || document.getElementById('lastName')?.value;
       const email = document.getElementById('b-email')?.value || document.getElementById('email')?.value;
-      const address = document.getElementById('b-address')?.value || '';
-      const postcode =
-        document.getElementById('b-postcode')?.value || document.getElementById('postcode')?.value;
       const date = document.getElementById('b-date')?.value;
       const slot = state.slot;
       const total =
         document.getElementById('summary-total')?.textContent || fmt(lastQuote?.total || 0);
 
       const fullName = [firstName, lastName].filter(Boolean).join(' ');
-      const fullAddress = [address, postcode].filter(Boolean).join(', ');
-      const dateStr = date
-        ? new Date(date).toLocaleDateString('en-GB', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })
-        : 'Date to be confirmed';
+      const fullAddress = BN.fullAddress();
+      const dateStr = date ? BN.fmtDateUK(date) : 'Date to be confirmed';
       const slotStr =
         slot === 'morning'
           ? 'Morning slot: 8:00am – 1:00pm'

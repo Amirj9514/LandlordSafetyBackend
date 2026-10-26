@@ -698,6 +698,7 @@
     background: var(--white);
   }
   .zone-opt:hover { border-color: #0571ff; }
+  .zone-opt.field-error { border-color: #c0392b !important; }
   .zone-opt.selected {
     color: #0571ff;
     font-weight: 600;
@@ -1138,6 +1139,178 @@
     font-weight: 500;
   }
   .confirm-screen p { color: var(--slate); font-size: 14px; max-width: 360px; margin: 0 auto 28px; }
+
+  /* ── BOOKING FLOW ADDITIONS ── */
+  input::placeholder, textarea::placeholder { color: #9ca3af; opacity: 1; }
+  label .opt { font-weight: 400; color: #6b7a99; margin-left: 4px; }
+  .add-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0571ff;
+    cursor: pointer;
+  }
+  .add-link:hover { text-decoration: underline; }
+  .label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .label-row label { margin-bottom: 0; }
+  .change-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0571ff;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .change-link:hover { text-decoration: underline; }
+  .logistics-heading { margin-top: 8px; margin-bottom: 14px; }
+
+  /* Inline actions / info icons pinned to the top-right corner of their field */
+  .field-group.has-corner { position: relative; }
+  .has-corner > label, .has-corner > .pref-label { padding-right: 32px; }
+  .corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .corner-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    color: #0571ff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .corner-btn:hover { text-decoration: underline; }
+  .corner-btn--danger { color: var(--red); }
+  .corner .info-tip { margin: 0; vertical-align: middle; }
+  .corner .info-tip__text { left: auto; right: 0; transform: none !important; }
+  .pref-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .pref-label label { margin-bottom: 0; }
+  .pref-label input[type=radio] { width: 16px; height: 16px; min-height: 0; padding: 0; margin: 0; accent-color: #0571ff; cursor: pointer; flex-shrink: 0; }
+  .has-corner > .pref-label { padding-right: 130px; }
+
+  /* Info icon + tooltip */
+  .info-tip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    margin-left: 6px;
+    vertical-align: -3px;
+    border: 1.5px solid #6b7a99;
+    border-radius: 50%;
+    color: #6b7a99;
+    font-size: 10px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1;
+    cursor: pointer;
+    outline: none;
+  }
+  .info-tip:hover, .info-tip:focus-visible, .info-tip.is-open { border-color: #0571ff; color: #0571ff; }
+  .info-tip__text {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+    width: min(260px, calc(100vw - 24px));
+    padding: 10px 12px;
+    background: #0a0f2e;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    box-shadow: var(--shadow-md);
+    z-index: 60;
+    cursor: default;
+  }
+  .info-tip:hover .info-tip__text,
+  .info-tip:focus-visible .info-tip__text,
+  .info-tip.is-open .info-tip__text { display: block; }
+
+  /* Preferred date calendar */
+  .date-field { position: relative; }
+  .date-field input[readonly] {
+    cursor: pointer;
+    background: var(--white);
+    color: #0a0f2e;
+    border-color: #c4cdd9;
+  }
+  .date-pop {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 50;
+    width: 300px;
+    max-width: 100%;
+    padding: 14px;
+    background: var(--white);
+    border: 1px solid #c4cdd9;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+  }
+  .date-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .date-cal__title { font-size: 14px; font-weight: 700; color: #0a0f2e; }
+  .date-cal__nav {
+    width: 32px; height: 32px;
+    border: 1px solid #c4cdd9;
+    border-radius: 8px;
+    background: var(--white);
+    font-size: 18px;
+    line-height: 1;
+    color: #0a0f2e;
+    cursor: pointer;
+  }
+  .date-cal__nav:disabled { opacity: 0.35; cursor: not-allowed; }
+  .date-cal__dow, .date-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .date-cal__dow span { text-align: center; font-size: 11px; font-weight: 600; color: #6b7a99; padding: 4px 0; }
+  .date-cal__day {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #0a0f2e;
+    cursor: pointer;
+  }
+  .date-cal__day:hover:not(:disabled) { background: #eff6ff; color: #0571ff; }
+  .date-cal__day:disabled { color: #c4cdd9; cursor: not-allowed; }
+  .date-cal__day.is-selected { background: #0571ff; color: #fff; font-weight: 600; }
+
+  /* Review step */
+  .terms-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 20px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #0a0f2e;
+    cursor: pointer;
+  }
+  .terms-check input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #0571ff; cursor: pointer; }
+  .terms-check a { color: #0571ff; text-decoration: underline; }
+  .terms-check.field-error { color: #c0392b; }
+  .is-review .quote-panel, .is-confirm .quote-panel,
+  .is-review .float-quote, .is-confirm .float-quote { display: none !important; }
+  .is-review .main, .is-confirm .main { grid-template-columns: minmax(0, 1fr); }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 960px) {
@@ -1684,7 +1857,7 @@
       <div class="progress-steps">
         <button type="button" class="step-tab active" data-step="1" onclick="handleStepTabClick(1)">
           <span class="step-num">1</span>
-          <span class="step-label">Contact</span>
+          <span class="step-label">Details</span>
         </button>
         <button type="button" class="step-tab" data-step="2" onclick="handleStepTabClick(2)">
           <span class="step-num">2</span>
@@ -1692,11 +1865,11 @@
         </button>
         <button type="button" class="step-tab" data-step="3" onclick="handleStepTabClick(3)">
           <span class="step-num">3</span>
-          <span class="step-label">Details</span>
+          <span class="step-label">Appointment</span>
         </button>
         <button type="button" class="step-tab" data-step="4" onclick="handleStepTabClick(4)">
           <span class="step-num">4</span>
-          <span class="step-label">Confirm</span>
+          <span class="step-label">Review</span>
         </button>
       </div>
     </div>
@@ -1708,7 +1881,7 @@
       <div class="card form-step-card personal-info-card">
         <div class="card-body">
           <div class="section-heading">Personal Information</div>
-          <div class="section-desc">Please provide your personal details to continue with the onboarding process.</div>
+          <div class="section-desc">Tell us who you are and we&rsquo;ll prepare your quote.</div>
           <hr class="form-section-divider">
 
           <div class="subsection-label">Your Details</div>
@@ -1745,8 +1918,6 @@
             </div>
           </div>
 
-          <div class="subsection-label" style="margin-top:8px">Your Details</div>
-          <div class="subsection-hint">Tell us about yourself and what type of property needs a visit.</div>
           <input type="hidden" id="firstName">
           <input type="hidden" id="lastName">
           <div class="personal-info-fields">
@@ -1757,27 +1928,43 @@
                 <div class="form-error-msg" id="fullName-error">Full name is required.</div>
               </div>
               <div class="field-group">
-                <label for="phone">Mobile / Phone <span class="req">*</span></label>
-                <input type="tel" id="phone" placeholder="07xxx xxxxxx / 02xxx xxxxxx" oninput="syncField('phone')">
-                <div class="form-error-msg" id="phone-error">Phone number is required.</div>
+                <label for="company">Company <span class="opt">(optional)</span></label>
+                <input type="text" id="company" placeholder="Company name">
               </div>
             </div>
             <div class="field-row">
+            <div class="field-group has-corner">
+              <div class="pref-label">
+                <input type="radio" name="pref-contact" id="pref-mobile" value="mobile" checked aria-label="Preferred contact number: mobile">
+                <label for="phone">Mobile Number <span class="req" id="phone-star">*</span></label>
+              </div>
+              <button type="button" class="corner corner-btn" id="add-phone-btn" onclick="BN.showPhone2('')">+ Add Landline</button>
+              <input type="tel" id="phone" placeholder="07xxx xxxxxx" data-phone-type="mobile" autocomplete="tel" oninput="syncField('phone'); BN.onPhoneInput('')">
+              <div class="form-error-msg" id="phone-error">Enter a mobile or landline number.</div>
+            </div>
+            <div class="field-group has-corner hidden" id="phone2-row">
+              <div class="pref-label">
+                <input type="radio" name="pref-contact" id="pref-landline" value="landline" aria-label="Preferred contact number: landline">
+                <label for="phone2">Landline</label>
+              </div>
+              <button type="button" class="corner corner-btn corner-btn--danger" onclick="BN.hidePhone2('')">&mdash; Remove Landline</button>
+              <input type="tel" id="phone2" placeholder="020 xxxx xxxx" data-phone-type="landline" oninput="syncField('phone2'); BN.onPhoneInput('')">
+              <div class="form-error-msg" id="phone2-error">Landline must be a UK number starting 01, 02 or 03.</div>
+            </div>
               <div class="field-group">
                 <label for="email">Email <span class="req">*</span></label>
                 <input type="email" id="email" placeholder="jane@example.co.uk" oninput="syncField('email')">
                 <div class="form-error-msg" id="email-error">Email address is required.</div>
               </div>
               <div class="field-group">
-                <label for="postcode">Postal Code <span class="req">*</span></label>
-                <input type="text" id="postcode" placeholder="SW1A 1AA" oninput="syncField('postcode')">
+                <label for="postcode">Postcode <span class="req">*</span></label>
+                <input type="text" id="postcode" placeholder="SW1A 1AA" autocomplete="postal-code" oninput="syncField('postcode')">
                 <div class="form-error-msg" id="postcode-error">Postcode is required.</div>
               </div>
             </div>
           </div>
 
           <div class="step-nav">
-            <button type="button" class="btn btn-secondary" disabled>Go Back</button>
             <button type="button" class="btn btn-primary" id="step1-next-btn" onclick="goToStep(2)" disabled>Next</button>
           </div>
         </div>
@@ -1815,76 +2002,90 @@
           <hr class="form-section-divider">
 
           <div class="form-step-fields">
+          <input type="hidden" id="b-firstName">
+          <input type="hidden" id="b-lastName">
           <div class="field-row">
             <div class="field-group">
-              <label>First Name <span class="req">*</span></label>
-              <input type="text" id="b-firstName" placeholder="Pre-filled from Step 1">
-              <div class="form-error-msg" id="b-firstName-error">First name is required.</div>
+              <label for="b-fullName">Full Name <span class="req">*</span></label>
+              <input type="text" id="b-fullName" placeholder="Pre-filled from Step 1" oninput="BN.syncBookingName()">
+              <div class="form-error-msg" id="b-fullName-error">Please enter your first and last name.</div>
             </div>
             <div class="field-group">
-              <label>Last Name <span class="req">*</span></label>
-              <input type="text" id="b-lastName" placeholder="Pre-filled from Step 1">
-              <div class="form-error-msg" id="b-lastName-error">Last name is required.</div>
+              <label for="b-company">Company <span class="opt">(optional)</span></label>
+              <input type="text" id="b-company" placeholder="Company name">
             </div>
           </div>
           <div class="field-row">
-            <div class="field-group">
-              <label>Mobile Number <span class="req">*</span></label>
-              <input type="tel" id="b-phone" placeholder="Pre-filled from Step 1">
-              <div class="form-error-msg" id="b-phone-error">Phone number is required.</div>
-            </div>
-            <div class="field-group">
-              <label>Phone Number (optional)</label>
-              <input type="tel" id="b-phone2" placeholder="Secondary number">
-            </div>
-          </div>
-          <div class="field-group">
-            <label>Email Address <span class="req">*</span></label>
-            <input type="email" id="b-email" placeholder="Pre-filled from Step 1">
-            <div class="form-error-msg" id="b-email-error">Email address is required.</div>
-          </div>
-          <div class="field-group">
-            <label>Appointment Address <span class="req">*</span></label>
-            <input type="text" id="b-address" placeholder="Full property address">
-            <div class="form-error-msg" id="b-address-error">Appointment address is required.</div>
-          </div>
-          <div class="field-group">
-            <label>Postcode</label>
-            <input type="text" id="b-postcode" placeholder="Pre-filled from Step 1" style="max-width:200px" disabled>
-          </div>
-
-          <div class="field-row">
-            <div class="field-group">
-              <label>Is your property in a congestion zone? <span class="req">*</span></label>
-              <div class="zone-toggle">
-                <div class="zone-opt" id="congestion-no" onclick="selectZone(false)">
-                  No
-                  <div class="zone-charge">No extra charge</div>
+              <div class="field-group has-corner">
+                <div class="pref-label">
+                  <input type="radio" name="b-pref-contact" id="b-pref-mobile" value="mobile" checked aria-label="Preferred contact number: mobile">
+                  <label for="b-phone">Mobile Number <span class="req" id="b-phone-star">*</span></label>
                 </div>
-                <div class="zone-opt" id="congestion-yes" onclick="selectZone(true)">
-                  Yes
-                  <div class="zone-charge">+£18.00 added</div>
-                </div>
+                <button type="button" class="corner corner-btn" id="b-add-phone-btn" onclick="BN.showPhone2('b-')">+ Add Landline</button>
+                <input type="tel" id="b-phone" placeholder="07xxx xxxxxx" data-phone-type="mobile" oninput="BN.onPhoneInput('b-')">
+                <div class="form-error-msg" id="b-phone-error">Enter a mobile or landline number.</div>
               </div>
-            </div>
-            <div class="field-group">
-              <label>Parking available at property? <span class="req">*</span></label>
-              <div class="zone-toggle">
-                <div class="zone-opt selected" id="parking-yes" onclick="selectParking(true)">
-                  Yes
-                  <div class="zone-charge">No extra charge</div>
+              <div class="field-group has-corner hidden" id="b-phone2-row">
+                <div class="pref-label">
+                  <input type="radio" name="b-pref-contact" id="b-pref-landline" value="landline" aria-label="Preferred contact number: landline">
+                  <label for="b-phone2">Landline</label>
                 </div>
-                <div class="zone-opt" id="parking-no" onclick="selectParking(false)">
-                  No
-                  <div class="zone-charge">+£5.00 added</div>
-                </div>
+                <button type="button" class="corner corner-btn corner-btn--danger" onclick="BN.hidePhone2('b-')">&mdash; Remove Landline</button>
+                <input type="tel" id="b-phone2" placeholder="020 xxxx xxxx" data-phone-type="landline" oninput="BN.onPhoneInput('b-')">
+                <div class="form-error-msg" id="b-phone2-error">Landline must be a UK number starting 01, 02 or 03.</div>
               </div>
+            <div class="field-group">
+              <label for="b-email">Email <span class="req">*</span></label>
+              <input type="email" id="b-email" placeholder="Pre-filled from Step 1">
+              <div class="form-error-msg" id="b-email-error">Email address is required.</div>
             </div>
           </div>
 
           <div class="field-group">
-            <label>Preferred Date <span class="req">*</span></label>
-            <input type="date" id="b-date" min="">
+            <label for="b-address">Address line 1 <span class="req">*</span></label>
+            <input type="text" id="b-address" placeholder="House/flat number and street, e.g. Flat 2, 14 High Street" autocomplete="address-line1">
+            <div class="form-error-msg" id="b-address-error">Address line 1 is required.</div>
+          </div>
+          <div class="field-group">
+            <label for="b-address2">Address line 2 <span class="opt">(optional)</span></label>
+            <input type="text" id="b-address2" placeholder="Building name, area" autocomplete="address-line2">
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="b-city">Town / City <span class="req">*</span></label>
+              <input type="text" id="b-city" placeholder="e.g. London" autocomplete="address-level2" oninput="BN.clearError(this,'b-city-error')">
+              <div class="form-error-msg" id="b-city-error">Town / City is required.</div>
+            </div>
+            <div class="field-group">
+              <label for="b-county">County / State / Region <span class="opt">(optional)</span></label>
+              <input type="text" id="b-county" placeholder="e.g. Greater London" autocomplete="address-level1">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="b-country">Country</label>
+              <select id="b-country">
+                <option value="United Kingdom" selected>United Kingdom</option>
+                <option value="Jersey">Jersey</option>
+                <option value="Guernsey">Guernsey</option>
+                <option value="Isle of Man">Isle of Man</option>
+              </select>
+            </div>
+            <div class="field-group has-corner">
+              <label for="b-postcode">Postcode</label>
+              <button type="button" class="corner corner-btn" onclick="goToStep(1)">Change</button>
+              <input type="text" id="b-postcode" placeholder="Pre-filled from Step 1" disabled>
+            </div>
+          </div>
+
+          <div class="field-group has-corner">
+            <label for="b-date-display">Preferred Date <span class="req">*</span></label>
+            <span class="corner"><span class="info-tip" tabindex="0" role="button" aria-label="About the preferred date">i<span class="info-tip__text" role="tooltip">This is your preferred date. We&rsquo;ll confirm it once an engineer is booked.</span></span></span>
+            <div class="date-field" id="date-field">
+              <input type="text" id="b-date-display" readonly placeholder="Select a date" autocomplete="off" aria-haspopup="dialog" aria-expanded="false">
+              <input type="hidden" id="b-date">
+              <div class="date-pop hidden" id="date-pop" role="dialog" aria-label="Choose a date"></div>
+            </div>
             <div class="form-error-msg" id="b-date-error">Preferred date is required.</div>
           </div>
 
@@ -1904,24 +2105,50 @@
           </div>
 
           <div class="field-group">
-            <label>Who will provide access? <span class="req">*</span></label>
+            <label for="access-provider">Who will provide access? <span class="req">*</span></label>
             <select id="access-provider" onchange="toggleAccessArrangements()">
-              <option value="me">Me</option>
+              <option value="me" selected>Myself / Owner</option>
               <option value="tenant">Tenant</option>
-              <option value="agent">Agent</option>
-              <option value="porter">Porter</option>
-              <option value="other">Other</option>
+              <option value="agent">Estate Agent</option>
+              <option value="porter">Porter / Other</option>
             </select>
           </div>
 
-          <div class="field-group hidden" id="access-arrangements-field">
-            <label>Access Arrangements <span class="req">*</span></label>
-            <textarea id="access-arrangements" placeholder="e.g. Key with concierge, tenant will be home after 10am, code is 1234..."></textarea>
-            <div class="form-error-msg" id="access-arrangements-error">Please describe the access arrangements.</div>
+          <div class="field-row hidden" id="access-contact-fields">
+            <div class="field-group">
+              <label for="access-name">Access contact name <span class="req">*</span></label>
+              <input type="text" id="access-name" placeholder="Name of the person giving access" oninput="BN.clearError(this,'access-name-error')">
+              <div class="form-error-msg" id="access-name-error">Please enter the access contact&rsquo;s name.</div>
+            </div>
+            <div class="field-group">
+              <label for="access-phone">Access contact phone <span class="req">*</span></label>
+              <input type="tel" id="access-phone" placeholder="07xxx xxxxxx" data-phone-type="any" oninput="BN.clearError(this,'access-phone-error')">
+              <div class="form-error-msg" id="access-phone-error">Enter a valid UK phone number.</div>
+            </div>
+          </div>
+
+          <div class="subsection-label logistics-heading">Visit logistics</div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Is your property in a congestion zone? <span class="req">*</span></label>
+              <div class="zone-toggle">
+                <div class="zone-opt" id="congestion-no" onclick="BN.zoneClick(false)">No</div>
+                <div class="zone-opt" id="congestion-yes" onclick="BN.zoneClick(true)">Yes (+£18)</div>
+              </div>
+            </div>
+            <div class="field-group has-corner">
+              <label>Parking available at property? <span class="req">*</span></label>
+              <span class="corner"><span class="info-tip" tabindex="0" role="button" aria-label="About the parking charge">i<span class="info-tip__text" role="tooltip">£5 standard parking charge applies where there is no free parking. If our engineer pays a higher parking charge during the visit, we&rsquo;ll send you the receipt.</span></span></span>
+              <div class="zone-toggle" id="parking-toggle">
+                <div class="zone-opt" id="parking-yes" onclick="selectParking(true)">Yes</div>
+                <div class="zone-opt" id="parking-no" onclick="selectParking(false)">No (+£5)</div>
+              </div>
+              <div class="form-error-msg" id="parking-error">Please choose whether parking is available.</div>
+            </div>
           </div>
 
           <div class="field-group">
-            <label>Leave a Comment (optional)</label>
+            <label for="b-comment">Leave a Comment (optional)</label>
             <textarea id="b-comment" placeholder="Any additional notes for the engineer..."></textarea>
           </div>
           </div>
@@ -1973,17 +2200,23 @@
 
           <div class="billing-totals">
             <div class="billing-row"><span>Subtotal</span><span id="summary-subtotal">£0.00</span></div>
-            <div class="billing-row vat"><span>VAT (No VAT — registration pending)</span><span>£0.00</span></div>
+            <div class="billing-row vat"><span>No VAT</span></div>
             <div class="billing-row total"><span>Total</span><span id="summary-total">£0.00</span></div>
           </div>
 
           <div class="payment-note">
-            <span><strong>Payment: Bank Transfer Only.</strong> Invoice will be sent to your email upon booking confirmation.</span>
+            <span>Payment by bank transfer. Once we confirm your date with an engineer, we&rsquo;ll email your invoice. Payment is due before the visit, and certificates are issued once paid.</span>
           </div>
+
+          <label class="terms-check" id="terms-check">
+            <input type="checkbox" id="terms-agree" onchange="BN.onTermsChange()">
+            <span>I agree to the <a href="/terms-conditions/" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="/refund-cancellation-policy/" target="_blank" rel="noopener">Refund &amp; Cancellation Policy</a>.</span>
+          </label>
+          <div class="form-error-msg" id="terms-error">Please agree to the terms to continue.</div>
 
           <div class="step-nav">
             <button type="button" class="btn btn-secondary" onclick="goToStep(3)">Go Back</button>
-            <button type="button" class="btn btn-book" id="btn-submit-booking" onclick="submitBooking()">
+            <button type="button" class="btn btn-book" id="btn-submit-booking" onclick="submitBooking()" disabled>
               Confirm Booking
             </button>
           </div>
@@ -2001,9 +2234,9 @@
 
           <div class="confirm-next-box">
             <div class="confirm-next-box__title">What happens next?</div>
-            <div class="confirm-next-box__step"><span class="confirm-next-box__num">1.</span><span>We will verify your property is within our coverage area (London &amp; M25 corridor).</span></div>
+            <div class="confirm-next-box__step"><span class="confirm-next-box__num">1.</span><span>We will verify your property is within our coverage area (London &amp; within M25).</span></div>
             <div class="confirm-next-box__step"><span class="confirm-next-box__num">2.</span><span>A team member will send you an <strong>invoice for payment</strong> via bank transfer.</span></div>
-            <div class="confirm-next-box__step"><span class="confirm-next-box__num">3.</span><span>Once payment is received, we will send your <strong>official booking confirmation</strong> with engineer details and arrival window.</span></div>
+            <div class="confirm-next-box__step"><span class="confirm-next-box__num">3.</span><span>Once payment is received, we&rsquo;ll confirm your appointment date and time slot.</span></div>
           </div>
 
           <div class="confirm-summary-box">
@@ -2016,7 +2249,7 @@
           </div>
 
           <div style="background:var(--red-light);border:1px solid rgba(139,26,26,0.15);border-radius:var(--radius-sm);padding:12px 16px;margin-top:14px;font-size:12px;color:var(--red);text-align:left">
-            &#9888; If your property is outside our coverage area (London &amp; M25), a team member will contact you within 1 working hour.
+            &#9888; If your property is outside our coverage area (London &amp; within M25), a team member will contact you within 1 working hour.
           </div>
 
           <button class="btn btn-primary" style="margin-top:24px;width:100%;justify-content:center" onclick="location.reload()">
@@ -2057,7 +2290,7 @@
             <div class="quote-totals-final">
               <div class="quote-totals-final__left">
                 <div class="quote-totals-final__label">Total</div>
-                <div class="quote-totals-final__vat">excl. VAT</div>
+                <div class="quote-totals-final__vat">No VAT</div>
               </div>
               <div class="quote-totals-final__right">
                 <div class="quote-totals-final__was hidden" id="q-was">£0.00</div>
@@ -2068,7 +2301,7 @@
         </div>
       </div>
       <div class="summary-footer">
-        Prefer to talk? <a href="https://wa.me/447350538874" target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help.
+        Prefer to talk? <a href="https://wa.me/447350536874" target="_blank" rel="noopener noreferrer">WhatsApp us</a> for instant help.
       </div>
     </div>
   </div>
@@ -2085,7 +2318,7 @@
     </div>
     <div class="float-right">
       <span class="float-total" id="float-total">£0.00</span>
-      <span class="float-vat">exc. VAT</span>
+      <span class="float-vat">No VAT</span>
     </div>
   </div>
 </div>
@@ -2100,7 +2333,8 @@ const state = {
   activeBundles: new Set(),
   radios: {},
   congestion: false,
-  parking: true,
+  parking: null, // no default: the customer must answer
+  zoneManualFor: '',
   slot: '',
 };
 
@@ -2125,9 +2359,10 @@ function handleStepTabClick(n) {
 function isStep1Complete() {
   const fullName = document.getElementById('fullName')?.value?.trim() || '';
   const phone = document.getElementById('phone')?.value?.trim() || '';
+  const phone2 = document.getElementById('phone2')?.value?.trim() || '';
   const email = document.getElementById('email')?.value?.trim() || '';
   const postcode = document.getElementById('postcode')?.value?.trim() || '';
-  return Boolean(fullName && phone && email && postcode && state.propType);
+  return Boolean(fullName && (phone || phone2) && email && postcode && state.propType);
 }
 
 function updateStep1NextState() {
@@ -2200,49 +2435,63 @@ function goToStep(n) {
 
 function validateStep1() {
   syncFullName();
-  const fieldConfig = [
-    { id: 'fullName', msg: 'Full name is required.' },
-    { id: 'phone',    msg: 'Phone number is required.' },
-    { id: 'email',    msg: 'Email address is required.' },
-    { id: 'postcode', msg: 'Postcode is required.' },
-  ];
   let ok = true;
-  fieldConfig.forEach(({ id, msg }) => {
-    const el = document.getElementById(id);
-    const errEl = document.getElementById(id + '-error');
-    if (!el?.value?.trim()) {
-      el?.classList.add('field-error');
-      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
-      ok = false;
-    } else {
-      el?.classList.remove('field-error');
-      if (errEl) errEl.style.display = 'none';
-    }
-  });
-  const first = document.getElementById('firstName')?.value?.trim();
-  if (first && !document.getElementById('lastName')?.value?.trim()) {
-    document.getElementById('fullName')?.classList.add('field-error');
-    const errEl = document.getElementById('fullName-error');
-    if (errEl) { errEl.textContent = 'Please enter your first and last name.'; errEl.style.display = 'block'; }
+
+  const fullEl = document.getElementById('fullName');
+  const fullErr = document.getElementById('fullName-error');
+  if (!fullEl?.value?.trim()) {
+    BN.setError(fullEl, 'fullName-error', 'Full name is required.');
     ok = false;
+  } else if (!document.getElementById('lastName')?.value?.trim()) {
+    BN.setError(fullEl, 'fullName-error', 'Please enter your first and last name.');
+    ok = false;
+  } else {
+    BN.clearError(fullEl, 'fullName-error');
   }
+
+  const emailEl = document.getElementById('email');
+  if (!emailEl?.value?.trim()) {
+    BN.setError(emailEl, 'email-error', 'Email address is required.');
+    ok = false;
+  } else {
+    BN.clearError(emailEl, 'email-error');
+  }
+
+  if (!BN.validatePhones('')) ok = false;
+
+  const pcEl = document.getElementById('postcode');
+  if (pcEl) pcEl.value = BN.formatPostcode(pcEl.value);
+  if (!pcEl?.value?.trim()) {
+    BN.setError(pcEl, 'postcode-error', 'Postcode is required.');
+    ok = false;
+  } else if (!BN.isValidPostcode(pcEl.value)) {
+    BN.setError(pcEl, 'postcode-error', 'Enter a valid UK postcode, e.g. SW18 3AH.');
+    ok = false;
+  } else {
+    BN.clearError(pcEl, 'postcode-error');
+  }
+
   const propErr = document.getElementById('propType-error');
   if (!state.propType) {
     if (propErr) propErr.style.display = 'block';
     ok = false;
-  } else {
-    if (propErr) propErr.style.display = 'none';
+  } else if (propErr) {
+    propErr.style.display = 'none';
   }
   return ok;
 }
 
 function syncBookingFields() {
   syncFullName();
-  ['firstName','lastName','phone','email','postcode'].forEach(f => {
+  ['firstName','lastName','phone','phone2','email','postcode','company'].forEach(f => {
     const src = document.getElementById(f);
     const dst = document.getElementById('b-' + f);
     if (src && dst) dst.value = src.value;
   });
+  const fullName = document.getElementById('b-fullName');
+  if (fullName) fullName.value = document.getElementById('fullName')?.value || '';
+  BN.syncPhone2Visibility('b-');
+  BN.copyPreferred();
 }
 
 function syncField(f) {
@@ -2254,14 +2503,6 @@ function syncField(f) {
   }
   updateStep1NextState();
 }
-
-// Set min date to today
-(function() {
-  const d = new Date();
-  const ds = d.toISOString().split('T')[0];
-  const el = document.getElementById('b-date');
-  if (el) el.min = ds;
-})();
 
 // ═══════════════════════════════════════════════════
 // PROPERTY TYPE
@@ -2612,7 +2853,7 @@ function getSubqDef(id) {
         </div>`
     },
     epc: {
-      title: 'Energy Performance Certificate (EPC)',
+      title: 'Energy Performance Certificate',
       html: `
         <div class="subq-row">
           <label>Number of bedrooms <span class="req">*</span></label>
@@ -2718,6 +2959,9 @@ function selectParking(val) {
   state.parking = val;
   document.getElementById('parking-yes').classList.toggle('selected', val);
   document.getElementById('parking-no').classList.toggle('selected', !val);
+  const err = document.getElementById('parking-error');
+  if (err) err.style.display = 'none';
+  document.querySelectorAll('#parking-toggle .zone-opt').forEach(o => o.classList.remove('field-error'));
 }
 
 function selectSlot(s) {
@@ -2728,7 +2972,7 @@ function selectSlot(s) {
 
 function toggleAccessArrangements() {
   const val = document.getElementById('access-provider').value;
-  document.getElementById('access-arrangements-field').classList.toggle('hidden', val === 'me');
+  document.getElementById('access-contact-fields').classList.toggle('hidden', val === 'me');
 }
 
 // ═══════════════════════════════════════════════════
@@ -2856,7 +3100,7 @@ function calcAll() {
     const price = sel && sel.value ? parseFloat(sel.value) : 0;
     if (price > 0) {
       const bedsText = sel.options[sel.selectedIndex]?.text.split('—')[0].trim() || '';
-      lines.push({ name: 'Energy Performance Certificate (EPC)', sub: bedsText, price, id: 'epc' });
+      lines.push({ name: 'Energy Performance Certificate', sub: bedsText, price, id: 'epc' });
     }
   }
 
@@ -3033,25 +3277,25 @@ window.addEventListener('scroll', updateFloatBar, { passive: true });
 // FILL BOOKING DETAILS (Step 4)
 // ═══════════════════════════════════════════════════
 function fillBookingDetails() {
-  const firstName = document.getElementById('b-firstName').value || document.getElementById('firstName').value;
-  const lastName = document.getElementById('b-lastName').value || document.getElementById('lastName').value;
-  const phone = document.getElementById('b-phone').value || document.getElementById('phone').value;
-  const email = document.getElementById('b-email').value || document.getElementById('email').value;
-  const address = document.getElementById('b-address').value || '';
-  const postcode = document.getElementById('b-postcode').value || document.getElementById('postcode').value;
-  const date = document.getElementById('b-date').value;
+  const val = (id) => document.getElementById(id)?.value?.trim() || '';
+  const firstName = val('b-firstName') || val('firstName');
+  const lastName = val('b-lastName') || val('lastName');
+  const company = val('b-company') || val('company');
+  const mobile = val('b-phone') || val('phone');
+  const landline = val('b-phone2') || val('phone2');
+  const email = val('b-email') || val('email');
+  const postcode = val('b-postcode') || val('postcode');
   const slot = state.slot;
 
   const fullName = [firstName, lastName].filter(Boolean).join(' ') || '—';
-  const fullAddress = [address, postcode].filter(Boolean).join(', ') || '—';
-  const dateStr = date ? new Date(date).toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) : '—';
+  const fullAddress = BN.fullAddress() || '—';
   const slotStr = slot === 'morning' ? 'Morning: 8:00am – 1:00pm' : slot === 'afternoon' ? 'Afternoon: 1:00pm – 6:00pm' : '—';
 
-  document.getElementById('bd-name').textContent = fullName;
+  document.getElementById('bd-name').textContent = company ? fullName + ' · ' + company : fullName;
   document.getElementById('bd-address').textContent = fullAddress;
-  document.getElementById('bd-contact').textContent = phone || '—';
+  document.getElementById('bd-contact').textContent = [mobile, landline].filter(Boolean).join(' · ') || '—';
   document.getElementById('bd-email-disp').textContent = email || '—';
-  document.getElementById('bd-date').textContent = dateStr;
+  document.getElementById('bd-date').textContent = BN.fmtDateUK(val('b-date')) || '—';
   document.getElementById('bd-slot').textContent = slotStr;
 }
 
@@ -3094,7 +3338,6 @@ selectPropType('residential');
 updateStep1NextState();
 updateStep2NextState();
 selectZone(false);
-selectParking(true);
 updateStepProgress(1);
 window.currentStep = 1;
 renderSubQuestions();
@@ -3133,6 +3376,7 @@ updateFloatBar();
 
 <script src="/header-mega-menu.js"></script>
 <script src="/book-now/book-now-api.js"></script>
+<script src="/book-now/book-now-ui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -70,6 +70,7 @@ const pricingTiers = [
   { tierKey: 'asbestos_2_sample', label: 'Asbestos 2 sample survey', serviceCode: 'asbestos', sortOrder: 1 },
   { tierKey: 'asbestos_full_property', label: 'Asbestos full property survey', serviceCode: 'asbestos', sortOrder: 2 },
   { tierKey: 'asbestos_house_3bed', label: 'Asbestos House up to 3 bed (legacy)', serviceCode: 'asbestos', sortOrder: 3, isTbcByDefault: true },
+  { tierKey: 'callout_base', label: 'Non-Emergency Callout (1 hour labour)', serviceCode: 'callout', sortOrder: 1 },
   { tierKey: 'bundle_gsc_boiler_basic', label: 'Bundle discount GSC+Basic Boiler', serviceCode: null, sortOrder: 100 },
   { tierKey: 'bundle_gsc_boiler_full', label: 'Bundle discount GSC+Full Boiler', serviceCode: null, sortOrder: 101 },
   { tierKey: 'bundle_eicr_pat_total', label: 'Bundle discount EICR+PAT total', serviceCode: null, sortOrder: 102 },
@@ -150,6 +151,11 @@ const asbestosQuestions = [
   { fieldKey: 'propertySizeSqm', inputType: 'number', label: 'Property size (SQM)', validation: { required: false, min: 1 }, sortOrder: 2 },
 ];
 
+const calloutQuestions = [
+  { fieldKey: 'faultType', inputType: 'select', label: 'Type of fault', options: [{ value: 'gas', tierKey: 'callout_base', label: 'Gas' }, { value: 'electrical', tierKey: 'callout_base', label: 'Electrical' }, { value: 'fire_alarm', tierKey: 'callout_base', label: 'Fire alarm' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'issueDescription', inputType: 'textarea', label: 'Describe the issue', validation: { required: true, placeholder: 'e.g. boiler not firing, circuit keeps tripping, alarm going off' }, sortOrder: 2 },
+];
+
 /** Services: categoryCode, code, name, pricingMode, displayOrder, parentCode?, metadata?, questions? */
 const services = [
   // Residential
@@ -163,6 +169,7 @@ const services = [
   { categoryCode: 'res_epc', code: 'epc', name: 'Energy Performance Certificate (EPC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: epcQuestions },
   { categoryCode: 'res_epc', code: 'floorplan', name: 'Floor Plan', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: floorplanQuestions },
   { categoryCode: 'res_other', code: 'asbestos', name: 'Asbestos Survey', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: asbestosQuestions },
+  { categoryCode: 'res_other', code: 'callout', name: 'Non-Emergency Callout', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: calloutQuestions },
 
   // Commercial gas — CGSC parent + sub certs
   { categoryCode: 'com_gas', code: 'cgsc', name: 'Commercial Gas Safety Certificate', propertyType: PT.COMMERCIAL, pricingMode: PM.QUOTE_ONLY, displayOrder: 0, metadata: { isParent: true } },

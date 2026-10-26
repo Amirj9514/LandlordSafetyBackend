@@ -1,21 +1,26 @@
 const { body, query, param } = require('express-validator');
 const { ALL_PROPERTY_TYPES } = require('../constants/propertyTypes');
 const { ALL_LEAD_STATUSES } = require('../constants/leadStatus');
-const { isValidContact } = require('../utils/contactParser');
+const { parseContactFields, isValidUkPhone, CONTACT_MESSAGES } = require('../utils/contactParser');
+const { CONTACT_SUBJECTS } = require('../constants/contactSubjects');
+
+// Email and phone are separate, optional fields, but at least one is required and any value
+// given must be valid (see parseContactFields). Each error is reported on its own field.
+const contactFieldCheck = (field) =>
+  body(field).custom((_, { req }) => {
+    const { errors } = parseContactFields(req.body);
+    if (errors[field]) throw new Error(errors[field]);
+    return true;
+  });
 
 const createLeadValidator = [
   body('postcode').trim().notEmpty().withMessage('Postcode is required'),
   body('propertyType').isIn(ALL_PROPERTY_TYPES).withMessage('Invalid property type'),
-  body('contact')
-    .trim()
-    .notEmpty()
-    .withMessage('Email or phone is required')
-    .custom((value) => {
-      if (!isValidContact(value)) {
-        throw new Error('Contact must be a valid email address or phone number');
-      }
-      return true;
-    }),
+  body('email').optional({ values: 'falsy' }).isString().isLength({ max: 255 }).withMessage('Email is too long'),
+  body('phone').optional({ values: 'falsy' }).isString().isLength({ max: 50 }).withMessage('Phone is too long'),
+  contactFieldCheck('email'),
+  contactFieldCheck('phone'),
+  contactFieldCheck('contact'),
 ];
 
 const createEnquiryValidator = [
@@ -31,11 +36,25 @@ const createEnquiryValidator = [
     .trim()
     .matches(/^[\d\s+().-]{7,20}$/)
     .withMessage('Phone must be a valid phone number'),
+  // Contact page form: a Subject is sent, which makes the message required and the phone a UK number.
+  body('subject')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isIn(CONTACT_SUBJECTS)
+    .withMessage('Please select a subject'),
+  body('phone').custom((value, { req }) => {
+    if (req.body.subject && value && !isValidUkPhone(String(value))) throw new Error(CONTACT_MESSAGES.phone);
+    return true;
+  }),
   body('message')
     .optional({ values: 'falsy' })
     .trim()
     .isLength({ max: 2000 })
     .withMessage('Message must be 2000 characters or fewer'),
+  body('message').custom((value, { req }) => {
+    if (req.body.subject && !String(value || '').trim()) throw new Error('Message is required');
+    return true;
+  }),
   body('service')
     .optional({ values: 'falsy' })
     .trim()

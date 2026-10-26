@@ -1,14 +1,14 @@
 /**
  * Instant Estimate: catalog from GET /api/catalog, price from POST /api/quotes/preview.
- * Desktop: category accordion + side calculator.
- * Mobile/tablet: per-service cards with Get Estimate / Hide Calculator accordion.
+ * Desktop/tablet: category accordion + calculator card (nothing is pre-selected; the price waits for the answers).
+ * Mobile: per-service cards with Get Estimate / Hide Calculator accordion.
  */
 (function () {
   const API = '/api';
   const PROPERTY_TYPE = 'residential';
   // Used only to fetch indicative "from" prices while the postcode field is empty; never shown in the field.
   const DEFAULT_POSTCODE = 'SW1A 1AA';
-  const MOBILE_MQ = '(max-width: 63.99rem)';
+  const MOBILE_MQ = '(max-width: 47.99rem)';
   const CACHE_KEY = 'lsi-estimate-catalog-v1';
   const UK_POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
@@ -81,6 +81,8 @@
     floors: 'Number of floors',
     boilerType: 'Service type',
   };
+
+  const NO_SERVICE_HINT = 'Choose a service to see your estimate';
 
   const els = {
     layout: document.querySelector('.estimate-layout'),
@@ -263,6 +265,26 @@
     return catalogReady || Boolean(service?.localPricing);
   }
 
+  const ESTIMATE_QUESTION_TYPES = ['select', 'radio', 'number'];
+
+  // Desktop/tablet show a price only once the postcode and every question on screen is answered.
+  // Mobile keeps its starting answers, so it always prices.
+  function isReadyToPrice() {
+    if (isMobileLayout()) return true;
+    const service = findService(selectedServiceCode);
+    if (!service || !questionsKnown(service)) return false;
+    if (!service.localPricing && !UK_POSTCODE.test(typedPostcode())) return false;
+    return visibleQuestions(service)
+      .filter((q) => ESTIMATE_QUESTION_TYPES.includes(q.inputType) && q.validation?.required !== false)
+      .every((q) => {
+        const value = answers[q.fieldKey];
+        if (value == null || value === '') return false;
+        if (q.inputType !== 'number') return true;
+        const num = Number(value);
+        return Number.isFinite(num) && num >= (q.validation?.min ?? 1) && num <= (q.validation?.max ?? Infinity);
+      });
+  }
+
   function questionsSkeletonHtml() {
     return `
       <div class="estimate-questions__skeleton" aria-hidden="true">
@@ -298,6 +320,8 @@
   }
 
   function defaultAnswersForService(service) {
+    // Desktop/tablet start with nothing chosen; mobile keeps its starting answers.
+    if (!isMobileLayout()) return {};
     const next = {};
     for (const q of service.questions || []) {
       if (q.inputType === 'number') {
@@ -427,7 +451,7 @@
 
   function questionsHtml(service) {
     const questions = visibleQuestions(service).filter((q) =>
-      ['select', 'radio', 'number'].includes(q.inputType)
+      ESTIMATE_QUESTION_TYPES.includes(q.inputType)
     );
 
     return questions
@@ -464,10 +488,12 @@
             </fieldset>`;
         }
 
+        const unanswered = current == null || current === '';
         return `
           <div class="estimate-field">
             <label class="field-label" for="estimate-q-${escapeHtml(q.fieldKey)}">${escapeHtml(label)}</label>
             <select class="field-input estimate-select-input" id="estimate-q-${escapeHtml(q.fieldKey)}" data-field="${escapeHtml(q.fieldKey)}">
+              ${unanswered ? '<option value="" disabled selected>Select</option>' : ''}
               ${q.options
                 .map((opt) => {
                   const selected = String(current) === String(opt.value) ? ' selected' : '';
@@ -563,6 +589,7 @@
         <div class="estimate-mcard__price">
           <p class="estimate-mcard__price-label">Estimated price</p>
           <p class="estimate-mcard__price-amount" data-mobile-price>—</p>
+          <span class="price-novat" data-price-novat hidden>No VAT</span>
           <p class="estimate-mcard__price-note">Final price may vary based on property access.</p>
           <a class="btn-primary btn-primary--block estimate-mcard__book" href="${escapeHtml(bookHref())}">Book Now</a>
         </div>
@@ -612,6 +639,7 @@
       syncMobileCoverage();
       const amountEl = document.querySelector('[data-mobile-price]');
       if (amountEl && els.priceAmount) amountEl.textContent = els.priceAmount.textContent;
+      syncNoVat();
     }
   }
 
@@ -648,17 +676,29 @@
     }
   }
 
+  // "No VAT" only sits beside a real price, not the "—" placeholder or "TBC".
+  function syncNoVat() {
+    const text = els.priceAmount ? els.priceAmount.textContent.trim() : '';
+    const hasPrice = text !== '' && text !== '—' && text !== 'TBC';
+    document.querySelectorAll('[data-price-novat]').forEach((el) => {
+      el.hidden = !hasPrice;
+    });
+  }
+
   function applyQuote(quote) {
     const setAmount = (text) => {
       if (els.priceAmount) els.priceAmount.textContent = text;
       document.querySelectorAll('[data-mobile-price]').forEach((el) => {
         el.textContent = text;
       });
+      syncNoVat();
     };
 
     if (!quote) {
       setAmount('—');
-      if (els.priceDetail) els.priceDetail.textContent = '';
+      if (els.priceDetail) {
+        els.priceDetail.textContent = selectedServiceCode ? '' : NO_SERVICE_HINT;
+      }
       return;
     }
 
@@ -706,7 +746,7 @@
 
   async function refreshPreview() {
     const seq = ++previewSeq;
-    if (!selectedServiceCode) {
+    if (!selectedServiceCode || !isReadyToPrice()) {
       applyQuote(null);
       if (els.priceAmount) els.priceAmount.classList.remove('is-loading');
       document.querySelectorAll('[data-mobile-price]').forEach((el) => el.classList.remove('is-loading'));
@@ -777,13 +817,6 @@
     selectService(code, { expandMobile: true });
   }
 
-  function firstServiceCode() {
-    const categories = [...(catalog?.categories || [])].sort(
-      (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
-    );
-    return categories[0] ? listLeafServices(categories[0])[0]?.code || null : null;
-  }
-
   // Same categories and services in the same order => prices can be swapped in place.
   function catalogShape(data) {
     return [...(data?.categories || [])]
@@ -831,10 +864,7 @@
     if (selectedServiceCode && !findService(selectedServiceCode)) selectedServiceCode = null;
     if (expandedMobileCode && !findService(expandedMobileCode)) expandedMobileCode = null;
 
-    if (!selectedServiceCode && !isMobileLayout()) {
-      const first = firstServiceCode();
-      if (first) selectService(first, { skipPreview: true });
-    } else if (selectedServiceCode && !wasReady) {
+    if (selectedServiceCode && !wasReady) {
       // Questions only became known now: start from their defaults.
       answers = defaultAnswersForService(findService(selectedServiceCode));
     }
@@ -853,6 +883,14 @@
     const service = findService(selectedServiceCode);
     const beforeKeys = service ? visibleQuestions(service).map((q) => q.fieldKey).join('|') : '';
     answers[field] = event.target.value;
+    // A follow-up question that appears (e.g. "Add CO Alarm installation?") starts on its usual answer.
+    if (service && !isMobileLayout()) {
+      for (const q of visibleQuestions(service)) {
+        if (!q.conditionalLogic?.showWhen || !q.options?.length || answers[q.fieldKey] != null) continue;
+        const no = q.options.find((o) => o.value === 'no');
+        answers[q.fieldKey] = (q.fieldKey === 'coAlarmInstall' && no ? no : q.options[0]).value;
+      }
+    }
     const question = (service?.questions || []).find((q) => q.fieldKey === field);
     const chosen = question?.options?.find((o) => String(o.value) === String(event.target.value));
     document.querySelectorAll(`[data-hint-for="${field}"]`).forEach((el) => {
@@ -883,6 +921,7 @@
     const typed = typedPostcode();
     if (typed && !UK_POSTCODE.test(typed)) {
       setCoverage('muted', 'Enter a full postcode, e.g. SW1A 1AA');
+      if (!isMobileLayout() && selectedServiceCode) schedulePreview();
       return;
     }
     postcodeTimer = setTimeout(loadCatalog, 450);
@@ -940,13 +979,7 @@
   const cached = readCachedCatalog();
   catalog = normalizeCatalog(cached || FALLBACK_CATALOG);
   catalogReady = Boolean(cached);
-  if (!isMobileLayout()) {
-    const first = firstServiceCode();
-    if (first) selectService(first, { skipPreview: true });
-  } else {
-    renderLayout();
-  }
+  renderLayout();
   setCoverage('muted', 'Enter your postcode to check coverage');
-  if (els.priceAmount) els.priceAmount.classList.add('is-loading');
   loadCatalog();
 })();
