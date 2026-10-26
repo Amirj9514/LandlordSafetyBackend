@@ -162,7 +162,7 @@ Deprecated alias for `POST /api/quotations`.
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/api/dashboard/stats` | Active technicians, pending/unpaid bookings, current-month completed bookings and paid revenue |
+| GET | `/api/dashboard/stats` | Active technicians, pending/unpaid bookings, pending quotations, new leads, and for the current month: bookings received, completed bookings, paid revenue, Priority Service bookings, revenue by service (`topServices`) and booking-level `adjustments` (Priority Service, congestion/parking, bundle discounts) |
 
 **Response `data` excerpt:**
 
@@ -274,12 +274,25 @@ Set tier amounts per region via existing `PUT /api/regions/:id/prices`. Run `npm
 
 ## Pricing rules (residential)
 
-- Prices loaded from **region matrix** (`region_prices` + `pricing_tiers`)
-- **GSC + boiler bundle**: boiler priced as add-on (£45 basic / £120 full) when `bundle-gsc-boiler` active
-- **EICR + PAT**: PAT £49.99 (1–10) + £10 bundle discount line
-- **FSC + ELC**: −£20; **FSC + ELC + FRA**: −£40; **EPC + floor plan**: −£20
-- **Congestion zone**: +£18; **No parking**: +£5
-- **EPC 7+ bedrooms**, **asbestos non–3-bed house**: TBC
+- Prices are final and **VAT-free** (`VAT_ENABLED=false`). Source of truth: `src/scripts/seed/zonePrices.js` (the "Residential Services — Website Price List"), seeded per zone into the **region matrix** (`region_prices` + `pricing_tiers`)
+- **Starting from** on each card is the lowest price across the four zones; the exact price is shown once the postcode sets the zone. Postcodes outside London and the M25 are "not covered"
+- **CP12**: meter + 1 appliance, then **+£10 per additional appliance** (stepper, `applianceCount`). CO alarm fitted for £35 (**£40 in Zone 1**) when none is present
+- **Boiler service**: Essential / Standard / Premium (`boilerType` = `essential` | `standard` | `premium`)
+- **CP12 + boiler bundle** (one bundle, no stacking) is chosen inside the CP12 form with the "Add a boiler service?" question (`boilerAddon` = `none` | `essential` | `standard` | `premium`). It adds a Boiler Service line plus a bundle discount line: **Essential** is a fixed bundle price with 2 appliances included (£119.99 / £109.99 / £109.99 / £119.99 for zones 1–4); **Standard** and **Premium** take **5% off** the CP12 + service total (£185.23 / £280.23 in Zone 2 with 1 appliance). Extra appliances are added on top. The separate Boiler Service card is always the standalone price
+- **PAT**: bands of up to 10 / 15 / 20 appliances, then **+£2.50 per appliance above 20**
+- **FSC**: Grade D (flat / house / small HMO) or Grade A (large HMO / communal building); 1–3 alarms base, then **+£15 per extra alarm** in Zone 2 (zone prices in `zonePrices.js`)
+- **ELC**: 1–3 lights base, then per extra light
+- **FRA**: **House / HMO** by bedrooms (1–3 base, then per bedroom); **Building** by floors / communal areas (1 base, then per extra)
+- **Floor plan**: studio, then 1–2 bed single storey, +£20 per extra bedroom, +£39.99 per extra floor
+- **Asbestos**: limited survey (up to 2 samples) or full property survey (up to 5 bed); **more than 5 bed is quote only**
+- **Quote-only lines** (for example an asbestos survey over 5 bed) make the whole basket a quote request: `POST /api/bookings` answers `422 REQUIRES_QUOTATION` and the booking form submits to `POST /api/quotations`
+- **Non-emergency callout**: £119.99 per fault type (gas / electrical / fire), includes 1 hour of labour
+- **EICR + PAT**: £10 bundle discount line; **FSC + ELC**: −£20; **FSC + ELC + FRA**: −£40; **EPC + floor plan**: −£20
+- **Congestion zone**: +£18; **No parking**: +£5; **Priority Service** (optional, `priorityService: true`): +£99
+- **EPC 7+ bedrooms**: TBC
+- Question text can carry an info tooltip via `conditionalLogic.info`; `validation.stepper: true` renders a number question as a − / + stepper
+
+To apply a new price list: edit `zonePrices.js` (and tiers/questions in `catalogData.js` if the structure changed), then run `npm run db:seed:catalog && npm run db:seed:regions && npm run db:seed:prices && npm run db:seed:pricing-rules`.
 
 ## Tests
 

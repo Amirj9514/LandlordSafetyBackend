@@ -5,41 +5,62 @@ const {
   enrichQuestionWithRules,
   formatDisplayLabel,
   formatMoney,
+  variantBundleFigures,
 } = require('./pricing/pricingEngine');
+
+/** The CP12 + boiler bundle rule (per service-level variants), if seeded. */
+const findGscBoilerBundleRule = (rules) =>
+  rules.find((r) => r.isActive && r.config?.variants && r.config?.variantFieldKey === 'boilerAddon');
 
 const enrichBoilerOption = (option, priceMap, noRegion) => {
   const raw = { ...option };
-  const label = raw.label || (raw.value === 'basic' ? 'Basic Service' : 'Full Service');
-  const standaloneKey = raw.tierKeyStandalone;
-  const bundleKey = raw.tierKeyBundle;
+  const label = raw.label || `${String(raw.value).charAt(0).toUpperCase()}${String(raw.value).slice(1)} Service`;
+  const standaloneKey = raw.tierKeyStandalone || raw.tierKey;
   const standalone = getPrice(priceMap, standaloneKey, noRegion);
-  const bundle = getPrice(priceMap, bundleKey, noRegion);
   const standaloneAmount = standalone.isTbc ? null : formatMoney(standalone.amount);
-  const bundleAmount = bundle.isTbc ? null : formatMoney(bundle.amount);
 
   return {
     ...raw,
     label,
     tierKeyStandalone: standaloneKey,
-    tierKeyBundle: bundleKey,
     price: standaloneAmount,
-    priceStandalone: standaloneAmount,
-    priceBundleAddon: bundleAmount,
     isTbc: standalone.isTbc,
-    isTbcStandalone: standalone.isTbc,
-    isTbcBundleAddon: bundle.isTbc,
     displayLabel: formatDisplayLabel(label, standaloneAmount, standalone.isTbc),
-    displayLabelStandalone: formatDisplayLabel(label, standaloneAmount, standalone.isTbc),
-    displayLabelBundle: formatDisplayLabel(label, bundleAmount, bundle.isTbc),
+  };
+};
+
+// "Add a boiler service?" inside the CP12 form: each option shows the CP12 + service bundle price.
+const enrichBoilerAddonOption = (option, priceMap, noRegion, bundleRule) => {
+  const raw = { ...option };
+  if (raw.value === 'none') {
+    return { ...raw, price: null, isTbc: false, displayLabel: raw.label };
+  }
+  const label = raw.label || raw.value;
+  const shortName = label.replace(/\s+Service$/i, '');
+  const figures = bundleRule && !noRegion ? variantBundleFigures(bundleRule.config, raw.value, 1, priceMap, noRegion) : null;
+  const total = figures ? formatMoney(figures.total) : null;
+  return {
+    ...raw,
+    label,
+    price: total,
+    isTbc: total === null,
+    displayLabel: formatDisplayLabel(`CP12 + ${shortName}`, total, total === null),
   };
 };
 
 const enrichServiceQuestions = async (service, priceMap, noRegion, rules) => {
+  const bundleRule = findGscBoilerBundleRule(rules);
   const questions = (service.questions || []).map((q) => {
     if (service.code === 'boiler' && q.fieldKey === 'boilerType') {
       return {
         ...q,
         options: (q.options || []).map((opt) => enrichBoilerOption(opt, priceMap, noRegion)),
+      };
+    }
+    if (service.code === 'gsc' && q.fieldKey === 'boilerAddon') {
+      return {
+        ...q,
+        options: (q.options || []).map((opt) => enrichBoilerAddonOption(opt, priceMap, noRegion, bundleRule)),
       };
     }
     return enrichQuestionWithRules(service, q, rules, priceMap, noRegion);

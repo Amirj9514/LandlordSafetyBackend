@@ -8974,3 +8974,42 @@ html {
     padding-left: 1rem;
   }
 }
+
+/* Home hero on phones: image + headline form the banner, the quote card sits below it */
+@media (max-width: 47.99rem) {
+  .hero__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: visible;
+  }
+
+  .hero__media,
+  .hero__overlay {
+    position: static;
+    inset: auto;
+    grid-area: 1 / 1;
+  }
+
+  .hero__inner {
+    display: contents;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 22rem;
+    padding: var(--space-10) var(--layout-pad-x);
+    box-sizing: border-box;
+  }
+
+  .hero__main .quote-card {
+    grid-area: 2 / 1;
+    width: auto;
+    max-width: none;
+    margin: var(--space-6) var(--layout-pad-x) var(--space-8);
+  }
+}

@@ -21,16 +21,12 @@ const categories = [
 
 /** Pricing tiers — amounts seeded per region in seedRegionPricesDefault */
 const pricingTiers = [
-  { tierKey: 'gsc_meter_1', label: 'Meter & 1 appliance', serviceCode: 'gsc', sortOrder: 1 },
-  { tierKey: 'gsc_meter_2', label: 'Meter & 2 appliances', serviceCode: 'gsc', sortOrder: 2 },
-  { tierKey: 'gsc_meter_3', label: 'Meter & 3 appliances', serviceCode: 'gsc', sortOrder: 3 },
-  { tierKey: 'gsc_meter_4', label: 'Meter & 4 appliances', serviceCode: 'gsc', sortOrder: 4 },
-  { tierKey: 'gsc_meter_5', label: 'Meter & 5 appliances', serviceCode: 'gsc', sortOrder: 5 },
+  { tierKey: 'gsc_meter_1', label: 'CP12 meter & 1 appliance', serviceCode: 'gsc', sortOrder: 1 },
+  { tierKey: 'gsc_appliance_extra', label: 'CP12 each additional appliance', serviceCode: 'gsc', sortOrder: 2 },
   { tierKey: 'co_alarm_install', label: 'CO Alarm installation', serviceCode: 'gsc', sortOrder: 10 },
-  { tierKey: 'boiler_basic_standalone', label: 'Basic Boiler Service (standalone)', serviceCode: 'boiler', sortOrder: 1 },
-  { tierKey: 'boiler_full_standalone', label: 'Full Boiler Service (standalone)', serviceCode: 'boiler', sortOrder: 2 },
-  { tierKey: 'boiler_basic_bundle_addon', label: 'Basic Boiler Service (GSC bundle add-on)', serviceCode: 'boiler', sortOrder: 3 },
-  { tierKey: 'boiler_full_bundle_addon', label: 'Full Boiler Service (GSC bundle add-on)', serviceCode: 'boiler', sortOrder: 4 },
+  { tierKey: 'boiler_essential_standalone', label: 'Essential Boiler Service (standalone)', serviceCode: 'boiler', sortOrder: 1 },
+  { tierKey: 'boiler_standard_standalone', label: 'Standard Boiler Service (standalone)', serviceCode: 'boiler', sortOrder: 2 },
+  { tierKey: 'boiler_premium_standalone', label: 'Premium Boiler Service (standalone)', serviceCode: 'boiler', sortOrder: 3 },
   { tierKey: 'eicr_studio', label: 'EICR Studio', serviceCode: 'eicr', sortOrder: 1 },
   { tierKey: 'eicr_bed_1_3', label: 'EICR 1-3 bedrooms', serviceCode: 'eicr', sortOrder: 2 },
   { tierKey: 'eicr_bed_4', label: 'EICR 4 bedrooms', serviceCode: 'eicr', sortOrder: 3 },
@@ -44,7 +40,7 @@ const pricingTiers = [
   { tierKey: 'pat_flat_1_10', label: 'PAT 1-10 appliances', serviceCode: 'pat', sortOrder: 1 },
   { tierKey: 'pat_flat_1_15', label: 'PAT 1-15 appliances', serviceCode: 'pat', sortOrder: 2 },
   { tierKey: 'pat_flat_1_20', label: 'PAT 1-20 appliances', serviceCode: 'pat', sortOrder: 3 },
-  { tierKey: 'pat_per_extra_appliance', label: 'PAT per appliance above 20', serviceCode: 'pat', sortOrder: 4, isTbcByDefault: true },
+  { tierKey: 'pat_per_extra_appliance', label: 'PAT each appliance above 20', serviceCode: 'pat', sortOrder: 4 },
   { tierKey: 'pat_with_eicr_1_10', label: 'PAT 1-10 with EICR bundle', serviceCode: 'pat', sortOrder: 5 },
   { tierKey: 'fsc_standard_base', label: 'FSC standard base (1-3 alarms)', serviceCode: 'fsc', sortOrder: 1 },
   { tierKey: 'fsc_premium_base', label: 'FSC premium base (1-3 alarms)', serviceCode: 'fsc', sortOrder: 2 },
@@ -61,18 +57,18 @@ const pricingTiers = [
   { tierKey: 'epc_bed_5', label: 'EPC 5 bedrooms', serviceCode: 'epc', sortOrder: 4 },
   { tierKey: 'epc_bed_6', label: 'EPC 6 bedrooms', serviceCode: 'epc', sortOrder: 5 },
   { tierKey: 'epc_bed_7_plus', label: 'EPC 7+ bedrooms', serviceCode: 'epc', sortOrder: 6, isTbcByDefault: true },
-  { tierKey: 'fp_bed_1_2', label: 'Floor Plan 1-2 bedrooms', serviceCode: 'floorplan', sortOrder: 1 },
+  { tierKey: 'fp_studio', label: 'Floor Plan Studio', serviceCode: 'floorplan', sortOrder: 0 },
+  { tierKey: 'fp_bed_1_2', label: 'Floor Plan 1-2 bedrooms (single storey)', serviceCode: 'floorplan', sortOrder: 1 },
   { tierKey: 'fp_bed_3', label: 'Floor Plan 3 bedrooms', serviceCode: 'floorplan', sortOrder: 2 },
   { tierKey: 'fp_bed_4', label: 'Floor Plan 4 bedrooms', serviceCode: 'floorplan', sortOrder: 3 },
   { tierKey: 'fp_bed_5', label: 'Floor Plan 5 bedrooms', serviceCode: 'floorplan', sortOrder: 4 },
   { tierKey: 'fp_bed_6_plus', label: 'Floor Plan 6+ bedrooms', serviceCode: 'floorplan', sortOrder: 5 },
   { tierKey: 'fp_floor_extra', label: 'Floor Plan each floor above 1', serviceCode: 'floorplan', sortOrder: 6 },
-  { tierKey: 'asbestos_2_sample', label: 'Asbestos 2 sample survey', serviceCode: 'asbestos', sortOrder: 1 },
-  { tierKey: 'asbestos_full_property', label: 'Asbestos full property survey', serviceCode: 'asbestos', sortOrder: 2 },
+  { tierKey: 'asbestos_2_sample', label: 'Asbestos limited survey (up to 2 samples)', serviceCode: 'asbestos', sortOrder: 1 },
+  { tierKey: 'asbestos_full_property', label: 'Asbestos full property survey (up to 5 bed)', serviceCode: 'asbestos', sortOrder: 2 },
   { tierKey: 'asbestos_house_3bed', label: 'Asbestos House up to 3 bed (legacy)', serviceCode: 'asbestos', sortOrder: 3, isTbcByDefault: true },
   { tierKey: 'callout_base', label: 'Non-Emergency Callout (1 hour labour)', serviceCode: 'callout', sortOrder: 1 },
-  { tierKey: 'bundle_gsc_boiler_basic', label: 'Bundle discount GSC+Basic Boiler', serviceCode: null, sortOrder: 100 },
-  { tierKey: 'bundle_gsc_boiler_full', label: 'Bundle discount GSC+Full Boiler', serviceCode: null, sortOrder: 101 },
+  { tierKey: 'bundle_gsc_boiler_essential', label: 'CP12 + Essential boiler service bundle price (2 appliances included)', serviceCode: null, sortOrder: 100 },
   { tierKey: 'bundle_eicr_pat_total', label: 'Bundle discount EICR+PAT total', serviceCode: null, sortOrder: 102 },
   { tierKey: 'bundle_fsc_elc', label: 'Bundle discount FSC+ELC', serviceCode: null, sortOrder: 103 },
   { tierKey: 'bundle_fsc_elc_fra', label: 'Bundle discount FSC+ELC+FRA', serviceCode: null, sortOrder: 104 },
@@ -80,6 +76,7 @@ const pricingTiers = [
   { tierKey: 'zone_premium', label: 'Zone Premium', serviceCode: null, sortOrder: 199 },
   { tierKey: 'congestion_charge', label: 'Congestion Charge', serviceCode: null, sortOrder: 200 },
   { tierKey: 'parking_charge', label: 'Parking Charge', serviceCode: null, sortOrder: 201 },
+  { tierKey: 'priority_service', label: 'Priority Service (guaranteed priority appointment and certificate)', serviceCode: null, sortOrder: 202 },
   { tierKey: 'cp17_starts_from', label: 'CP17 starts from', serviceCode: 'cp17', sortOrder: 1 },
   { tierKey: 'cp42_starts_from', label: 'CP42 starts from', serviceCode: 'cp42', sortOrder: 1 },
   { tierKey: 'cp15_starts_from', label: 'CP15 starts from', serviceCode: 'cp15', sortOrder: 1 },
@@ -96,7 +93,7 @@ const pricingTiers = [
 ];
 
 const residentialBundles = [
-  { bundleKey: 'bundle-gsc-boiler', label: 'Gas Safety Cert + Boiler Service', propertyType: PT.RESIDENTIAL, serviceCodes: ['gsc', 'boiler'], discountTierKey: null, discountAmount: null, exclusionGroup: 'gsc-boiler', displayOrder: 1, metadata: { saveLabel: 'Save £20' } },
+  { bundleKey: 'bundle-gsc-boiler', label: 'Gas Safety Cert + Boiler Service', propertyType: PT.RESIDENTIAL, serviceCodes: ['gsc', 'boiler'], discountTierKey: null, discountAmount: null, exclusionGroup: 'gsc-boiler', displayOrder: 1, metadata: { saveLabel: 'Save up to £45' } },
   { bundleKey: 'bundle-fsc-elc', label: 'FSC + ELC', propertyType: PT.RESIDENTIAL, serviceCodes: ['fsc', 'elc'], discountTierKey: 'bundle_fsc_elc', discountAmount: 20, exclusionGroup: 'fire-bundle', displayOrder: 2, metadata: { saveLabel: 'Save £20' } },
   { bundleKey: 'bundle-fsc-elc-fra', label: 'FSC + ELC + FRA', propertyType: PT.RESIDENTIAL, serviceCodes: ['fsc', 'elc', 'fra'], discountTierKey: 'bundle_fsc_elc_fra', discountAmount: 40, exclusionGroup: 'fire-bundle', displayOrder: 3, metadata: { saveLabel: 'Save £40' } },
   { bundleKey: 'bundle-eicr-pat', label: 'EICR + PAT', propertyType: PT.RESIDENTIAL, serviceCodes: ['eicr', 'pat'], discountTierKey: 'bundle_eicr_pat_total', discountAmount: 10, exclusionGroup: null, displayOrder: 4, metadata: { saveLabel: 'Save £20' } },
@@ -104,13 +101,18 @@ const residentialBundles = [
 ];
 
 const gscQuestions = [
-  { fieldKey: 'applianceCount', inputType: 'select', label: 'Number of appliances', options: [{ value: '1', tierKey: 'gsc_meter_1' }, { value: '2', tierKey: 'gsc_meter_2' }, { value: '3', tierKey: 'gsc_meter_3' }, { value: '4', tierKey: 'gsc_meter_4' }, { value: '5', tierKey: 'gsc_meter_5' }], validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'coAlarmPresent', inputType: 'radio', label: 'CO Alarm present at property?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], validation: { required: true }, sortOrder: 2, conditionalLogic: { note: 'A CO alarm is mandatory where a boiler is installed.' } },
-  { fieldKey: 'coAlarmInstall', inputType: 'radio', label: 'Add CO Alarm installation? (+£35)', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], validation: { required: true }, sortOrder: 3, conditionalLogic: { showWhen: { field: 'coAlarmPresent', equals: 'no' } } },
+  { fieldKey: 'applianceCount', inputType: 'number', label: 'Number of appliances', validation: { required: true, min: 1, max: 20, stepper: true }, sortOrder: 1, conditionalLogic: { info: 'Count boilers, hobs/cookers and fires as appliances. The price includes the meter and 1 appliance; each additional appliance is charged on top.' } },
+  { fieldKey: 'coAlarmPresent', inputType: 'radio', label: 'CO alarm present at property?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], validation: { required: true }, sortOrder: 2, conditionalLogic: { info: 'A CO alarm is mandatory where a boiler is installed.' } },
+  { fieldKey: 'coAlarmInstall', inputType: 'radio', label: 'Would you like us to fit one?', options: [{ value: 'yes', label: 'Fit a CO alarm', tierKey: 'co_alarm_install' }, { value: 'no', label: 'No thanks' }], validation: { required: true }, sortOrder: 3, conditionalLogic: { showWhen: { field: 'coAlarmPresent', equals: 'no' } } },
+  { fieldKey: 'boilerAddon', inputType: 'radio', label: 'Add a boiler service?', options: [{ value: 'none', label: 'No thanks' }, { value: 'essential', label: 'Essential Service', tierKey: 'boiler_essential_standalone' }, { value: 'standard', label: 'Standard Service', tierKey: 'boiler_standard_standalone' }, { value: 'premium', label: 'Premium Service', tierKey: 'boiler_premium_standalone' }], validation: { required: false }, sortOrder: 4, conditionalLogic: { info: 'Book a boiler service together with your CP12 and save. CP12 + Essential is a fixed bundle price with 2 appliances included; Standard and Premium take 5% off.' } },
 ];
 
 const boilerQuestions = [
-  { fieldKey: 'boilerType', inputType: 'radio', label: 'Service type', options: [{ value: 'basic', label: 'Basic Service', tierKey: 'boiler_basic_standalone' }, { value: 'full', label: 'Full Service (TBC)', tierKey: 'boiler_full_standalone' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'boilerType', inputType: 'radio', label: 'Service level', options: [
+    { value: 'essential', label: 'Essential Service', tierKey: 'boiler_essential_standalone', tierKeyStandalone: 'boiler_essential_standalone' },
+    { value: 'standard', label: 'Standard Service', tierKey: 'boiler_standard_standalone', tierKeyStandalone: 'boiler_standard_standalone' },
+    { value: 'premium', label: 'Premium Service', tierKey: 'boiler_premium_standalone', tierKeyStandalone: 'boiler_premium_standalone' },
+  ], validation: { required: true }, sortOrder: 1 },
 ];
 
 const eicrQuestions = [
@@ -123,53 +125,54 @@ const patQuestions = [
 ];
 
 const fscQuestions = [
-  { fieldKey: 'propertySubtype', inputType: 'select', label: 'Property type', options: [{ value: 'standard', label: 'Flat / House / Small HMO (Grade D/LD2)' }, { value: 'premium', label: 'Large / Licensed HMO (Grade A/L2)' }, { value: 'block', label: 'Block of Flats — per unit' }], validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'alarmCount', inputType: 'select', label: 'Number of fire alarms', options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((n) => ({ value: n, label: n === '12' ? '12+' : n })), validation: { required: true }, sortOrder: 2 },
+  { fieldKey: 'propertySubtype', inputType: 'select', label: 'Property type', options: [{ value: 'standard', label: 'Flat / House / Small HMO (Grade D / LD2)', tierKey: 'fsc_standard_base' }, { value: 'premium', label: 'Large HMO / Flat or communal building (Grade A)', tierKey: 'fsc_premium_base' }], validation: { required: true }, sortOrder: 1, conditionalLogic: { info: 'Large HMOs and communal buildings usually have a mixed system, for example Grade D alarms inside the flats and Grade A alarms in the communal areas.' } },
+  { fieldKey: 'alarmCount', inputType: 'number', label: 'Number of alarms', validation: { required: true, min: 1, max: 50, stepper: true }, sortOrder: 2, conditionalLogic: { info: 'The price includes up to 3 alarms; each additional alarm is charged on top.' } },
 ];
 
 const elcQuestions = [
-  { fieldKey: 'lightCount', inputType: 'select', label: 'Number of emergency lights', options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((n) => ({ value: n, label: n === '12' ? '12+' : n })), validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'lightCount', inputType: 'number', label: 'Number of lights', validation: { required: true, min: 1, max: 50, stepper: true }, sortOrder: 1, conditionalLogic: { info: 'The price includes up to 3 lights; each additional light is charged on top.' } },
 ];
 
 const fraQuestions = [
-  { fieldKey: 'propertySubtype', inputType: 'select', label: 'Property type', options: [{ value: 'house', label: 'House' }, { value: 'flat', label: 'Flat (single)' }, { value: 'hmo', label: 'HMO' }, { value: 'building', label: 'Building / Block' }, { value: 'sheltered', label: 'Sheltered / Care Home' }], validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: ['1', '2', '3', '4', '5', '6', '7', '8'].map((n) => ({ value: n, label: n })), validation: { required: true }, sortOrder: 2, conditionalLogic: { hideWhen: { field: 'propertySubtype', equals: 'flat' } } },
-  { fieldKey: 'communalAreas', inputType: 'select', label: 'Number of communal areas', options: [{ value: '1', label: '1 (included)' }, { value: '2', label: '2 (+£60)' }, { value: '3', label: '3 (+£120)' }, { value: '4', label: '4 (+£180)' }, { value: '5', label: '5+ (+£240)' }], validation: { required: true }, sortOrder: 3 },
+  { fieldKey: 'propertySubtype', inputType: 'select', label: 'Property type', options: [{ value: 'house_hmo', label: 'House / HMO' }, { value: 'building', label: 'Building (communal)' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'bedrooms', inputType: 'number', label: 'Number of bedrooms', validation: { required: true, min: 1, max: 30, stepper: true }, sortOrder: 2, conditionalLogic: { showWhen: { field: 'propertySubtype', equals: 'house_hmo' }, info: 'The price includes 1 to 3 bedrooms; each additional bedroom is charged on top.' } },
+  { fieldKey: 'communalAreas', inputType: 'number', label: 'Number of floors / communal areas', validation: { required: true, min: 1, max: 30, stepper: true }, sortOrder: 3, conditionalLogic: { showWhen: { field: 'propertySubtype', equals: 'building' }, info: 'The price includes 1 floor; each additional floor or communal area is charged on top.' } },
 ];
 
 const epcQuestions = [
-  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: 'studio', tierKey: 'epc_studio', label: 'Studio' }, { value: '1-3', tierKey: 'epc_bed_1_3' }, { value: '4', tierKey: 'epc_bed_4' }, { value: '5', tierKey: 'epc_bed_5' }, { value: '6', tierKey: 'epc_bed_6' }, { value: '7+', tierKey: 'epc_bed_7_plus', label: '7+ (TBC)' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: 'studio', tierKey: 'epc_studio', label: 'Studio' }, { value: '1-3', tierKey: 'epc_bed_1_3', label: '1-3 bedrooms' }, { value: '4', tierKey: 'epc_bed_4', label: '4 bedrooms' }, { value: '5', tierKey: 'epc_bed_5', label: '5 bedrooms' }, { value: '6', tierKey: 'epc_bed_6', label: '6 bedrooms' }, { value: '7+', tierKey: 'epc_bed_7_plus', label: '7+ bedrooms (TBC)' }], validation: { required: true }, sortOrder: 1 },
 ];
 
 const floorplanQuestions = [
-  { fieldKey: 'bedrooms', inputType: 'select', label: 'Bedrooms', options: ['1', '2', '3', '4', '5', '6'].map((n) => ({ value: n, label: n })), validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'floors', inputType: 'select', label: 'Floors', options: [{ value: '1', label: '1 floor' }, { value: '2', label: '2 floors (+£39.99)' }, { value: '3', label: '3 floors (+£79.98)' }], validation: { required: true }, sortOrder: 2 },
+  { fieldKey: 'bedrooms', inputType: 'select', label: 'Number of bedrooms', options: [{ value: '0', label: 'Studio' }, { value: '1', label: '1 bedroom' }, { value: '2', label: '2 bedrooms' }, { value: '3', label: '3 bedrooms' }, { value: '4', label: '4 bedrooms' }, { value: '5', label: '5 bedrooms' }, { value: '6', label: '6+ bedrooms' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'floors', inputType: 'select', label: 'Number of floors', options: [{ value: '1', label: '1 floor' }, { value: '2', label: '2 floors' }, { value: '3', label: '3 floors' }, { value: '4', label: '4 floors' }], validation: { required: true }, sortOrder: 2 },
 ];
 
 const asbestosQuestions = [
-  { fieldKey: 'configuration', inputType: 'select', label: 'Survey type', options: [{ value: '2_sample', tierKey: 'asbestos_2_sample', label: '2 sample survey' }, { value: 'full_property', tierKey: 'asbestos_full_property', label: 'Full property survey' }, { value: 'other', label: 'Other configuration — quote required' }], validation: { required: true }, sortOrder: 1 },
-  { fieldKey: 'propertySizeSqm', inputType: 'number', label: 'Property size (SQM)', validation: { required: false, min: 1 }, sortOrder: 2 },
+  { fieldKey: 'propertyType', inputType: 'select', label: 'Property type', options: [{ value: 'flat', label: 'Flat' }, { value: 'house_building', label: 'House or Building' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'surveyType', inputType: 'select', label: 'Type of survey', options: [{ value: 'management', label: 'Management survey' }, { value: 'refurbishment_demolition', label: 'Refurbishment / Demolition survey' }], validation: { required: true }, sortOrder: 2, conditionalLogic: { info: 'Both survey types are the same price.' } },
+  { fieldKey: 'configuration', inputType: 'select', label: 'Survey size', options: [{ value: '2_sample', tierKey: 'asbestos_2_sample', label: 'Limited survey (up to 2 samples)' }, { value: 'full_property', tierKey: 'asbestos_full_property', label: 'Full property survey (up to 5 bed)' }, { value: 'full_property_over_5', label: 'Full property survey (more than 5 bed): contact us for a personalised quote' }], validation: { required: true }, sortOrder: 3 },
 ];
 
 const calloutQuestions = [
-  { fieldKey: 'faultType', inputType: 'select', label: 'Type of fault', options: [{ value: 'gas', tierKey: 'callout_base', label: 'Gas' }, { value: 'electrical', tierKey: 'callout_base', label: 'Electrical' }, { value: 'fire_alarm', tierKey: 'callout_base', label: 'Fire alarm' }], validation: { required: true }, sortOrder: 1 },
+  { fieldKey: 'faultType', inputType: 'select', label: 'Type of fault', options: [{ value: 'gas', tierKey: 'callout_base', label: 'Gas' }, { value: 'electrical', tierKey: 'callout_base', label: 'Electrical' }, { value: 'fire_alarm', tierKey: 'callout_base', label: 'Fire' }], validation: { required: true }, sortOrder: 1, conditionalLogic: { info: 'Includes 1 hour of labour only. Parts and materials are charged separately.' } },
   { fieldKey: 'issueDescription', inputType: 'textarea', label: 'Describe the issue', validation: { required: true, placeholder: 'e.g. boiler not firing, circuit keeps tripping, alarm going off' }, sortOrder: 2 },
 ];
 
 /** Services: categoryCode, code, name, pricingMode, displayOrder, parentCode?, metadata?, questions? */
 const services = [
   // Residential
-  { categoryCode: 'res_gas', code: 'gsc', name: 'Gas Safety Certificate (CP12)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: gscQuestions },
-  { categoryCode: 'res_gas', code: 'boiler', name: 'Boiler Service', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: boilerQuestions },
-  { categoryCode: 'res_electrical', code: 'eicr', name: 'Electrical Installation Condition Report (EICR)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: eicrQuestions },
-  { categoryCode: 'res_electrical', code: 'pat', name: 'Portable Appliance Test (PAT)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: patQuestions },
-  { categoryCode: 'res_fire', code: 'fsc', name: 'Fire Alarm Certificate (FSC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: fscQuestions },
-  { categoryCode: 'res_fire', code: 'elc', name: 'Emergency Light Certificate (ELC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: elcQuestions },
-  { categoryCode: 'res_fire', code: 'fra', name: 'Fire Safety Risk Assessment (FRA)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 3, questions: fraQuestions },
-  { categoryCode: 'res_epc', code: 'epc', name: 'Energy Performance Certificate (EPC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: epcQuestions },
-  { categoryCode: 'res_epc', code: 'floorplan', name: 'Floor Plan', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: floorplanQuestions },
-  { categoryCode: 'res_other', code: 'asbestos', name: 'Asbestos Survey', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, questions: asbestosQuestions },
-  { categoryCode: 'res_other', code: 'callout', name: 'Non-Emergency Callout', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, questions: calloutQuestions },
+  { categoryCode: 'res_gas', code: 'gsc', name: 'Gas Safety Certificate (CP12)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, metadata: { startingFrom: 54.99 }, questions: gscQuestions },
+  { categoryCode: 'res_gas', code: 'boiler', name: 'Boiler Service', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, metadata: { startingFrom: 79.99 }, questions: boilerQuestions },
+  { categoryCode: 'res_electrical', code: 'eicr', name: 'Electrical Installation Condition Report (EICR)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, metadata: { startingFrom: 89.99 }, questions: eicrQuestions },
+  { categoryCode: 'res_electrical', code: 'pat', name: 'Portable Appliance Test (PAT)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, metadata: { startingFrom: 54.99 }, questions: patQuestions },
+  { categoryCode: 'res_fire', code: 'fsc', name: 'Fire Alarm Certificate (FSC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, metadata: { startingFrom: 69.99 }, questions: fscQuestions },
+  { categoryCode: 'res_fire', code: 'elc', name: 'Emergency Light Certificate (ELC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, metadata: { startingFrom: 69.99 }, questions: elcQuestions },
+  { categoryCode: 'res_fire', code: 'fra', name: 'Fire Safety Risk Assessment (FRA)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 3, metadata: { startingFrom: 159.99 }, questions: fraQuestions },
+  { categoryCode: 'res_epc', code: 'epc', name: 'Energy Performance Certificate (EPC)', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, metadata: { startingFrom: 69.99 }, questions: epcQuestions },
+  { categoryCode: 'res_epc', code: 'floorplan', name: 'Floor Plan', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, metadata: { startingFrom: 99.99 }, questions: floorplanQuestions },
+  { categoryCode: 'res_other', code: 'asbestos', name: 'Asbestos Survey', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 1, metadata: { startingFrom: 349.99 }, questions: asbestosQuestions },
+  { categoryCode: 'res_other', code: 'callout', name: 'Non-Emergency Callout', propertyType: PT.RESIDENTIAL, pricingMode: PM.INSTANT, displayOrder: 2, metadata: { startingFrom: 119.99 }, questions: calloutQuestions },
 
   // Commercial gas — CGSC parent + sub certs
   { categoryCode: 'com_gas', code: 'cgsc', name: 'Commercial Gas Safety Certificate', propertyType: PT.COMMERCIAL, pricingMode: PM.QUOTE_ONLY, displayOrder: 0, metadata: { isParent: true } },

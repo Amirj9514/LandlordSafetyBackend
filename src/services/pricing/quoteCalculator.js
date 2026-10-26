@@ -57,6 +57,7 @@ const calculateQuote = async ({
   activeBundleKeys = [],
   congestionZone = false,
   parkingAvailable = true,
+  priorityService = false,
 }) => {
   const region = await resolveRegionByPostcode(postcode);
   const noRegion = !region;
@@ -91,7 +92,7 @@ const calculateQuote = async ({
     lines.push(
       ...evaluateBookingSurcharges(
         context.rules,
-        { congestionZone: effectiveCongestion, parkingAvailable: effectiveParking },
+        { congestionZone: effectiveCongestion, parkingAvailable: effectiveParking, priorityService: !!priorityService },
         priceMap,
         noRegion
       )
@@ -128,8 +129,15 @@ const inferActiveBundles = async (propertyType, selections, explicitBundles) => 
 const quoteRequiresQuotation = (lines) =>
   lines.some((l) => !l.isDiscount && !l.quoteOnly && l.isTbc);
 
+/**
+ * True if any non-discount line has no price yet, including quote-only lines such as an asbestos survey of a
+ * property with more than 5 bedrooms. Such a basket cannot be booked directly; it is submitted as a quote request.
+ */
+const quoteHasUnpricedLines = (lines) => lines.some((l) => !l.isDiscount && l.isTbc);
+
 module.exports = {
   calculateQuote,
   inferActiveBundles,
   quoteRequiresQuotation,
+  quoteHasUnpricedLines,
 };

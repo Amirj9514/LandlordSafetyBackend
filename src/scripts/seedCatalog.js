@@ -1,10 +1,12 @@
 require('dotenv').config();
+const { Op } = require('sequelize');
 const {
   sequelize,
   ServiceCategory,
   Service,
   ServiceQuestion,
   PricingTier,
+  RegionPrice,
   Bundle,
   CatalogTopQuestion,
   syncModels,
@@ -44,6 +46,10 @@ const upsertService = async (svc, categoryId, parentId = null) => {
 
 const seedQuestions = async (serviceId, questions) => {
   if (!questions?.length) return;
+  // Drop questions that were removed from the catalog (e.g. the old asbestos size field).
+  await ServiceQuestion.destroy({
+    where: { serviceId, fieldKey: { [Op.notIn]: questions.map((q) => q.fieldKey) } },
+  });
   for (const q of questions) {
     const existing = await ServiceQuestion.findOne({
       where: { serviceId, fieldKey: q.fieldKey },
@@ -64,7 +70,59 @@ const seedQuestions = async (serviceId, questions) => {
   }
 };
 
+/**
+ * Tier keys renamed in the current price list. Renaming in place keeps the row id,
+ * so existing line items / region prices that reference the tier stay valid.
+ */
+const TIER_KEY_RENAMES = {
+  boiler_basic_standalone: 'boiler_essential_standalone',
+  boiler_full_standalone: 'boiler_standard_standalone',
+  bundle_gsc_boiler_basic: 'bundle_gsc_boiler_essential',
+};
+
+/**
+ * Tier keys that no longer exist in the price list. Removed when nothing references them;
+ * a tier still referenced by an old quote or booking line is kept (with a warning).
+ */
+const RETIRED_TIER_KEYS = [
+  'boiler_basic_bundle_addon',
+  'boiler_full_bundle_addon',
+  'bundle_gsc_boiler_full',
+  'gsc_meter_2',
+  'gsc_meter_3',
+  'gsc_meter_4',
+  'gsc_meter_5',
+];
+
+const applyTierRenames = async () => {
+  for (const [oldKey, newKey] of Object.entries(TIER_KEY_RENAMES)) {
+    const oldRow = await PricingTier.findOne({ where: { tierKey: oldKey } });
+    if (!oldRow) continue;
+    const newRow = await PricingTier.findOne({ where: { tierKey: newKey } });
+    if (newRow) continue;
+    await oldRow.update({ tierKey: newKey });
+    console.log(`Renamed tier ${oldKey} -> ${newKey}`);
+  }
+};
+
+const retireTiers = async () => {
+  for (const tierKey of RETIRED_TIER_KEYS) {
+    const row = await PricingTier.findOne({ where: { tierKey } });
+    if (!row) continue;
+    try {
+      await sequelize.transaction(async (transaction) => {
+        await RegionPrice.destroy({ where: { pricingTierId: row.id }, transaction });
+        await row.destroy({ transaction });
+      });
+      console.log(`Removed retired tier ${tierKey}`);
+    } catch (err) {
+      console.warn(`Could not remove retired tier ${tierKey} (still referenced): ${err.message}`);
+    }
+  }
+};
+
 const seedTiers = async (serviceByCode) => {
+  await applyTierRenames();
   for (const tier of catalogData.pricingTiers) {
     const linked = tier.serviceCode ? serviceByCode[tier.serviceCode] : null;
     const serviceId = linked?.id ?? null;
@@ -157,6 +215,7 @@ const run = async () => {
   }
 
   await seedTiers(serviceByCode);
+  await retireTiers();
   await seedBundles();
   await seedTopQuestions();
 

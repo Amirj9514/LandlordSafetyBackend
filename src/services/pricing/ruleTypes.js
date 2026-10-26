@@ -8,7 +8,7 @@ const REQUIRED_CONFIG_KEYS = {
   flat_plus_extra_units: ['fieldKey', 'flatTierKey', 'extraTierKey'],
   conditional_addon: ['when', 'tierKey'],
   tier_range_map: ['ranges'],
-  bundle_discount: ['discountTierKey'],
+  bundle_discount: [],
   booking_surcharge: ['tierKey', 'lineName'],
   quote_only: [],
   starts_from: [],
@@ -25,8 +25,13 @@ const validateRuleConfig = (ruleType, config = {}) => {
       return `Missing required config key "${key}" for ruleType ${ruleType}`;
     }
   }
-  if (ruleType === 'bundle_discount' && !config.discountTierKey && !config.discountTierKeyFromField) {
-    return 'bundle_discount requires discountTierKey or discountTierKeyFromField';
+  if (
+    ruleType === 'bundle_discount' &&
+    !config.discountTierKey &&
+    !config.discountTierKeyFromField &&
+    !config.variants
+  ) {
+    return 'bundle_discount requires discountTierKey, discountTierKeyFromField or variants';
   }
   return null;
 };

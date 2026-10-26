@@ -10,6 +10,7 @@ const quotePreviewValidator = [
   body('activeBundleKeys').optional().isArray(),
   body('congestionZone').optional().isBoolean(),
   body('parkingAvailable').optional().isBoolean(),
+  body('priorityService').optional().isBoolean(),
 ];
 
 const regionPricesQueryValidator = [

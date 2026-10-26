@@ -1202,6 +1202,24 @@
   .has-corner > .pref-label { padding-right: 130px; }
 
   /* Info icon + tooltip */
+  /* Stepper (number of appliances / alarms ...): label left, buttons right */
+  .subq-row--stepper { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+  .subq-row--stepper > label { flex: 1 1 0; min-width: 7rem; margin: 0; }
+  .subq-row--stepper .addon-note { flex: 1 1 100%; }
+  .stepper { display: inline-flex; align-items: center; border: 1px solid #d5dbe5; border-radius: 10px; background: #fff; overflow: hidden; }
+  .stepper__btn { width: 40px; height: 40px; border: 0; background: #f2f6fc; color: #0a0f2e; font-size: 20px; line-height: 1; cursor: pointer; transition: background .15s ease, color .15s ease; }
+  .stepper__btn:hover, .stepper__btn:focus-visible { background: #0571ff; color: #fff; outline: none; }
+  .stepper input { width: 56px; height: 40px; padding: 0; border: 0; border-left: 1px solid #d5dbe5; border-right: 1px solid #d5dbe5; border-radius: 0; text-align: center; font-size: 16px; font-weight: 600; background: #fff; -moz-appearance: textfield; appearance: textfield; }
+  /* the modal's generic input styling must not round or shade the number between the buttons */
+  .service-modal .stepper input, .subq-row .stepper input { border-radius: 0 !important; box-shadow: none !important; height: 40px; width: 56px; padding: 0; background: #fff; }
+  .stepper input:focus { outline: none; background: #f7faff; }
+  .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* Priority service option */
+  .priority-option { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border: 1px solid #d5dbe5; border-radius: 12px; background: #f7faff; cursor: pointer; font-weight: 400; }
+  .priority-option input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #0571ff; }
+  .priority-option__text strong { display: block; color: #0a0f2e; }
+
   .info-tip {
     position: relative;
     display: inline-flex;
@@ -2147,6 +2165,13 @@
             </div>
           </div>
 
+          <div class="field-group priority-service">
+            <label class="priority-option" for="priority-service">
+              <input type="checkbox" id="priority-service" onchange="togglePriorityService(this.checked)">
+              <span class="priority-option__text"><strong>Priority Service (+£99)</strong> A guaranteed priority appointment and certificate: we reschedule our engineer&rsquo;s other work so your job takes priority.</span>
+            </label>
+          </div>
+
           <div class="field-group">
             <label for="b-comment">Leave a Comment (optional)</label>
             <textarea id="b-comment" placeholder="Any additional notes for the engineer..."></textarea>
@@ -2334,6 +2359,7 @@ const state = {
   radios: {},
   congestion: false,
   parking: null, // no default: the customer must answer
+  priority: false,
   zoneManualFor: '',
   slot: '',
 };
@@ -2402,36 +2428,6 @@ function showToast(message, type = 'danger') {
   el.addEventListener('hidden.bs.toast', () => el.remove());
 }
 
-function goToStep(n) {
-  if (n === 2 && !validateStep1()) return;
-  if (n === 3 && state.services.size === 0) {
-    showToast('Please select at least one service to continue.');
-    return;
-  }
-  if (n === 4) {
-    buildBillingTable();
-    fillBookingDetails();
-  }
-
-  // Hide all panels
-  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('step' + n).classList.add('active');
-
-  // Update tabs
-  document.querySelectorAll('.step-tab').forEach((t, i) => {
-    t.classList.remove('active', 'done');
-    const sn = i + 1;
-    if (sn < n) t.classList.add('done');
-    if (sn === n) t.classList.add('active');
-  });
-
-  // Sync pre-filled fields
-  if (n === 3) syncBookingFields();
-
-  updateStepProgress(n);
-  currentStep = n;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
 function validateStep1() {
   syncFullName();
@@ -2523,13 +2519,8 @@ function selectPropType(type) {
 // BUNDLE MEMBERSHIP MAP
 // Each bundle id -> which individual service ids it covers
 // ═══════════════════════════════════════════════════
-const BUNDLES = {
-  'bundle-gsc-boiler':   { services: ['gsc','boiler'],        discount: 20, label: 'GSC + Boiler Service' },
-  'bundle-fsc-elc':      { services: ['fsc','elc'],           discount: 20, label: 'FSC + ELC' },
-  'bundle-fsc-elc-fra':  { services: ['fsc','elc','fra'],     discount: 40, label: 'FSC + ELC + FRA' },
-  'bundle-eicr-pat':     { services: ['eicr','pat'],          discount: 20, label: 'EICR + PAT' },
-  'bundle-epc-fp':       { services: ['epc','floorplan'],     discount: 20, label: 'EPC + Floor Plan' },
-};
+// Bundles come from GET /api/catalog; book-now-api.js fills window.BUNDLES.
+window.BUNDLES = {};
 
 // Track which bundles are active
 state.activeBundles = new Set();
@@ -2537,7 +2528,7 @@ state.activeBundles = new Set();
 // Services that are covered by an active bundle (hidden from individual selection)
 function coveredByBundle(svcId) {
   for (const bid of state.activeBundles) {
-    if (BUNDLES[bid].services.includes(svcId)) return true;
+    if (window.BUNDLES[bid]?.services?.includes(svcId)) return true;
   }
   return false;
 }
@@ -2554,397 +2545,8 @@ function updateStep2NextState() {
   if (btn) btn.disabled = !isStep2Complete();
 }
 
-function toggleService(id) {
-  // If this service is covered by an active bundle, ignore individual click
-  if (coveredByBundle(id)) return;
-
-  const row = document.getElementById('svc-' + id);
-  const isOn = state.services.has(id);
-  if (isOn) {
-    state.services.delete(id);
-    row.classList.remove('selected');
-  } else {
-    state.services.add(id);
-    row.classList.add('selected');
-  }
-  renderSubQuestions();
-  calcAll();
-  updateStep2NextState();
-}
-
-// ═══════════════════════════════════════════════════
-// BUNDLE TOGGLE — selects bundle row, hides individual rows,
-// adds all component services to state
-// ═══════════════════════════════════════════════════
-function toggleBundle(bundleId, svcIds) {
-  const bundleRow = document.getElementById('svc-' + bundleId);
-  const isOn = state.activeBundles.has(bundleId);
-
-  if (isOn) {
-    // Deactivate bundle
-    state.activeBundles.delete(bundleId);
-    bundleRow.classList.remove('selected');
-    // Remove services (unless selected individually — they won't be since rows were hidden)
-    svcIds.forEach(id => {
-      state.services.delete(id);
-      const r = document.getElementById('svc-' + id);
-      if (r) { r.classList.remove('selected'); r.style.display = ''; }
-    });
-  } else {
-    // Check for conflicting bundles that share services
-    for (const [bid, bdef] of Object.entries(BUNDLES)) {
-      if (bid === bundleId) continue;
-      if (state.activeBundles.has(bid)) {
-        const overlap = bdef.services.some(s => svcIds.includes(s));
-        if (overlap) {
-          // Deactivate conflicting bundle
-          state.activeBundles.delete(bid);
-          document.getElementById('svc-' + bid).classList.remove('selected');
-          bdef.services.forEach(id => {
-            state.services.delete(id);
-            const r = document.getElementById('svc-' + id);
-            if (r) { r.classList.remove('selected'); r.style.display = ''; }
-          });
-        }
-      }
-    }
-    // Activate bundle
-    state.activeBundles.add(bundleId);
-    bundleRow.classList.add('selected');
-    // Add all component services and hide their individual rows
-    svcIds.forEach(id => {
-      state.services.add(id);
-      const r = document.getElementById('svc-' + id);
-      if (r) { r.classList.remove('selected'); r.style.display = 'none'; }
-    });
-  }
-
-  renderSubQuestions();
-  calcAll();
-  updateStep2NextState();
-}
-
-// ═══════════════════════════════════════════════════
-// RENDER SUB-QUESTIONS below the grid
-// Renders one panel per active service, in logical order
-// ═══════════════════════════════════════════════════
-const SVC_ORDER = ['gsc','boiler','eicr','pat','fsc','elc','fra','epc','floorplan','asbestos'];
-
-function renderSubQuestions() {
-  // Save all current input values before re-rendering
-  const saved = {};
-  document.querySelectorAll('.subq-slot [id]').forEach(el => {
-    if (el.value !== undefined && el.value !== '') saved[el.id] = el.value;
-  });
-
-  // Map: slotId -> array of service ids to render in that slot
-  // For individual services: slot = subq-{svcId}
-  // For bundles: slot = subq-bundle-{bundleId}, renders all component services merged
-  const BUNDLE_DEFS = {
-    'bundle-gsc-boiler':   ['gsc','boiler'],
-    'bundle-fsc-elc':      ['fsc','elc'],
-    'bundle-fsc-elc-fra':  ['fsc','elc','fra'],
-    'bundle-eicr-pat':     ['eicr','pat'],
-    'bundle-epc-fp':       ['epc','floorplan'],
-  };
-
-  // Clear all slots first
-  document.querySelectorAll('.subq-slot').forEach(s => { s.innerHTML = ''; });
-
-  // Render bundle slots
-  for (const [bid, svcs] of Object.entries(BUNDLE_DEFS)) {
-    if (!state.activeBundles.has(bid)) continue;
-    const slot = document.getElementById('subq-' + bid);
-    if (!slot) continue;
-    let combined = '';
-    svcs.forEach(id => {
-      const def = getSubqDef(id);
-      if (def) combined += `<div class="subq-section"><div class="subq-section-title">${def.title}</div>${def.html}</div>`;
-    });
-    slot.innerHTML = `<div class="subq-panel">${combined}</div>`;
-  }
-
-  // Render individual service slots (only if not covered by active bundle)
-  SVC_ORDER.forEach(id => {
-    if (!state.services.has(id)) return;
-    if (coveredByBundle(id)) return; // bundle slot handles it
-    const slot = document.getElementById('subq-' + id);
-    if (!slot) return;
-    const def = getSubqDef(id);
-    if (!def) return;
-    slot.innerHTML = `<div class="subq-panel"><div class="subq-panel-title">${def.title}</div>${def.html}</div>`;
-  });
-
-  // Restore saved values
-  Object.entries(saved).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el && val) el.value = val;
-  });
-
-  // Restore radio states
-  Object.entries(state.radios).forEach(([group, val]) => {
-    if (!val) return;
-    document.querySelectorAll('[onclick*="selectRadio"]').forEach(el => {
-      const match = el.getAttribute('onclick') && el.getAttribute('onclick').match(/selectRadio\('([^']+)','([^']+)'/);
-      if (match && match[1] === group) el.classList.toggle('checked', match[2] === val);
-    });
-  });
-
-  // Restore CO install field visibility
-  if (state.radios['co-alarm'] === 'no') {
-    const f = document.getElementById('co-install-field');
-    if (f) f.classList.remove('hidden');
-  }
-
-  // Restore FRA flat note
-  checkFraType();
-
-  // Update float bar and recalc
-  calcAll();
-  updateFloatBar();
-}
-
-function getSubqDef(id) {
-  const defs = {
-    gsc: {
-      title: 'Gas Safety Certificate (CP12)',
-      html: `
-        <div class="subq-row">
-          <label>Number of appliances <span class="req">*</span></label>
-          <select id="gsc-appliances" onchange="calcAll()">
-            <option value="">Select appliance count</option>
-            <option value="59.99">Meter &amp; 1 appliance &mdash; &pound;59.99</option>
-            <option value="74.99">Meter &amp; 2 appliances &mdash; &pound;74.99</option>
-            <option value="89.99">Meter &amp; 3 appliances &mdash; &pound;89.99</option>
-            <option value="104.99">Meter &amp; 4 appliances &mdash; &pound;104.99</option>
-            <option value="119.99">Meter &amp; 5 appliances &mdash; &pound;119.99</option>
-          </select>
-        </div>
-        <div class="subq-row">
-          <label>CO Alarm present at property? <span class="req">*</span></label>
-          <div class="radio-group">
-            <div class="radio-opt" onclick="selectRadio('co-alarm','yes')"><div class="radio-dot"></div> Yes</div>
-            <div class="radio-opt" onclick="selectRadio('co-alarm','no')"><div class="radio-dot"></div> No</div>
-          </div>
-          <div class="addon-note" style="margin-top:8px">A CO alarm is mandatory where a boiler is installed.</div>
-        </div>
-        <div class="subq-row hidden" id="co-install-field">
-          <label>Add CO Alarm installation? (+&pound;35) <span class="req">*</span></label>
-          <div class="radio-group">
-            <div class="radio-opt" onclick="selectRadio('co-install','yes',calcAll)"><div class="radio-dot"></div> Yes</div>
-            <div class="radio-opt" onclick="selectRadio('co-install','no',calcAll)"><div class="radio-dot"></div> No</div>
-          </div>
-        </div>`
-    },
-    boiler: {
-      title: 'Boiler Service',
-      html: `
-        <div class="subq-row">
-          <label>Service type <span class="req">*</span></label>
-          <div class="radio-group">
-            <div class="radio-opt" onclick="selectRadio('boiler-type','basic',calcAll)"><div class="radio-dot"></div> Basic Service &mdash; &pound;65</div>
-            <div class="radio-opt" onclick="selectRadio('boiler-type','full',calcAll)"><div class="radio-dot"></div> Full Service &mdash; &pound;150</div>
-          </div>
-        </div>`
-    },
-    eicr: {
-      title: 'EICR &mdash; Electrical Installation Condition Report',
-      html: `
-        <div class="subq-row">
-          <label>Number of bedrooms <span class="req">*</span></label>
-          <select id="eicr-beds" onchange="calcAll()">
-            <option value="">Select bedrooms</option>
-            <option value="99.99">Studio &mdash; &pound;99.99</option>
-            <option value="110.00">1&ndash;3 Bedrooms &mdash; &pound;110.00</option>
-            <option value="130.00">4 Bedrooms &mdash; &pound;130.00</option>
-            <option value="150.00">5 Bedrooms &mdash; &pound;150.00</option>
-            <option value="170.00">6 Bedrooms &mdash; &pound;170.00</option>
-            <option value="190.00">7 Bedrooms &mdash; &pound;190.00</option>
-            <option value="210.00">8 Bedrooms &mdash; &pound;210.00</option>
-          </select>
-        </div>
-        <div class="subq-row">
-          <label>Number of fuse boards <span class="req">*</span></label>
-          <select id="eicr-boards" onchange="calcAll()">
-            <option value="0">1 fuse board (included)</option>
-            <option value="60">2 fuse boards (+&pound;60)</option>
-            <option value="120">3 fuse boards (+&pound;120)</option>
-            <option value="180">4 fuse boards (+&pound;180)</option>
-          </select>
-        </div>`
-    },
-    pat: {
-      title: 'PAT Testing &mdash; Portable Appliance Test',
-      html: `
-        <div class="subq-row">
-          <label>Number of appliances to test <span class="req">*</span></label>
-          <input type="number" id="pat-count" min="1" max="100" placeholder="e.g. 8" oninput="calcAll()">
-          <div class="addon-note" style="margin-top:8px">1&ndash;10 appliances: &pound;59.99 flat rate. Each above 10: +&pound;2 each.</div>
-        </div>`
-    },
-    fsc: {
-      title: 'Fire Alarm Certificate (FSC)',
-      html: `
-        <div class="subq-row">
-          <label>Property type <span class="req">*</span></label>
-          <select id="fsc-proptype" onchange="calcAll()">
-            <option value="standard">Flat / House / Small HMO (Grade D/LD2)</option>
-            <option value="premium">Large / Licensed HMO &mdash; Panel System (Grade A/L2)</option>
-            <option value="block">Block of Flats &mdash; per unit</option>
-          </select>
-        </div>
-        <div class="subq-row">
-          <label>Number of fire alarms <span class="req">*</span></label>
-          <select id="fsc-alarms" onchange="calcAll()">
-            <option value="">Select count</option>
-            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
-            <option value="4">4 (+&pound;20)</option><option value="5">5 (+&pound;40)</option><option value="6">6 (+&pound;60)</option>
-            <option value="7">7 (+&pound;80)</option><option value="8">8 (+&pound;100)</option><option value="9">9 (+&pound;120)</option>
-            <option value="10">10 (+&pound;140)</option><option value="11">11 (+&pound;160)</option><option value="12">12+ (+&pound;180)</option>
-          </select>
-        </div>`
-    },
-    elc: {
-      title: 'Emergency Light Certificate (ELC)',
-      html: `
-        <div class="subq-row">
-          <label>Number of emergency lights <span class="req">*</span></label>
-          <select id="elc-lights" onchange="calcAll()">
-            <option value="">Select count</option>
-            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
-            <option value="4">4 (+&pound;20)</option><option value="5">5 (+&pound;40)</option><option value="6">6 (+&pound;60)</option>
-            <option value="7">7 (+&pound;80)</option><option value="8">8 (+&pound;100)</option><option value="9">9 (+&pound;120)</option>
-            <option value="10">10 (+&pound;140)</option><option value="11">11 (+&pound;160)</option><option value="12">12+ (+&pound;180)</option>
-          </select>
-        </div>`
-    },
-    fra: {
-      title: 'Fire Safety Risk Assessment (FRA)',
-      html: `
-        <div class="subq-row">
-          <label>Property type <span class="req">*</span></label>
-          <select id="fra-proptype" onchange="checkFraType()">
-            <option value="house">House</option>
-            <option value="flat">Flat (single)</option>
-            <option value="hmo">HMO</option>
-            <option value="building">Building / Block</option>
-            <option value="sheltered">Sheltered / Care Home</option>
-          </select>
-          <div class="warning-note hidden" id="fra-flat-note">An FRA is not a legal requirement for a single flat. You may not need this service.</div>
-        </div>
-        <div class="subq-row">
-          <label>Number of bedrooms <span class="req">*</span></label>
-          <select id="fra-beds" onchange="calcAll()">
-            <option value="">Select</option>
-            <option value="1">1</option><option value="2">2</option><option value="3">3 (base price)</option>
-            <option value="4">4 (+&pound;25)</option><option value="5">5 (+&pound;50)</option>
-            <option value="6">6 (+&pound;75)</option><option value="7">7 (+&pound;100)</option><option value="8">8 (+&pound;125)</option>
-          </select>
-        </div>
-        <div class="subq-row">
-          <label>Number of communal areas <span class="req">*</span></label>
-          <select id="fra-communal" onchange="calcAll()">
-            <option value="1">1 (included)</option>
-            <option value="2">2 (+&pound;60)</option>
-            <option value="3">3 (+&pound;120)</option>
-            <option value="4">4 (+&pound;180)</option>
-            <option value="5">5+ (+&pound;240)</option>
-          </select>
-        </div>`
-    },
-    epc: {
-      title: 'Energy Performance Certificate',
-      html: `
-        <div class="subq-row">
-          <label>Number of bedrooms <span class="req">*</span></label>
-          <select id="epc-beds" onchange="calcAll()">
-            <option value="">Select bedrooms</option>
-            <option value="100.00">1&ndash;3 Bedrooms &mdash; &pound;100.00</option>
-            <option value="120.00">4 Bedrooms &mdash; &pound;120.00</option>
-            <option value="140.00">5 Bedrooms &mdash; &pound;140.00</option>
-            <option value="160.00">6 Bedrooms &mdash; &pound;160.00</option>
-          </select>
-        </div>`
-    },
-    floorplan: {
-      title: 'Floor Plan',
-      html: `
-        <div class="subq-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div>
-            <label>Bedrooms <span class="req">*</span></label>
-            <select id="fp-beds" onchange="calcAll()">
-              <option value="">Select</option>
-              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-              <option value="4">4</option><option value="5">5</option><option value="6">6+</option>
-            </select>
-          </div>
-          <div>
-            <label>Floors <span class="req">*</span></label>
-            <select id="fp-floors" onchange="calcAll()">
-              <option value="1">1 floor</option>
-              <option value="2">2 floors (+&pound;25)</option>
-              <option value="3">3 floors (+&pound;50)</option>
-            </select>
-          </div>
-        </div>`
-    },
-    asbestos: {
-      title: 'Asbestos Survey',
-      html: `
-        <div class="subq-row">
-          <label>Property configuration <span class="req">*</span></label>
-          <select id="asbestos-type" onchange="calcAll()">
-            <option value="650">House &mdash; up to 3 bedrooms (Full Test) &mdash; &pound;650.00</option>
-            <option value="0">Other configuration &mdash; quote required</option>
-          </select>
-          <div class="addon-note" style="margin-top:8px">Other configurations require a custom quote &mdash; our team will contact you.</div>
-        </div>`
-    },
-  };
-  return defs[id];
-}
-
-// ═══════════════════════════════════════════════════
-// RADIO HELPERS
-// ═══════════════════════════════════════════════════
-function selectRadio(group, val, cb) {
-  state.radios[group] = val;
-  document.querySelectorAll(`[onclick*="selectRadio('${group}'"]`).forEach(el => {
-    const elVal = el.getAttribute('onclick').match(/'([^']+)'\s*[,)]/g);
-    if (elVal) {
-      const v = elVal[1] ? elVal[1].replace(/['",)]/g,'').trim() : '';
-    }
-  });
-  // Toggle checked class based on value
-  const container = document.getElementById(group + '-group') ||
-    (document.querySelector(`[onclick="selectRadio('${group}','${val}')"]`) || document.querySelector(`[onclick*="selectRadio('${group}'"]`))?.parentElement;
-
-  document.querySelectorAll(`[onclick*="selectRadio('${group}'"]`).forEach(el => {
-    const match = el.getAttribute('onclick').match(/selectRadio\('[^']+','([^']+)'/);
-    if (match) el.classList.toggle('checked', match[1] === val);
-  });
-
-  // CO alarm logic
-  if (group === 'co-alarm') {
-    const field = document.getElementById('co-install-field');
-    if (field) field.classList.toggle('hidden', val !== 'no');
-    if (val === 'yes') { state.radios['co-install'] = null; }
-  }
-  if (cb) cb();
-  calcAll();
-}
-
-// ═══════════════════════════════════════════════════
-// FRA TYPE CHECK
-// ═══════════════════════════════════════════════════
-function checkFraType() {
-  const propTypeEl = document.getElementById('fra-proptype');
-  if (!propTypeEl) return;
-  const v = propTypeEl.value;
-  const note = document.getElementById('fra-flat-note');
-  if (note) note.classList.toggle('hidden', v !== 'flat');
-  calcAll();
-}
+// Service/bundle toggling, sub-questions, radios and pricing are handled by
+// book-now-api.js from the live catalog (GET /api/catalog, POST /api/quotes/preview).
 
 // ═══════════════════════════════════════════════════
 // ZONE / PARKING / SLOT
@@ -2975,262 +2577,7 @@ function toggleAccessArrangements() {
   document.getElementById('access-contact-fields').classList.toggle('hidden', val === 'me');
 }
 
-// ═══════════════════════════════════════════════════
-// PRICING ENGINE
-// ═══════════════════════════════════════════════════
-function calcAll() {
-  const lines = [];
-
-  // GSC
-  if (state.services.has('gsc')) {
-    const sel = document.getElementById('gsc-appliances');
-    const price = sel && sel.value ? parseFloat(sel.value) : 0;
-    if (price > 0) {
-      const appText = sel.options[sel.selectedIndex]?.text.split('—')[0].trim() || 'Gas Safety Certificate';
-      lines.push({ name: 'Gas Safety Certificate (CP12)', sub: appText, price, id: 'gsc' });
-    }
-    // CO Alarm
-    if (state.radios['co-alarm'] === 'no' && state.radios['co-install'] === 'yes') {
-      lines.push({ name: 'CO Alarm Installation', sub: '', price: 35, id: 'co' });
-    }
-  }
-
-  // BOILER — always standalone price; bundle with GSC = separate discount line
-  if (state.services.has('boiler')) {
-    const type = state.radios['boiler-type'];
-    let price = 0, sub = '', discountAmt = 0;
-    if (type === 'basic') {
-      price = 65;
-      sub = 'Basic Boiler Service';
-      discountAmt = 20; // standalone £65, bundle £45 = save £20
-    } else if (type === 'full') {
-      price = 150;
-      sub = 'Full Boiler Service';
-      discountAmt = 30; // standalone £150, bundle £120 = save £30
-    }
-    if (price > 0) {
-      lines.push({ name: 'Boiler Service', sub, price, id: 'boiler' });
-      // Bundle discount only when bundle row was explicitly selected
-      if (state.activeBundles && state.activeBundles.has('bundle-gsc-boiler')) {
-        lines.push({ name: 'Bundle Discount — GSC + Boiler Service', sub: 'Bundle selected', price: -discountAmt, id: 'bundle-boiler', discount: true });
-      }
-    }
-  }
-
-  // EICR
-  if (state.services.has('eicr')) {
-    const beds = document.getElementById('eicr-beds');
-    const boards = document.getElementById('eicr-boards');
-    const basePrice = beds && beds.value ? parseFloat(beds.value) : 0;
-    const boardExtra = boards ? parseFloat(boards.value) : 0;
-    const total = basePrice + boardExtra;
-    if (total > 0) {
-      const bedsText = beds.options[beds.selectedIndex]?.text.split('—')[0].trim() || '';
-      const boardText = parseInt(boards.value) > 0 ? ` + ${parseInt(boards.value)/60+1} boards` : '';
-      lines.push({ name: 'EICR', sub: bedsText + boardText, price: total, id: 'eicr' });
-    }
-  }
-
-  // PAT
-  if (state.services.has('pat')) {
-    const count = parseInt(document.getElementById('pat-count').value) || 0;
-    if (count > 0) {
-      // Always charge standalone price — bundle discount applied as separate line
-      let price = count <= 10 ? 59.99 : 59.99 + (count - 10) * 2;
-      lines.push({ name: 'PAT Testing', sub: `${count} appliance${count > 1 ? 's' : ''}`, price, id: 'pat' });
-    }
-  }
-
-  // EICR+PAT bundle discount — only when bundle row explicitly selected
-  if (state.activeBundles && state.activeBundles.has('bundle-eicr-pat')) {
-    const count = parseInt(document.getElementById('pat-count') ? document.getElementById('pat-count').value : '0') || 0;
-    if (count > 0) {
-      lines.push({ name: 'Bundle Discount — EICR + PAT', sub: 'Bundle selected', price: -20, id: 'bundle-eicr-pat', discount: true });
-    }
-  }
-
-  // FSC
-  if (state.services.has('fsc')) {
-    const proptype = document.getElementById('fsc-proptype').value;
-    const alarms = parseInt(document.getElementById('fsc-alarms').value) || 0;
-    if (alarms > 0) {
-      const isPremium = proptype === 'premium';
-      const base = isPremium ? 119.99 : 79.99;
-      const extra = alarms > 3 ? (alarms - 3) * 20 : 0;
-      const price = base + extra;
-      const sub = `${alarms} alarm${alarms > 1 ? 's' : ''} — ${isPremium ? 'Grade A Panel System' : 'Grade D/LD2'}`;
-      lines.push({ name: 'Fire Alarm Certificate (FSC)', sub, price, id: 'fsc' });
-    }
-  }
-
-  // ELC — always full price
-  if (state.services.has('elc')) {
-    const lights = parseInt(document.getElementById('elc-lights').value) || 0;
-    if (lights > 0) {
-      const base = 79.99;
-      const extra = lights > 3 ? (lights - 3) * 20 : 0;
-      const price = base + extra;
-      lines.push({ name: 'Emergency Light Certificate (ELC)', sub: `${lights} light${lights > 1 ? 's' : ''}`, price, id: 'elc' });
-    }
-  }
-
-  // FRA — always full price
-  if (state.services.has('fra')) {
-    const beds = parseInt(document.getElementById('fra-beds').value) || 0;
-    const communal = parseInt(document.getElementById('fra-communal').value) || 1;
-    if (beds > 0) {
-      const base = 159.99;
-      const bedExtra = beds > 3 ? (beds - 3) * 25 : 0;
-      const commExtra = communal > 1 ? (communal - 1) * 60 : 0;
-      const price = base + bedExtra + commExtra;
-      lines.push({ name: 'Fire Safety Risk Assessment (FRA)', sub: `${beds} bed${beds > 1 ? 's' : ''}, ${communal} communal area${communal > 1 ? 's' : ''}`, price, id: 'fra' });
-    }
-  }
-
-  // Bundle discounts — only when bundle row was explicitly selected (activeBundles)
-  if (state.activeBundles && state.activeBundles.has('bundle-fsc-elc-fra')) {
-    lines.push({ name: 'Bundle Discount — FSC + ELC + FRA', sub: 'Bundle selected', price: -40, id: 'bundle-fire-all', discount: true });
-  } else if (state.activeBundles && state.activeBundles.has('bundle-fsc-elc')) {
-    lines.push({ name: 'Bundle Discount — FSC + ELC', sub: 'Bundle selected', price: -20, id: 'bundle-fire', discount: true });
-  }
-
-  // EPC
-  if (state.services.has('epc')) {
-    const sel = document.getElementById('epc-beds');
-    const price = sel && sel.value ? parseFloat(sel.value) : 0;
-    if (price > 0) {
-      const bedsText = sel.options[sel.selectedIndex]?.text.split('—')[0].trim() || '';
-      lines.push({ name: 'Energy Performance Certificate', sub: bedsText, price, id: 'epc' });
-    }
-  }
-
-  // FLOOR PLAN — always full price; EPC bundle discount as separate line
-  if (state.services.has('floorplan')) {
-    const beds = parseInt(document.getElementById('fp-beds').value) || 0;
-    const floors = parseInt(document.getElementById('fp-floors').value) || 1;
-    if (beds > 0) {
-      const base = beds <= 2 ? 130 : 130 + (beds - 2) * 20;
-      const floorExtra = (floors - 1) * 25;
-      const price = base + floorExtra;
-      lines.push({ name: 'Floor Plan', sub: `${beds} bed${beds > 1 ? 's' : ''}, ${floors} floor${floors > 1 ? 's' : ''}`, price, id: 'floorplan' });
-      // Bundle discount only when bundle row explicitly selected
-      if (state.activeBundles && state.activeBundles.has('bundle-epc-fp')) {
-        lines.push({ name: 'Bundle Discount — EPC + Floor Plan', sub: 'Bundle selected', price: -20, id: 'bundle-epc-fp', discount: true });
-      }
-    }
-  }
-
-  // ASBESTOS
-  if (state.services.has('asbestos')) {
-    const sel = document.getElementById('asbestos-type');
-    const price = sel ? parseFloat(sel.value) : 0;
-    if (price > 0) {
-      lines.push({ name: 'Asbestos Survey', sub: 'House — up to 3 bedrooms (Full Test)', price, id: 'asbestos' });
-    } else if (sel && sel.value === '0') {
-      lines.push({ name: 'Asbestos Survey', sub: 'Custom configuration — quote required', price: 0, id: 'asbestos', quoteOnly: true });
-    }
-  }
-
-  renderQuotePanel(lines);
-  return lines;
-}
-
-// ═══════════════════════════════════════════════════
-// QUOTE PANEL RENDER
-// ═══════════════════════════════════════════════════
 function fmt(n) { return '£' + n.toFixed(2); }
-
-function updateQuoteTotalsLegacy(serviceLines, discountLines) {
-  const grossSubtotal = serviceLines.reduce((sum, line) => {
-    if (line.quoteOnly || line.price == null || line.price === undefined) return sum;
-    return sum + line.price;
-  }, 0);
-  const discountTotal = discountLines.reduce((sum, line) => {
-    if (line.price == null || line.price === undefined) return sum;
-    return sum + Math.abs(line.price);
-  }, 0);
-  const finalTotal = Math.round((grossSubtotal - discountTotal) * 100) / 100;
-
-  document.getElementById('q-subtotal').textContent = fmt(grossSubtotal);
-  document.getElementById('q-total').textContent = fmt(finalTotal);
-
-  const discountRow = document.getElementById('q-discount-row');
-  const discountEl = document.getElementById('q-discount');
-  const wasEl = document.getElementById('q-was');
-
-  if (discountTotal > 0.001) {
-    discountRow?.classList.remove('hidden');
-    if (discountEl) discountEl.textContent = `−${fmt(discountTotal)}`;
-    if (wasEl) {
-      wasEl.textContent = fmt(grossSubtotal);
-      wasEl.classList.remove('hidden');
-    }
-  } else {
-    discountRow?.classList.add('hidden');
-    wasEl?.classList.add('hidden');
-  }
-}
-
-function renderQuotePanel(lines) {
-  if (typeof window.renderQuotePanel === 'function' && window.renderQuotePanel !== renderQuotePanel) {
-    window.renderQuotePanel(lines);
-    return;
-  }
-
-  const linesEl = document.getElementById('quote-lines');
-  const totalsEl = document.getElementById('quote-totals');
-  const emptyEl = document.getElementById('quote-empty');
-
-  const validLines = lines.filter(l => l.discount || l.price !== 0 || l.quoteOnly);
-  const serviceLines = validLines.filter(l => !l.discount);
-
-  if (serviceLines.length === 0) {
-    emptyEl.style.display = '';
-    linesEl.innerHTML = '';
-    totalsEl.classList.add('hidden');
-    return;
-  }
-
-  emptyEl.style.display = 'none';
-  totalsEl.classList.remove('hidden');
-
-  linesEl.innerHTML = serviceLines.map(l => `
-    <div class="quote-line">
-      <div class="quote-line-name">
-        ${l.name}
-        ${l.sub ? `<div class="line-sub">${l.sub}</div>` : ''}
-      </div>
-      <div class="quote-line-price">${l.quoteOnly ? 'TBC' : (l.price == null || l.price === undefined ? 'TBC' : fmt(l.price))}</div>
-    </div>
-  `).join('');
-
-  updateQuoteTotalsLegacy(serviceLines, validLines.filter(l => l.discount));
-}
-
-// ═══════════════════════════════════════════════════
-// BILLING TABLE
-// ═══════════════════════════════════════════════════
-function buildBillingTable() {
-  const lines = calcAll();
-  const tbody = document.getElementById('billing-tbody');
-
-  tbody.innerHTML = lines.map(l => `
-    <tr class="${l.discount ? 'discount-row' : l.id === 'congestion' || l.id === 'parking' ? 'charge-row' : ''}">
-      <td class="desc-cell">
-        ${l.name}
-        ${l.sub ? `<div class="desc-sub">${l.sub}</div>` : ''}
-      </td>
-      <td class="qty-cell" style="text-align:center">1</td>
-      <td class="price-cell" style="text-align:right">${l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
-      <td style="text-align:right">${l.quoteOnly ? 'TBC' : (l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price))}</td>
-      <td><button class="edit-btn" onclick="goToStep(2)">✎ Edit</button></td>
-    </tr>
-  `).join('');
-
-  const subtotal = lines.reduce((s, l) => s + (l.quoteOnly ? 0 : l.price), 0);
-  document.getElementById('summary-subtotal').textContent = fmt(subtotal);
-  document.getElementById('summary-total').textContent = fmt(subtotal);
-}
 
 // ═══════════════════════════════════════════════════
 // FLOAT BAR — updates sticky bottom bar
@@ -3238,7 +2585,6 @@ function buildBillingTable() {
 function updateFloatBar() {
   const bar = document.getElementById('float-quote');
   const totalEl = document.getElementById('q-total');
-  const linesEl = document.getElementById('quote-lines');
   if (!bar) return;
 
   const hasServices = state.services.size > 0 || state.activeBundles.size > 0;
@@ -3248,17 +2594,14 @@ function updateFloatBar() {
   if (hasServices && !panelVisible) {
     bar.classList.remove('hidden');
     document.getElementById('float-total').textContent = totalEl ? totalEl.textContent : '£0.00';
-    // Build service names list
+    // Service names are filled in from the catalog by book-now-api.js
     const names = [];
     state.activeBundles.forEach(bid => {
-      const b = BUNDLES[bid];
+      const b = window.BUNDLES[bid];
       if (b) names.push(b.label);
     });
     state.services.forEach(id => {
-      if (!coveredByBundle(id)) {
-        const labels = {gsc:'Gas Safety Cert',boiler:'Boiler Service',eicr:'EICR',pat:'PAT',fsc:'Fire Alarm Cert',elc:'Emergency Lights',fra:'Fire Risk Assessment',epc:'EPC',floorplan:'Floor Plan',asbestos:'Asbestos Survey'};
-        names.push(labels[id] || id);
-      }
+      if (!coveredByBundle(id)) names.push(id);
     });
     document.getElementById('float-services').textContent = names.length ? names.join(' · ') : 'No services selected';
   } else {
@@ -3299,40 +2642,6 @@ function fillBookingDetails() {
   document.getElementById('bd-slot').textContent = slotStr;
 }
 
-// ═══════════════════════════════════════════════════
-// SUBMIT
-// ═══════════════════════════════════════════════════
-function submitBooking() {
-  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('step-confirm').classList.add('active');
-  document.querySelectorAll('.step-tab').forEach(t => { t.classList.remove('active'); t.classList.add('done'); });
-  document.getElementById('float-quote').classList.add('hidden');
-
-  const firstName = document.getElementById('b-firstName').value || document.getElementById('firstName').value;
-  const lastName = document.getElementById('b-lastName').value || document.getElementById('lastName').value;
-  const phone = document.getElementById('b-phone').value || document.getElementById('phone').value;
-  const email = document.getElementById('b-email').value || document.getElementById('email').value;
-  const address = document.getElementById('b-address').value || '';
-  const postcode = document.getElementById('b-postcode').value || document.getElementById('postcode').value;
-  const date = document.getElementById('b-date').value;
-  const slot = state.slot;
-  const total = document.getElementById('summary-total').textContent;
-
-  const fullName = [firstName, lastName].filter(Boolean).join(' ');
-  const fullAddress = [address, postcode].filter(Boolean).join(', ');
-  const dateStr = date ? new Date(date).toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) : 'Date to be confirmed';
-  const slotStr = slot === 'morning' ? 'Morning slot: 8:00am – 1:00pm' : slot === 'afternoon' ? 'Afternoon slot: 1:00pm – 6:00pm' : 'Time slot to be confirmed';
-
-  document.getElementById('confirm-email').textContent = email || 'your email';
-  document.getElementById('confirm-name').textContent = fullName;
-  document.getElementById('confirm-address').textContent = fullAddress || '—';
-  document.getElementById('confirm-date').textContent = 'Date: ' + dateStr;
-  document.getElementById('confirm-slot').textContent = 'Time: ' + slotStr;
-  document.getElementById('confirm-total').textContent = 'Estimated Total: ' + total + ' — invoice to follow by bank transfer';
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
 // Init
 selectPropType('residential');
 updateStep1NextState();
@@ -3340,9 +2649,14 @@ updateStep2NextState();
 selectZone(false);
 updateStepProgress(1);
 window.currentStep = 1;
-renderSubQuestions();
-calcAll();
-updateFloatBar();
+
+// book-now-api.js (loaded after this script) provides the live renderSubQuestions,
+// calcAll and updateFloatBar, so run them once the page has fully loaded.
+document.addEventListener('DOMContentLoaded', () => {
+  window.renderSubQuestions();
+  window.calcAll();
+  window.updateFloatBar();
+});
 
 // Pre-fill from URL query params (e.g. from home estimate widget)
 (function prefillFromQuery() {

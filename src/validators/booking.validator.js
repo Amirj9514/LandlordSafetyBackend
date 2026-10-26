@@ -18,6 +18,7 @@ const contactFields = [
   body('activeBundleKeys').optional().isArray(),
   body('congestionZone').optional().isBoolean(),
   body('parkingAvailable').optional().isBoolean(),
+  body('priorityService').optional().isBoolean(),
   body('preferredDate').optional().isISO8601().toDate(),
   body('preferredTimeSlot').optional().isIn(['morning', 'afternoon']),
   body('accessProvider').optional().trim(),

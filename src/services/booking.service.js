@@ -11,7 +11,7 @@ const { toPublicBooking, toPublicInvoiceSummary, toTechnicianBooking } = require
 const { isAdminActor, isTechnicianActor, assertBookingAccess } = require('../utils/bookingAccess');
 const activityService = require('./bookingActivity.service');
 const notificationService = require('./notification.service');
-const { calculateQuote, inferActiveBundles, quoteRequiresQuotation } = require('./pricing/quoteCalculator');
+const { calculateQuote, inferActiveBundles, quoteHasUnpricedLines } = require('./pricing/quoteCalculator');
 const { resolveRegionByPostcode } = require('./pricing/regionResolver');
 const { createQuotation } = require('./quotation.service');
 const { allocateBookingReference } = require('../utils/referenceNumber');
@@ -74,6 +74,7 @@ const createBooking = async (body, { source = SUBMISSION_SOURCE.WEBSITE } = {}) 
     activeBundleKeys,
     congestionZone = false,
     parkingAvailable = true,
+    priorityService = false,
     preferredDate,
     preferredTimeSlot,
     accessProvider,
@@ -97,9 +98,10 @@ const createBooking = async (body, { source = SUBMISSION_SOURCE.WEBSITE } = {}) 
     activeBundleKeys: bundles,
     congestionZone,
     parkingAvailable,
+    priorityService,
   });
 
-  if (quoteRequiresQuotation(quote.lines)) {
+  if (quoteHasUnpricedLines(quote.lines)) {
     const error = new Error(
       'One or more services require a custom quote. Submit via POST /api/quotations instead.'
     );

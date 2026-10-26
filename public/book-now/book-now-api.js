@@ -58,9 +58,6 @@
   }
 
   function formatOptionLabel(serviceCode, fieldKey, option) {
-    if (serviceCode === 'boiler' && fieldKey === 'boilerType' && state.activeBundles.has('bundle-gsc-boiler')) {
-      return option.displayLabelBundle || option.displayLabel || option.label || option.value;
-    }
     return option.displayLabel || option.label || option.value;
   }
 
@@ -94,7 +91,12 @@
   }
 
   function collectServiceAnswers(code) {
-    return getAnswersForService(code);
+    const answers = getAnswersForService(code);
+    const svc = catalogServicesByCode[code];
+    for (const q of svc?.questions || []) {
+      if (q.conditionalLogic && !isQuestionVisible(code, q)) delete answers[q.fieldKey];
+    }
+    return answers;
   }
 
   function clearServiceAnswers(serviceCode) {
@@ -627,6 +629,10 @@
 
   function getServicePriceLabel(service) {
     const meta = service.metadata || {};
+    // Residential cards show the lowest price across all zones; the exact price follows from the postcode.
+    if (meta.startingFrom != null) {
+      return `From £${Number(meta.startingFrom).toFixed(2)}`;
+    }
     if (meta.startsFrom != null) {
       return `£${Math.round(Number(meta.startsFrom))}`;
     }
@@ -914,6 +920,50 @@
     });
   }
 
+  // Label text plus an optional "i" tooltip taken from the question's conditionalLogic.info.
+  function labelInner(q, req) {
+    const info = q.conditionalLogic?.info;
+    const tip = info
+      ? `<span class="info-tip" tabindex="0" role="button" aria-label="More information about ${escapeHtml(q.label)}">i<span class="info-tip__text" role="tooltip">${escapeHtml(info)}</span></span>`
+      : '';
+    return `${escapeHtml(q.label)} ${req}${tip}`;
+  }
+
+  function stepperBounds(input) {
+    const min = input.min !== '' ? Number(input.min) : 1;
+    const max = input.max !== '' ? Number(input.max) : Infinity;
+    return { min, max };
+  }
+
+  function clampStepperValue(input) {
+    const { min, max } = stepperBounds(input);
+    const n = Math.round(Number(input.value));
+    input.value = String(Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : min);
+  }
+
+  // Answering a question removes the red "required" highlight left by a failed Add to Cart.
+  function clearRowError(row) {
+    if (!row) return;
+    row.classList.remove('field-error');
+    row.querySelectorAll('.field-error').forEach((el) => el.classList.remove('field-error'));
+  }
+  document.addEventListener('input', (e) => clearRowError(e.target.closest?.('[data-q-row]')));
+  document.addEventListener('change', (e) => clearRowError(e.target.closest?.('[data-q-row]')));
+
+  window.stepQuestion = function stepQuestion(inputId, delta, serviceCode) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.value = String((Number(input.value) || stepperBounds(input).min) + delta);
+    clampStepperValue(input);
+    clearRowError(input.closest('[data-q-row]'));
+    window.onQuestionChange(serviceCode);
+  };
+
+  window.clampStepper = function clampStepper(input, serviceCode) {
+    clampStepperValue(input);
+    window.onQuestionChange(serviceCode);
+  };
+
   function renderQuestion(serviceCode, q) {
     const id = fieldId(serviceCode, q.fieldKey);
     const req = q.validation?.required ? '<span class="req">*</span>' : '';
@@ -940,7 +990,7 @@
           .join('');
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
+          <label for="${id}">${labelInner(q, req)}</label>
           <select id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" onchange="onQuestionChange('${escapeHtml(serviceCode)}')">
             <option value="">${escapeHtml(placeholder)}</option>
             ${optionsHtml}
@@ -958,7 +1008,7 @@
           .join('');
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}" id="row-${id}">
-          <label>${escapeHtml(q.label)} ${req}</label>
+          <label>${labelInner(q, req)}</label>
           <div class="radio-group">${radios}</div>
           ${note}
         </div>`;
@@ -966,23 +1016,38 @@
       case 'number': {
         const min = q.validation?.min != null ? ` min="${q.validation.min}"` : '';
         const max = q.validation?.max != null ? ` max="${q.validation.max}"` : '';
+        if (q.validation?.stepper) {
+          const svc = escapeHtml(serviceCode);
+          const start = q.validation?.min ?? 1;
+          return `
+        <div class="service-modal__field subq-row subq-row--stepper${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
+          <label for="${id}">${labelInner(q, req)}</label>
+          <div class="stepper" role="group" aria-label="${escapeHtml(q.label)}">
+            <button type="button" class="stepper__btn" aria-label="Decrease ${escapeHtml(q.label)}" onclick="stepQuestion('${id}', -1, '${svc}')">&minus;</button>
+            <input type="number" inputmode="numeric" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" value="${start}"${min}${max} onchange="clampStepper(this, '${svc}')" oninput="calcAll()">
+            <button type="button" class="stepper__btn" aria-label="Increase ${escapeHtml(q.label)}" onclick="stepQuestion('${id}', 1, '${svc}')">+</button>
+          </div>
+          ${note}
+        </div>`;
+        }
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
+          <label for="${id}">${labelInner(q, req)}</label>
           <input type="number" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" placeholder="e.g. 8"${min}${max} oninput="calcAll()">
+          ${note}
         </div>`;
       }
       case 'textarea':
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
+          <label for="${id}">${labelInner(q, req)}</label>
           <textarea id="${id}" data-field-key="${escapeHtml(q.fieldKey)}"${q.validation?.placeholder ? ` placeholder="${escapeHtml(q.validation.placeholder)}"` : ''} oninput="calcAll()"></textarea>
         </div>`;
       case 'text':
       default:
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label for="${id}">${escapeHtml(q.label)} ${req}</label>
+          <label for="${id}">${labelInner(q, req)}</label>
           <input type="text" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" oninput="calcAll()">
         </div>`;
     }
@@ -1053,7 +1118,10 @@
     });
 
     const svcCode = serviceCodeFromRadioGroup(group);
-    if (svcCode) applyConditionalVisibility(svcCode);
+    if (svcCode) {
+      clearRowError(document.querySelector(`[data-q-row][data-service="${svcCode}"][data-field="${group.slice(`q-${svcCode}-`.length)}"]`));
+      applyConditionalVisibility(svcCode);
+    }
 
     if (cb) cb();
     else calcAll();
@@ -1096,7 +1164,7 @@
 
   function isSurchargeApiLine(line) {
     const name = line?.name || '';
-    return name === 'Congestion Charge' || name === 'Parking Charge';
+    return name === 'Congestion Charge' || name === 'Parking Charge' || name === 'Priority Service';
   }
 
   function isSurchargeDisplayLine(line) {
@@ -1154,6 +1222,7 @@
       activeBundleKeys: [...state.activeBundles],
       congestionZone: shouldIncludeSurcharges() ? !!state.congestion : false,
       parkingAvailable: shouldIncludeSurcharges() ? state.parking !== false : true,
+      priorityService: shouldIncludeSurcharges() ? !!state.priority : false,
     };
   }
 
@@ -1305,7 +1374,8 @@
   function quoteNeedsQuotation(quote) {
     if (state.propType && state.propType !== 'residential') return true;
     if (!quote?.lines) return false;
-    return quote.lines.some((l) => !l.isDiscount && !l.quoteOnly && l.isTbc);
+    // Any unpriced line, including "contact us for a personalised quote" lines, makes it a quote request.
+    return quote.lines.some((l) => !l.isDiscount && l.isTbc);
   }
 
   function updateSubmitCta(quote) {
@@ -1376,7 +1446,7 @@
       return;
     }
     if (quote.pricingStatus === 'all_tbc') {
-      el.textContent = `${pc} is outside our price list — team will quote (TBC)`;
+      el.textContent = `Not covered: ${pc} is outside London and the M25`;
       return;
     }
     if (quote.resolvedRegion?.name) {
@@ -1759,7 +1829,7 @@
           await ensureCatalogLoaded(propType);
         }
         if (propType === 'residential' && catalog && catalog.hasPricing === false) {
-          if (typeof showToast === 'function') showToast('This postcode is outside our London &amp; M25 price area. Prices will show as TBC until our team confirms.', 'warning');
+          if (typeof showToast === 'function') showToast('Sorry, this postcode is not covered. We only cover London and the M25, so prices will show as TBC until our team confirms.', 'warning');
         }
         updateSubmitCta(lastQuote);
         updateQuoteRegionLabel(lastQuote);
@@ -2033,6 +2103,12 @@
       document.getElementById('parking-yes')?.classList.toggle('selected', val);
       document.getElementById('parking-no')?.classList.toggle('selected', !val);
     }
+    if (shouldIncludeSurcharges()) calcAll();
+  };
+
+  // Optional Priority Service (+£99): sent with the quote as a booking-level surcharge.
+  window.togglePriorityService = function togglePriorityService(on) {
+    state.priority = !!on;
     if (shouldIncludeSurcharges()) calcAll();
   };
 

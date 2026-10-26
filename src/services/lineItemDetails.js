@@ -32,6 +32,7 @@ const buildServiceSelections = (answers = {}, questions = []) => {
 
 const ADDON_EXCLUDED_ANSWER_FIELDS = {
   'CO Alarm Installation': ['coAlarmInstall'],
+  'Boiler Service': ['boilerAddon'],
 };
 
 const collectPricingFieldKeys = (line) => {

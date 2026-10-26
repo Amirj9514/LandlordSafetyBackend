@@ -18,6 +18,12 @@ const serviceIdByCode = async (code) => {
   return svc.id;
 };
 
+const RETIRED_RULE_KEYS = ['fra_line'];
+
+const retireRules = async () => {
+  await PricingRule.destroy({ where: { ruleKey: RETIRED_RULE_KEYS } });
+};
+
 const residentialRules = async () => {
   const ids = {};
   for (const code of [
@@ -27,13 +33,16 @@ const residentialRules = async () => {
   }
 
   await upsertRule('gsc_appliance_line', {
-    ruleType: RULE_TYPES.OPTION_TIER_LOOKUP,
+    ruleType: RULE_TYPES.BASE_PLUS_INCREMENT,
     scope: RULE_SCOPES.SERVICE_LINE,
     serviceId: ids.gsc,
     sortOrder: 1,
     config: {
       fieldKey: 'applianceCount',
-      subTemplate: 'Meter & {value} appliance(s)',
+      baseTierKey: 'gsc_meter_1',
+      includedUnits: 1,
+      extraTierKey: 'gsc_appliance_extra',
+      subTemplate: 'Meter & {count} appliance(s)',
     },
   });
 
@@ -47,6 +56,20 @@ const residentialRules = async () => {
       tierKey: 'co_alarm_install',
       lineName: 'CO Alarm Installation',
       sub: '',
+    },
+  });
+
+  await upsertRule('gsc_boiler_addon_line', {
+    ruleType: RULE_TYPES.OPTION_TIER_LOOKUP,
+    scope: RULE_SCOPES.SERVICE_LINE,
+    serviceId: ids.gsc,
+    sortOrder: 3,
+    config: {
+      fieldKey: 'boilerAddon',
+      lineName: 'Boiler Service',
+      lineServiceCode: 'boiler',
+      lineServiceName: 'Boiler Service',
+      isAddon: true,
     },
   });
 
@@ -104,8 +127,9 @@ const residentialRules = async () => {
         { min: 11, max: 15, tierKey: 'pat_flat_1_15' },
         { min: 16, max: 20, tierKey: 'pat_flat_1_20' },
       ],
+      // Above 20 appliances: the 1-20 price plus a per-appliance charge for each extra one.
+      overflowTierKey: 'pat_per_extra_appliance',
       subTemplate: '{beds} appliance(s)',
-      forceTbcAboveMax: true,
     },
   });
 
@@ -139,20 +163,33 @@ const residentialRules = async () => {
     },
   });
 
-  await upsertRule('fra_line', {
+  await upsertRule('fra_house_line', {
     ruleType: RULE_TYPES.BASE_PLUS_INCREMENT,
     scope: RULE_SCOPES.SERVICE_LINE,
     serviceId: ids.fra,
     sortOrder: 1,
     config: {
+      applicableWhen: { field: 'propertySubtype', equals: 'house_hmo' },
       fieldKey: 'bedrooms',
       baseTierKey: 'fra_base',
       includedUnits: 3,
       extraTierKey: 'fra_bed_extra',
-      additionalIncrements: [
-        { fieldKey: 'communalAreas', includedUnits: 1, extraTierKey: 'fra_communal_extra' },
-      ],
-      subTemplate: '{bedrooms} beds, {communalAreas} communal area(s)',
+      subTemplate: 'House / HMO, {count} bedroom(s)',
+    },
+  });
+
+  await upsertRule('fra_building_line', {
+    ruleType: RULE_TYPES.BASE_PLUS_INCREMENT,
+    scope: RULE_SCOPES.SERVICE_LINE,
+    serviceId: ids.fra,
+    sortOrder: 2,
+    config: {
+      applicableWhen: { field: 'propertySubtype', equals: 'building' },
+      fieldKey: 'communalAreas',
+      baseTierKey: 'fra_base',
+      includedUnits: 1,
+      extraTierKey: 'fra_communal_extra',
+      subTemplate: 'Building, {count} floor(s) / communal area(s)',
     },
   });
 
@@ -174,7 +211,9 @@ const residentialRules = async () => {
     serviceId: ids.floorplan,
     sortOrder: 1,
     config: {
+      allowZero: true,
       ranges: [
+        { min: 0, max: 0, tierKey: 'fp_studio' },
         { min: 1, max: 2, tierKey: 'fp_bed_1_2' },
         { min: 3, max: 3, tierKey: 'fp_bed_3' },
         { min: 4, max: 4, tierKey: 'fp_bed_4' },
@@ -184,6 +223,7 @@ const residentialRules = async () => {
       floorExtraTierKey: 'fp_floor_extra',
       includedFloors: 1,
       subTemplate: '{beds} bed(s), {floors} floor(s)',
+      zeroSubTemplate: 'Studio, {floors} floor(s)',
     },
   });
 
@@ -213,8 +253,8 @@ const residentialRules = async () => {
     serviceId: ids.asbestos,
     sortOrder: 2,
     config: {
-      when: { field: 'configuration', equals: 'other' },
-      sub: 'Custom configuration — quote required',
+      when: { field: 'configuration', equals: 'full_property_over_5' },
+      sub: 'Contact us for a personalised quote',
     },
   });
 
@@ -224,14 +264,36 @@ const residentialRules = async () => {
     serviceId: null,
     sortOrder: 10,
     config: {
-      bundleKey: 'bundle-gsc-boiler',
-      requiredServiceCodes: ['gsc', 'boiler'],
-      discountTierKeyFromField: {
-        serviceCode: 'boiler',
-        fieldKey: 'boilerType',
-        map: { basic: 'bundle_gsc_boiler_basic', full: 'bundle_gsc_boiler_full' },
+      requiredServiceCodes: ['gsc'],
+      lineLabel: 'Bundle Discount — CP12 + Boiler Service',
+      baseServiceCode: 'gsc',
+      unitFieldKey: 'applianceCount',
+      baseTierKey: 'gsc_meter_1',
+      extraTierKey: 'gsc_appliance_extra',
+      // The bundle applies when the boiler service is added inside the CP12 form ("Add a boiler service?").
+      variantServiceCode: 'gsc',
+      variantFieldKey: 'boilerAddon',
+      variants: {
+        // Fixed bundle price, 2 appliances included; extra appliances are added on top.
+        essential: {
+          boilerTierKey: 'boiler_essential_standalone',
+          bundleTierKey: 'bundle_gsc_boiler_essential',
+          includedUnits: 2,
+          sub: 'CP12 + Essential service bundle',
+        },
+        // 5% off the CP12 and service prices added together.
+        standard: {
+          boilerTierKey: 'boiler_standard_standalone',
+          percentOff: 5,
+          sub: 'CP12 + Standard service bundle (5% off)',
+        },
+        premium: {
+          boilerTierKey: 'boiler_premium_standalone',
+          percentOff: 5,
+          sub: 'CP12 + Premium service bundle (5% off)',
+        },
       },
-      lineLabel: 'Bundle Discount — GSC + Boiler Service',
+      exclusionGroup: 'gsc-boiler',
     },
   });
 
@@ -303,6 +365,19 @@ const residentialRules = async () => {
     },
   });
 
+  await upsertRule('surcharge_priority', {
+    ruleType: RULE_TYPES.BOOKING_SURCHARGE,
+    scope: RULE_SCOPES.BOOKING_SURCHARGE,
+    serviceId: null,
+    sortOrder: 102,
+    config: {
+      tierKey: 'priority_service',
+      lineName: 'Priority Service',
+      sub: 'Guaranteed priority appointment and certificate',
+      applyWhen: { field: 'priorityService', equals: true },
+    },
+  });
+
   await upsertRule('surcharge_parking', {
     ruleType: RULE_TYPES.BOOKING_SURCHARGE,
     scope: RULE_SCOPES.BOOKING_SURCHARGE,
@@ -348,6 +423,7 @@ const commercialAndInstallationRules = async () => {
 
 const run = async () => {
   await syncModels({ alter: true });
+  await retireRules();
   await residentialRules();
   await commercialAndInstallationRules();
   console.log('Pricing rules seeded.');

@@ -83,7 +83,9 @@ const pricingFieldKeysFromConfig = (config = {}) => {
   const keys = [];
   if (config.fieldKey) keys.push(config.fieldKey);
   if (config.bedFieldKey) keys.push(config.bedFieldKey);
-  if (config.floorFieldKey && config.floorExtraTierKey) keys.push(config.floorFieldKey);
+  // Banded rules (e.g. floor plan) read "bedrooms" / "floors" by default.
+  if (config.ranges && !config.bedFieldKey) keys.push('bedrooms');
+  if (config.floorExtraTierKey) keys.push(config.floorFieldKey || 'floors');
   for (const inc of config.additionalIncrements || []) {
     if (inc.fieldKey) keys.push(inc.fieldKey);
   }
@@ -164,14 +166,15 @@ const evaluateOptionTierLookup = (rule, ctx) => {
 
   return [
     buildLine({
-      name: ctx.service.name,
+      name: config.lineName || ctx.service.name,
       sub,
       amount,
       isTbc: forceTbc,
       pricingTierId,
-      serviceCode: ctx.service.code,
-      serviceName: ctx.service.name,
+      serviceCode: config.lineServiceCode || ctx.service.code,
+      serviceName: config.lineServiceName || ctx.service.name,
       quoteOnly,
+      isAddon: !!config.isAddon,
       pricingFieldKeys: [config.fieldKey],
     }),
   ];
@@ -409,9 +412,13 @@ const evaluateConditionalAddon = (rule, ctx) => {
 const evaluateTierRangeMap = (rule, ctx) => {
   const { config } = rule;
   const answers = getAnswers(ctx.selection);
-  const beds = parseInt(answers[config.bedFieldKey || 'bedrooms'], 10) || 0;
+  const rawBeds = answers[config.bedFieldKey || 'bedrooms'];
+  if (rawBeds === undefined || rawBeds === null || rawBeds === '') return [];
+  const beds = parseInt(rawBeds, 10);
   const floors = parseInt(answers[config.floorFieldKey || 'floors'], 10) || 1;
-  if (beds <= 0) return [];
+  if (Number.isNaN(beds) || beds < 0) return [];
+  // Zero units (e.g. a studio) only counts when the rule opts in.
+  if (beds === 0 && !config.allowZero) return [];
 
   let tierKey = config.defaultTierKey;
   for (const range of config.ranges || []) {
@@ -420,6 +427,32 @@ const evaluateTierRangeMap = (rule, ctx) => {
       break;
     }
   }
+
+  // Above the last band: top band price plus a per-unit charge for every extra unit (e.g. PAT over 20).
+  if (!tierKey && config.overflowTierKey && config.ranges?.length) {
+    const top = config.ranges.reduce((a, b) => (b.max > a.max ? b : a));
+    if (beds > top.max) {
+      const topPrice = evaluateAmountFromTier(ctx.priceMap, top.tierKey, ctx.noRegion);
+      const extraPrice = evaluateAmountFromTier(ctx.priceMap, config.overflowTierKey, ctx.noRegion);
+      const tbc = topPrice.isTbc || extraPrice.isTbc;
+      const total = tbc ? null : round2(topPrice.amount + (beds - top.max) * extraPrice.amount);
+      return [
+        buildLine({
+          name: ctx.service.name,
+          sub: config.subTemplate
+            ? interpolate(config.subTemplate, { beds, floors, ...answers })
+            : `${beds} units`,
+          amount: total,
+          isTbc: tbc,
+          pricingTierId: topPrice.pricingTierId,
+          serviceCode: ctx.service.code,
+          serviceName: ctx.service.name,
+          pricingFieldKeys: pricingFieldKeysFromConfig(config),
+        }),
+      ];
+    }
+  }
+
   if (!tierKey) {
     const maxRange = Math.max(...(config.ranges || []).map((r) => r.max), 0);
     if (config.forceTbcAboveMax && beds > maxRange) {
@@ -456,8 +489,9 @@ const evaluateTierRangeMap = (rule, ctx) => {
     }
   }
 
-  const sub = config.subTemplate
-    ? interpolate(config.subTemplate, { beds, floors, ...answers })
+  const subTemplate = beds === 0 && config.zeroSubTemplate ? config.zeroSubTemplate : config.subTemplate;
+  const sub = subTemplate
+    ? interpolate(subTemplate, { ...answers, beds, floors })
     : `${beds} beds, ${floors} floors`;
 
   return [
@@ -531,10 +565,71 @@ const evaluateStartsFrom = (rule, ctx) => {
   ];
 };
 
+/**
+ * Bundle priced per variant of one service (CP12 + boiler service level).
+ *  - variant.bundleTierKey: fixed bundle price that includes `includedUnits` units; extra units add the per-unit price.
+ *  - variant.percentOff: percentage taken off the separate prices.
+ * Returns the separate total, the bundle total and the saving, or null while any price is unknown.
+ */
+const variantBundleFigures = (config, variantKey, count, priceMap, noRegion) => {
+  const variant = config.variants?.[variantKey];
+  if (!variant || !(count > 0)) return null;
+
+  const base = evaluateAmountFromTier(priceMap, config.baseTierKey, noRegion);
+  const extra = evaluateAmountFromTier(priceMap, config.extraTierKey, noRegion);
+  const boiler = evaluateAmountFromTier(priceMap, variant.boilerTierKey, noRegion);
+  if (base.isTbc || extra.isTbc || boiler.isTbc) return null;
+
+  const separate = round2(base.amount + extra.amount * (count - 1) + boiler.amount);
+  let total;
+  let pricingTierId = null;
+  if (variant.bundleTierKey) {
+    const bundle = evaluateAmountFromTier(priceMap, variant.bundleTierKey, noRegion);
+    if (bundle.isTbc) return null;
+    pricingTierId = bundle.pricingTierId;
+    total = round2(bundle.amount + extra.amount * Math.max(0, count - (variant.includedUnits ?? 1)));
+  } else if (variant.percentOff) {
+    total = round2(separate - round2((separate * variant.percentOff) / 100));
+  } else {
+    return null;
+  }
+
+  return { separate, total, saving: round2(separate - total), pricingTierId, variant };
+};
+
+const evaluateVariantBundle = (rule, ctx) => {
+  const { config } = rule;
+  const boilerSel = ctx.selections.find((s) => s.code === config.variantServiceCode);
+  const baseSel = ctx.selections.find((s) => s.code === config.baseServiceCode);
+  if (!boilerSel || !baseSel) return [];
+
+  const count = parseInt(getAnswers(baseSel)[config.unitFieldKey], 10) || 0;
+  const figures = variantBundleFigures(
+    config,
+    getAnswers(boilerSel)[config.variantFieldKey],
+    count,
+    ctx.priceMap,
+    ctx.noRegion
+  );
+  if (!figures || figures.saving <= 0) return [];
+
+  return [
+    buildLine({
+      name: config.lineLabel || 'Bundle Discount',
+      sub: figures.variant.sub || config.sub || 'Bundle selected',
+      amount: -figures.saving,
+      isTbc: false,
+      pricingTierId: figures.pricingTierId,
+      isDiscount: true,
+    }),
+  ];
+};
+
 const evaluateBundleDiscount = (rule, ctx) => {
   const { config } = rule;
   if (config.bundleKey && !hasBundle(ctx.activeBundleKeys, config.bundleKey)) return [];
   if (config.requiredServiceCodes?.some((c) => !hasService(ctx.selections, c))) return [];
+  if (config.variants) return evaluateVariantBundle(rule, ctx);
 
   let tierKey = config.discountTierKey;
   if (config.discountTierKeyFromField) {
@@ -629,6 +724,13 @@ const evaluateServiceRules = (service, selection, rules, ctx) => {
 
   for (const rule of serviceRules) {
     if (rule.scope === RULE_SCOPES.BUNDLE_DISCOUNT || rule.scope === RULE_SCOPES.BOOKING_SURCHARGE) {
+      continue;
+    }
+    // Rules that only apply to one variant of a service (e.g. FRA house vs building).
+    if (
+      rule.config?.applicableWhen &&
+      !resolveWhen(rule.config.applicableWhen, getAnswers(selection), ctx.selections || [], ctx.activeBundleKeys)
+    ) {
       continue;
     }
     lines.push(...evaluateRule(rule, serviceCtx));
@@ -878,8 +980,41 @@ const enrichOptionWithRules = (service, question, option, rules, priceMap, noReg
   };
 };
 
+/** Price hint for banded unit questions with a per-unit overflow charge (e.g. PAT appliances). */
+const buildBandedPricingHint = (service, question, rules, priceMap, noRegion) => {
+  const rule = rules.find(
+    (r) =>
+      r.serviceId === service.id &&
+      r.isActive &&
+      r.ruleType === RULE_TYPES.TIER_RANGE_MAP &&
+      r.config?.overflowTierKey &&
+      r.config?.bedFieldKey === question.fieldKey
+  );
+  if (!rule) return null;
+
+  const cfg = rule.config;
+  const bands = (cfg.ranges || []).map((range) => {
+    const p = getPrice(priceMap, range.tierKey, noRegion);
+    return { max: range.max, amount: p.isTbc ? null : formatMoney(p.amount) };
+  });
+  const top = bands[bands.length - 1];
+  const extra = getPrice(priceMap, cfg.overflowTierKey, noRegion);
+  const isTbc = bands.some((b) => b.amount === null) || extra.isTbc;
+
+  return {
+    bands,
+    perExtraUnit: extra.isTbc ? null : formatMoney(extra.amount),
+    isTbc,
+    displayText: isTbc
+      ? null
+      : `${bands.map((b) => `Up to ${b.max}: £${b.amount.toFixed(2)}`).join(' · ')}. Each above ${top.max}: +£${extra.amount.toFixed(2)}.`,
+  };
+};
+
 const enrichQuestionWithRules = (service, question, rules, priceMap, noRegion, ctx = {}) => {
   const q = { ...question };
+  const bandedHint = buildBandedPricingHint(service, q, rules, priceMap, noRegion);
+  if (bandedHint) q.pricingHint = bandedHint;
   if (!q.options?.length) return q;
 
   q.options = q.options.map((opt) =>
@@ -968,6 +1103,7 @@ module.exports = {
   formatMoney,
   evaluateRule,
   evaluateServiceRules,
+  variantBundleFigures,
   evaluateResidentialLinesFromRules,
   evaluateQuoteOnlyLinesFromRules,
   evaluateBookingSurcharges,

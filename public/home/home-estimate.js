@@ -9,7 +9,7 @@
   // Used only to fetch indicative "from" prices while the postcode field is empty; never shown in the field.
   const DEFAULT_POSTCODE = 'SW1A 1AA';
   const MOBILE_MQ = '(max-width: 47.99rem)';
-  const CACHE_KEY = 'lsi-estimate-catalog-v1';
+  const CACHE_KEY = 'lsi-estimate-catalog-v2';
   const UK_POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
   // Residential services (mirrors src/scripts/seed/catalogData.js) so the list renders instantly
@@ -43,21 +43,14 @@
   const CATEGORY_ORDER = ['res_gas', 'res_electrical', 'res_fire', 'res_epc', 'res_other'];
   const CATEGORY_NAMES = { res_epc: 'Energy Rating' };
 
-  // Boiler Service tiers mirror the Boiler Service page; priced here rather than by the API.
+  // Boiler Service: prices come from the API like every other service; this is only the
+  // one-line description shown under each service level.
   const BOILER_CODE = 'boiler';
-  const BOILER_QUESTION = {
-    fieldKey: 'serviceLevel',
-    inputType: 'radio',
-    label: 'Service Level',
-    sortOrder: 1,
-    options: [
-      { value: 'essential', label: 'Essential Service', price: 79.99,
-        description: 'A standard boiler check to keep it running safely' },
-      { value: 'standard', label: 'Standard Service', price: 139.99,
-        description: 'A full service with cleaning and performance checks' },
-      { value: 'premium', label: 'Premium Service', price: 239.99,
-        description: 'Our most thorough service for long-term reliability' },
-    ],
+  const BOILER_FIELD_KEY = 'boilerType';
+  const BOILER_DESCRIPTIONS = {
+    essential: 'A standard boiler check to keep it running safely',
+    standard: 'A full service with cleaning and performance checks',
+    premium: 'Our most thorough service for long-term reliability',
   };
 
   const SERVICE_BLURBS = {
@@ -179,8 +172,18 @@
                 ...svc,
                 name: 'Boiler Service',
                 metadata: { ...(svc.metadata || {}), shortDescription: SERVICE_BLURBS.boiler },
-                questions: [BOILER_QUESTION],
-                localPricing: true,
+                questions: (svc.questions || []).map((q) =>
+                  q.fieldKey === BOILER_FIELD_KEY
+                    ? {
+                        ...q,
+                        label: 'Service Level',
+                        options: (q.options || []).map((opt) => ({
+                          ...opt,
+                          description: BOILER_DESCRIPTIONS[opt.value] || opt.description || '',
+                        })),
+                      }
+                    : q
+                ),
               }
             : svc
         ),
@@ -260,9 +263,8 @@
     return FIELD_LABELS[q.fieldKey] || q.label || q.fieldKey;
   }
 
-  // Locally priced services (Boiler Service) don't wait for the API.
-  function questionsKnown(service) {
-    return catalogReady || Boolean(service?.localPricing);
+  function questionsKnown() {
+    return catalogReady;
   }
 
   const ESTIMATE_QUESTION_TYPES = ['select', 'radio', 'number'];
@@ -273,7 +275,7 @@
     if (isMobileLayout()) return true;
     const service = findService(selectedServiceCode);
     if (!service || !questionsKnown(service)) return false;
-    if (!service.localPricing && !UK_POSTCODE.test(typedPostcode())) return false;
+    if (!UK_POSTCODE.test(typedPostcode())) return false;
     return visibleQuestions(service)
       .filter((q) => ESTIMATE_QUESTION_TYPES.includes(q.inputType) && q.validation?.required !== false)
       .every((q) => {
@@ -348,7 +350,7 @@
 
   function useChipUi(question) {
     if (!question?.options?.length) return false;
-    if (question.fieldKey === BOILER_QUESTION.fieldKey) return true;
+    if (question.fieldKey === BOILER_FIELD_KEY) return true;
     if (question.options.length > 8) return false;
     return question.options.every(
       (opt) => String(optionLabel(opt, question.fieldKey) || opt.value).length <= 12
@@ -364,20 +366,9 @@
     return json.data;
   }
 
-  // Same shape as /api/quotes/preview's response, for services priced on this page.
-  function localQuote(service) {
-    const question = service.questions[0];
-    const opt = question.options.find((o) => o.value === answers[question.fieldKey]) || question.options[0];
-    return {
-      total: opt.price,
-      lines: [{ serviceCode: service.code, total: opt.price, sub: opt.label }],
-    };
-  }
-
   async function fetchPreview() {
     const service = findService(selectedServiceCode);
     if (!service) return null;
-    if (service.localPricing) return localQuote(service);
 
     const payload = {
       propertyType: PROPERTY_TYPE,
@@ -465,6 +456,7 @@
               <input class="field-input estimate-select-input" type="number" id="estimate-q-${escapeHtml(q.fieldKey)}"
                 data-field="${escapeHtml(q.fieldKey)}" min="${q.validation?.min ?? 1}" max="${q.validation?.max ?? 100}"
                 value="${escapeHtml(current ?? '')}">
+              ${q.pricingHint?.displayText ? `<p class="estimate-field__hint">${escapeHtml(q.pricingHint.displayText)}</p>` : ''}
             </div>`;
         }
 

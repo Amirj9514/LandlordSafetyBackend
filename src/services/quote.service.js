@@ -11,6 +11,7 @@ const previewQuote = async (body) => {
     activeBundleKeys,
     congestionZone = false,
     parkingAvailable = true,
+    priorityService = false,
   } = body;
 
   if (!propertyType || !postcode) {
@@ -30,6 +31,7 @@ const previewQuote = async (body) => {
     activeBundleKeys: bundles,
     congestionZone,
     parkingAvailable,
+    priorityService,
   });
 
   return {
