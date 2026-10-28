@@ -34,15 +34,22 @@ const run = async () => {
   let totalPrefixes = 0;
 
   for (const zone of LONDON_ZONES) {
-    const [region] = await Region.findOrCreate({
-      where: { name: zone.name },
-      defaults: {
+    let region = await Region.findOne({ where: { name: zone.name } });
+    if (!region && zone.legacyNames?.length) {
+      region = await Region.findOne({ where: { name: { [Op.in]: zone.legacyNames } } });
+      if (region) {
+        console.log(`Renamed region "${region.name}" to "${zone.name}"`);
+        await region.update({ name: zone.name });
+      }
+    }
+    if (!region) {
+      region = await Region.create({
         name: zone.name,
         isActive: true,
         isDefault: zone.isDefault,
         sortOrder: zone.sortOrder,
-      },
-    });
+      });
+    }
 
     await region.update({
       isActive: true,

@@ -101,7 +101,7 @@ describe('residential price list: starting prices', () => {
       { code: 'asbestos', answers: { propertyType: 'flat', surveyType: 'management', configuration: '2_sample' } },
       349.99,
     ],
-    callout: [{ code: 'callout', answers: { faultType: 'gas', issueDescription: 'x' } }, 119.99],
+    callout: [{ code: 'callout', answers: { faultType: 'gas', issueDescription: 'x' } }, 150],
   };
 
   for (const [code, [selection, expected]] of Object.entries(START)) {
@@ -130,14 +130,31 @@ describe('residential price list: zone prices', () => {
     assert.deepEqual(allZones([boiler('premium')]), [249.99, 239.99, 239.99, 249.99]);
   });
 
-  it('CP12 + boiler bundles: Essential fixed price, Standard / Premium 5% off', () => {
-    const bundle = ['bundle-gsc-boiler'];
-    assert.deepEqual(allZones([gsc(1), boiler('essential')], bundle), [119.99, 109.99, 109.99, 119.99]);
-    assert.deepEqual(allZones([gsc(2), boiler('essential')], bundle), [119.99, 109.99, 109.99, 119.99]);
-    assert.deepEqual(allZones([gsc(3), boiler('essential')], bundle), [129.99, 119.99, 119.99, 129.99]);
-    assert.equal(quote('zone_2', [gsc(1), boiler('standard')], bundle), 185.23);
-    assert.equal(quote('zone_2', [gsc(1), boiler('premium')], bundle), 280.23);
-    assert.equal(quote('zone_2', [gsc(1), boiler('standard')], []), 194.98);
+  it('CP12 + boiler add-on: Essential fixed bundle price, Standard / Premium 5% off', () => {
+    const withAddon = (n, level) => [gsc(n, { boilerAddon: level })];
+    assert.deepEqual(allZones(withAddon(1, 'essential')), [119.99, 109.99, 109.99, 119.99]);
+    assert.deepEqual(allZones(withAddon(2, 'essential')), [119.99, 109.99, 109.99, 119.99]);
+    assert.deepEqual(allZones(withAddon(3, 'essential')), [129.99, 119.99, 119.99, 129.99]);
+    assert.equal(quote('zone_2', withAddon(1, 'standard')), 185.23);
+    assert.equal(quote('zone_2', withAddon(1, 'premium')), 280.23);
+    assert.equal(quote('zone_2', withAddon(1, 'none')), 54.99);
+  });
+
+  it('boiler add-on adds a Boiler Service line plus a bundle discount line', () => {
+    const lines = engine.evaluateResidentialLinesFromRules([gsc(1, { boilerAddon: 'standard' })], [], priceMapFor('zone_2'), false, ctx);
+    assert.deepEqual(
+      lines.map((l) => [l.name, l.serviceCode, l.total]),
+      [
+        ['Gas Safety Certificate (CP12)', 'gsc', 54.99],
+        ['Boiler Service', 'boiler', 139.99],
+        ['Bundle Discount — CP12 + Boiler Service', null, -9.75],
+      ]
+    );
+  });
+
+  it('a separately selected CP12 and boiler service keep their standalone prices (no bundle)', () => {
+    assert.equal(quote('zone_2', [gsc(1), boiler('standard')]), 194.98);
+    assert.equal(quote('zone_2', [gsc(1), boiler('essential')]), 134.98);
   });
 
   it('EICR', () => {
@@ -199,11 +216,11 @@ describe('residential price list: zone prices', () => {
     assert.deepEqual(allZones(asb('full_property_over_5')), ['TBC', 'TBC', 'TBC', 'TBC']);
   });
 
-  it('Non-emergency callout is £119.99 for every fault type', () => {
+  it('Non-emergency callout is £150 for every fault type', () => {
     for (const faultType of ['gas', 'electrical', 'fire_alarm']) {
       assert.deepEqual(
         allZones([{ code: 'callout', answers: { faultType, issueDescription: 'x' } }]),
-        [119.99, 119.99, 119.99, 119.99]
+        [150, 150, 150, 150]
       );
     }
   });
@@ -217,7 +234,7 @@ describe('residential price list: zone prices', () => {
 });
 
 describe('catalog output for the booking form', () => {
-  it('boiler options carry the CP12 bundle prices and CP12 questions carry info + stepper', async () => {
+  it('the CP12 add-on options carry the bundle prices; CP12 questions carry info + stepper', async () => {
     const mk = (code) => ({
       ...ctx.servicesByCode[code],
       questions: ctx.questionsByServiceId[code].map((q, i) => ({ ...q, id: `${code}${i}` })),
@@ -228,14 +245,20 @@ describe('catalog output for the booking form', () => {
     const [boilerSvc, gscSvc] = out.categories[0].services;
 
     assert.deepEqual(
-      boilerSvc.questions[0].options.map((o) => o.displayLabelBundle),
-      ['CP12 + Essential Service — £109.99', 'CP12 + Standard Service — £185.23', 'CP12 + Premium Service — £280.23']
+      boilerSvc.questions[0].options.map((o) => o.displayLabel),
+      ['Essential Service — £79.99', 'Standard Service — £139.99', 'Premium Service — £239.99']
+    );
+    const addon = gscSvc.questions.find((q) => q.fieldKey === 'boilerAddon');
+    assert.deepEqual(
+      addon.options.map((o) => o.displayLabel),
+      ['CP12 + Essential — £109.99', 'No thanks', 'CP12 + Standard — £185.23', 'CP12 + Premium — £280.23']
     );
     const appliance = gscSvc.questions.find((q) => q.fieldKey === 'applianceCount');
-    assert.equal(appliance.validation.stepper, true);
+    assert.equal(appliance.conditionalLogic.display, 'cards');
+    assert.deepEqual(appliance.options.map((o) => o.priceText), ['£54.99', '£64.99', '£74.99', '£84.99']);
     assert.match(appliance.conditionalLogic.info, /boilers, hobs\/cookers and fires/);
     const co = gscSvc.questions.find((q) => q.fieldKey === 'coAlarmInstall');
-    assert.equal(co.options[0].displayLabel, 'Fit a CO alarm — £35.00');
+    assert.equal(co.options[0].displayLabel, 'Install CO alarm — £35.00');
   });
 });
 

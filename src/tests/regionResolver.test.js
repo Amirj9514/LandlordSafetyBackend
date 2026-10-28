@@ -12,8 +12,15 @@ describe('regionResolver', () => {
     assert.equal(r.outward, 'SW1A');
   });
 
-  it('builds longest-first prefix candidates', () => {
-    const candidates = buildPrefixCandidates('SW1A');
-    assert.deepEqual(candidates, ['SW1A', 'SW1', 'SW', 'S']);
+  it('tries the district, then the district without its sub-district letter', () => {
+    assert.deepEqual(buildPrefixCandidates('SW1A'), ['SW1A', 'SW1']);
+    assert.deepEqual(buildPrefixCandidates('E1W'), ['E1W', 'E1']);
+    assert.deepEqual(buildPrefixCandidates('SE1'), ['SE1']);
+  });
+
+  it('never shortens a district to a different one (KT11 is not KT1, DA11 is not DA1)', () => {
+    assert.deepEqual(buildPrefixCandidates('KT11'), ['KT11']);
+    assert.deepEqual(buildPrefixCandidates('DA11'), ['DA11']);
+    assert.deepEqual(buildPrefixCandidates(''), []);
   });
 });

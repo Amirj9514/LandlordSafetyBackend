@@ -9,11 +9,17 @@ const normalizePostcode = (postcode) => {
   return { formatted: `${outward} ${inward}`.trim(), outward };
 };
 
+/**
+ * The postcode district as written (SW1A, E1W, KT11), then the district without its trailing sub-district
+ * letter (SW1A -> SW1, W1K -> W1, EC1A -> EC1). Nothing shorter is tried: a district that is not in a zone
+ * list (KT11) must not fall into a neighbouring one (KT1), because postcodes that are not listed are outside
+ * our coverage area.
+ */
 const buildPrefixCandidates = (outward) => {
-  const candidates = [];
-  for (let i = outward.length; i >= 1; i -= 1) {
-    candidates.push(outward.slice(0, i));
-  }
+  if (!outward) return [];
+  const candidates = [outward];
+  const withoutLetter = outward.replace(/(?<=\d)[A-Z]$/, '');
+  if (withoutLetter && withoutLetter !== outward) candidates.push(withoutLetter);
   return candidates;
 };
 

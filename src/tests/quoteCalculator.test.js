@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 if (!process.env.JWT_SECRET) process.env.JWT_SECRET = 'test-secret-key-min-32-chars-long';
 
 const { sequelize } = require('../models');
-const { calculateQuote, quoteRequiresQuotation } = require('../services/pricing/quoteCalculator');
+const { calculateQuote, quoteRequiresQuotation, quoteHasUnpricedLines } = require('../services/pricing/quoteCalculator');
 
 let dbAvailable = false;
 
@@ -271,10 +271,10 @@ describe('quoteCalculator', () => {
       ],
       activeBundleKeys: [],
     });
-    assert.equal(quoteRequiresQuotation(quote.lines), true);
+    assert.equal(quoteHasUnpricedLines(quote.lines), true);
   });
 
-  it('Non-emergency callout is £119.99 per fault type', async (t) => {
+  it('Non-emergency callout is £150 per fault type', async (t) => {
     if (!dbAvailable) return t.skip('DATABASE_URL not available');
     const quote = await calculateQuote({
       propertyType: 'residential',
@@ -282,7 +282,7 @@ describe('quoteCalculator', () => {
       services: [{ code: 'callout', answers: { faultType: 'gas', issueDescription: 'Boiler not firing' } }],
       activeBundleKeys: [],
     });
-    assert.equal(quote.total, 119.99);
+    assert.equal(quote.total, 150);
   });
 
   it('Priority Service adds £99 only when requested', async (t) => {

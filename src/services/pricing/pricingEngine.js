@@ -1011,10 +1011,48 @@ const buildBandedPricingHint = (service, question, rules, priceMap, noRegion) =>
   };
 };
 
+/**
+ * Zone prices behind a counter question (FSC alarms, ELC lights), so the booking form can show
+ * "Your price" while the customer steps the number. It only reads the prices the base-plus-increment rule
+ * already uses; the quote itself is still calculated by the rule.
+ */
+const buildStepperPricing = (service, question, rules, priceMap, noRegion) => {
+  if (question.inputType !== 'number') return null;
+  const rule = rules.find(
+    (r) =>
+      r.serviceId === service.id &&
+      r.isActive &&
+      r.ruleType === RULE_TYPES.BASE_PLUS_INCREMENT &&
+      r.config?.fieldKey === question.fieldKey &&
+      r.scope !== RULE_SCOPES.BUNDLE_DISCOUNT
+  );
+  if (!rule) return null;
+
+  const cfg = rule.config;
+  const amountOf = (tierKey) => {
+    if (!tierKey) return 0;
+    const p = getPrice(priceMap, tierKey, noRegion);
+    return p.isTbc ? null : formatMoney(p.amount);
+  };
+  const variants = [{ when: null, base: amountOf(cfg.baseTierKey), extra: amountOf(cfg.extraTierKey) }];
+  for (const w of cfg.baseTierKeyWhen || []) {
+    const extraWhen = (cfg.extraTierKeyWhen || []).find((e) => e.field === w.field && e.equals === w.equals);
+    variants.push({
+      when: { field: w.field, equals: w.equals },
+      base: amountOf(w.tierKey),
+      extra: amountOf(extraWhen ? extraWhen.tierKey : cfg.extraTierKey),
+    });
+  }
+  if (variants.some((v) => v.base === null || v.extra === null)) return null;
+  return { includedUnits: cfg.includedUnits ?? 0, variants };
+};
+
 const enrichQuestionWithRules = (service, question, rules, priceMap, noRegion, ctx = {}) => {
   const q = { ...question };
   const bandedHint = buildBandedPricingHint(service, q, rules, priceMap, noRegion);
   if (bandedHint) q.pricingHint = bandedHint;
+  const stepperHint = buildStepperPricing(service, q, rules, priceMap, noRegion);
+  if (stepperHint) q.stepperPricing = stepperHint;
   if (!q.options?.length) return q;
 
   q.options = q.options.map((opt) =>

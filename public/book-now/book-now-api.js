@@ -181,6 +181,7 @@
 
       body.appendChild(wrapper);
       applyConditionalVisibility(code);
+      refreshStepperUi(code);
     });
   }
 
@@ -786,6 +787,10 @@
         for (const cat of catalog.categories || []) {
           for (const svc of cat.services || []) {
             catalogServicesByCode[svc.code] = svc;
+            // Card and pill questions are answered like radios: the value is kept in state.radios.
+            for (const q of svc.questions || []) {
+              if (isChoiceQuestion(q)) q.inputType = 'radio';
+            }
           }
         }
         syncBundlesMap();
@@ -920,6 +925,45 @@
     });
   }
 
+  function isChoiceQuestion(q) {
+    const display = q.conditionalLogic?.display;
+    return (display === 'cards' || display === 'pills') && Array.isArray(q.options) && q.options.length > 0;
+  }
+
+  function hasInlineTip(q) {
+    return q.conditionalLogic?.tip === 'inline' && !!q.conditionalLogic?.info;
+  }
+
+  // Label with an "i" icon that opens and closes the tip panel shown under the label (see questionTipHtml).
+  function inlineTipLabel(q, req, tipId) {
+    const open = q.conditionalLogic.infoOpen !== false;
+    return `${escapeHtml(q.label)} ${req}<span class="info-tip info-tip--toggle${open ? ' is-open' : ''}" tabindex="0" role="button" aria-label="More information about ${escapeHtml(q.label)}" aria-expanded="${open}" aria-controls="${tipId}" onclick="toggleQuestionTip(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleQuestionTip(this)}">i</span>`;
+  }
+
+  function questionTipHtml(q, tipId) {
+    if (!hasInlineTip(q)) return '';
+    const open = q.conditionalLogic.infoOpen !== false;
+    return `<div class="addon-note q-tip" id="${tipId}" data-q-tip${open ? '' : ' hidden'}>${escapeHtml(q.conditionalLogic.info)}</div>`;
+  }
+
+  function setQuestionTip(row, open) {
+    const tip = row?.querySelector('[data-q-tip]');
+    const icon = row?.querySelector('.info-tip--toggle');
+    if (!tip) return;
+    tip.hidden = !open;
+    if (icon) {
+      icon.classList.toggle('is-open', open);
+      icon.setAttribute('aria-expanded', String(open));
+    }
+  }
+
+  // The icon opens and closes the tip at any time.
+  window.toggleQuestionTip = function toggleQuestionTip(icon) {
+    const row = icon.closest('[data-q-row]');
+    const tip = row?.querySelector('[data-q-tip]');
+    if (tip) setQuestionTip(row, tip.hidden);
+  };
+
   // Label text plus an optional "i" tooltip taken from the question's conditionalLogic.info.
   function labelInner(q, req) {
     const info = q.conditionalLogic?.info;
@@ -950,19 +994,109 @@
   document.addEventListener('input', (e) => clearRowError(e.target.closest?.('[data-q-row]')));
   document.addEventListener('change', (e) => clearRowError(e.target.closest?.('[data-q-row]')));
 
+  // Minus / plus are disabled at the limits, and a "Your price" line (when the question has zone prices) follows the count.
+  function updateStepperUi(serviceCode, input) {
+    const row = input.closest('[data-q-row]');
+    if (!row) return;
+    const { min, max } = stepperBounds(input);
+    const n = Math.round(Number(input.value));
+    const buttons = row.querySelectorAll('.stepper__btn');
+    if (buttons[0]) buttons[0].disabled = Number.isFinite(n) && n <= min;
+    if (buttons[1]) buttons[1].disabled = Number.isFinite(n) && n >= max;
+
+    const line = row.querySelector('[data-step-price]');
+    if (!line) return;
+    const q = (catalogServicesByCode[serviceCode]?.questions || []).find((x) => x.fieldKey === input.dataset.fieldKey);
+    const hint = q?.stepperPricing;
+    if (!hint || !Number.isFinite(n)) {
+      line.textContent = '';
+      return;
+    }
+    const answers = getAnswersForService(serviceCode);
+    const variant =
+      hint.variants.find((v) => v.when && String(answers[v.when.field]) === String(v.when.equals)) ||
+      hint.variants.find((v) => !v.when);
+    const total = variant.base + Math.max(0, n - hint.includedUnits) * variant.extra;
+    const note = n >= max && q.conditionalLogic?.maxNote ? ' ' + q.conditionalLogic.maxNote : '';
+    line.textContent = 'Your price: ' + fmt(Math.round(total * 100) / 100) + note;
+  }
+
+  function refreshStepperUi(serviceCode) {
+    document
+      .querySelectorAll('[data-q-row][data-service="' + serviceCode + '"] .stepper input')
+      .forEach((input) => updateStepperUi(serviceCode, input));
+  }
+
   window.stepQuestion = function stepQuestion(inputId, delta, serviceCode) {
     const input = document.getElementById(inputId);
     if (!input) return;
     input.value = String((Number(input.value) || stepperBounds(input).min) + delta);
     clampStepperValue(input);
-    clearRowError(input.closest('[data-q-row]'));
+    const row = input.closest('[data-q-row]');
+    clearRowError(row);
+    setQuestionTip(row, false);
+    updateStepperUi(serviceCode, input);
     window.onQuestionChange(serviceCode);
   };
 
   window.clampStepper = function clampStepper(input, serviceCode) {
     clampStepperValue(input);
+    updateStepperUi(serviceCode, input);
     window.onQuestionChange(serviceCode);
   };
+
+  window.typeStepper = function typeStepper(input, serviceCode) {
+    setQuestionTip(input.closest('[data-q-row]'), false);
+    updateStepperUi(serviceCode, input);
+    calcAll();
+  };
+
+  // "More" reveals the cards kept back behind it (the 7+ "Contact us" card), then goes away.
+  window.showMoreChoices = function showMoreChoices(btn) {
+    const row = btn.closest('[data-q-row]');
+    row?.querySelectorAll('[data-more-item]').forEach((el) => { el.hidden = false; });
+    btn.hidden = true;
+  };
+
+  function choiceOptionHtml(group, o, logic, hiddenAttr) {
+    const pill = logic.display === 'pills';
+    const label = o.webLabel || o.label;
+    const sub = o.sub ? '<span class="choice-card__sub">' + escapeHtml(o.sub) + '</span>' : '';
+    if (o.contact) {
+      return '<a class="choice-card choice-card--contact" href="/contact/" target="_blank" rel="noopener"' + hiddenAttr + '>' +
+        '<span class="choice-card__label">' + escapeHtml(o.label) + '</span>' + sub +
+        '<span class="choice-card__price">Contact us</span></a>';
+    }
+    const attrs = 'data-radio-group="' + escapeHtml(group) + '" data-radio-value="' + escapeHtml(o.value) + '" onclick="selectRadio(\'' + escapeHtml(group) + '\',\'' + escapeHtml(o.value) + '\',calcAll)"';
+    if (pill) {
+      const text = o.priceText ? label + ': ' + o.priceText : label;
+      return '<button type="button" class="choice-card choice-card--pill" ' + attrs + hiddenAttr + '>' + escapeHtml(text) + '</button>';
+    }
+    const price = o.priceText ? '<span class="choice-card__price">' + escapeHtml(o.priceText) + '</span>' : '';
+    return '<button type="button" class="choice-card" ' + attrs + hiddenAttr + '>' +
+      '<span class="choice-card__label">' + escapeHtml(o.label) + '</span>' + sub + price + '</button>';
+  }
+
+  function renderChoiceQuestion(serviceCode, q, req, hidden) {
+    const id = fieldId(serviceCode, q.fieldKey);
+    const group = radioGroup(serviceCode, q.fieldKey);
+    const logic = q.conditionalLogic || {};
+    const tipId = 'tip-' + id;
+    // webHidden options stay in the catalog for the admin dashboard but are not offered on the website.
+    const opts = normalizeOptions(q.options).filter((o) => !o.webHidden);
+    const moreAfter = Number(logic.moreAfter) || 0;
+    const hasMore = moreAfter > 0 && opts.length > moreAfter;
+    const items = opts
+      .map((o, i) => choiceOptionHtml(group, o, logic, hasMore && i >= moreAfter ? ' hidden data-more-item' : ''))
+      .join('');
+    const label = hasInlineTip(q) ? inlineTipLabel(q, req, tipId) : labelInner(q, req);
+    return '\n        <div class="service-modal__field subq-row' + hidden + '" data-q-row data-service="' + escapeHtml(serviceCode) + '" data-field="' + escapeHtml(q.fieldKey) + '" id="row-' + id + '">' +
+      '\n          <label>' + label + '</label>' +
+      '\n          ' + questionTipHtml(q, tipId) +
+      '\n          <div class="choice-group' + (logic.display === 'pills' ? ' choice-group--pills' : '') + '">' + items + '</div>' +
+      '\n          ' + (hasMore ? '<button type="button" class="choice-more" onclick="showMoreChoices(this)">More</button>' : '') +
+      '\n        </div>';
+  }
 
   function renderQuestion(serviceCode, q) {
     const id = fieldId(serviceCode, q.fieldKey);
@@ -970,11 +1104,13 @@
     let note = q.conditionalLogic?.note
       ? `<div class="addon-note" style="margin-top:8px">${escapeHtml(q.conditionalLogic.note)}</div>`
       : '';
-    if (serviceCode === 'pat' && q.fieldKey === 'applianceCount') {
+    if (serviceCode === 'pat' && q.fieldKey === 'applianceCount' && !isChoiceQuestion(q)) {
       note = patPricingNote(q) + note;
     }
     const hidden = isQuestionVisible(serviceCode, q) ? '' : ' hidden';
     const opts = normalizeOptions(q.options);
+
+    if (isChoiceQuestion(q)) return renderChoiceQuestion(serviceCode, q, req, hidden);
 
     switch (q.inputType) {
       case 'select': {
@@ -1018,15 +1154,19 @@
         const max = q.validation?.max != null ? ` max="${q.validation.max}"` : '';
         if (q.validation?.stepper) {
           const svc = escapeHtml(serviceCode);
-          const start = q.validation?.min ?? 1;
+          const start = q.validation?.default ?? q.validation?.min ?? 1;
+          const tipId = `tip-${id}`;
+          const inline = hasInlineTip(q);
           return `
         <div class="service-modal__field subq-row subq-row--stepper${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
-          <label for="${id}">${labelInner(q, req)}</label>
+          <label for="${id}">${inline ? inlineTipLabel(q, req, tipId) : labelInner(q, req)}</label>
+          ${inline ? questionTipHtml(q, tipId) : ''}
           <div class="stepper" role="group" aria-label="${escapeHtml(q.label)}">
             <button type="button" class="stepper__btn" aria-label="Decrease ${escapeHtml(q.label)}" onclick="stepQuestion('${id}', -1, '${svc}')">&minus;</button>
-            <input type="number" inputmode="numeric" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" value="${start}"${min}${max} onchange="clampStepper(this, '${svc}')" oninput="calcAll()">
+            <input type="number" inputmode="numeric" id="${id}" data-field-key="${escapeHtml(q.fieldKey)}" value="${start}"${min}${max} onchange="clampStepper(this, '${svc}')" oninput="typeStepper(this, '${svc}')">
             <button type="button" class="stepper__btn" aria-label="Increase ${escapeHtml(q.label)}" onclick="stepQuestion('${id}', 1, '${svc}')">+</button>
           </div>
+          <div class="step-price" data-step-price aria-live="polite"></div>
           ${note}
         </div>`;
         }
@@ -1041,7 +1181,7 @@
         return `
         <div class="service-modal__field subq-row${hidden}" data-q-row data-service="${escapeHtml(serviceCode)}" data-field="${escapeHtml(q.fieldKey)}">
           <label for="${id}">${labelInner(q, req)}</label>
-          <textarea id="${id}" data-field-key="${escapeHtml(q.fieldKey)}"${q.validation?.placeholder ? ` placeholder="${escapeHtml(q.validation.placeholder)}"` : ''} oninput="calcAll()"></textarea>
+          <textarea id="${id}" rows="4" data-field-key="${escapeHtml(q.fieldKey)}"${q.validation?.placeholder ? ` placeholder="${escapeHtml(q.validation.placeholder)}"` : ''} oninput="calcAll()"></textarea>
         </div>`;
       case 'text':
       default:
@@ -1114,13 +1254,26 @@
   window.selectRadio = function selectRadioCatalog(group, val, cb) {
     state.radios[group] = val;
     document.querySelectorAll(`[data-radio-group="${group}"]`).forEach((el) => {
-      el.classList.toggle('checked', el.dataset.radioValue === val);
+      const on = el.dataset.radioValue === val;
+      el.classList.toggle('checked', on);
+      if (el.classList.contains('choice-card')) el.setAttribute('aria-pressed', String(on));
     });
 
     const svcCode = serviceCodeFromRadioGroup(group);
     if (svcCode) {
-      clearRowError(document.querySelector(`[data-q-row][data-service="${svcCode}"][data-field="${group.slice(`q-${svcCode}-`.length)}"]`));
+      const fieldKey = group.slice(`q-${svcCode}-`.length);
+      const row = document.querySelector(`[data-q-row][data-service="${svcCode}"][data-field="${fieldKey}"]`);
+      clearRowError(row);
+      // Answering closes the question's tip; only the (i) icon opens it again.
+      setQuestionTip(row, false);
+      const question = (catalogServicesByCode[svcCode]?.questions || []).find((x) => x.fieldKey === fieldKey);
+      // e.g. choosing the fire alarm property type sets the alarm counter to 3.
+      Object.entries(question?.conditionalLogic?.setOnChange || {}).forEach(([target, value]) => {
+        const el = document.getElementById(fieldId(svcCode, target));
+        if (el) el.value = String(value);
+      });
       applyConditionalVisibility(svcCode);
+      refreshStepperUi(svcCode);
     }
 
     if (cb) cb();
@@ -1284,7 +1437,16 @@
     return `<div class="line-sub line-details">${escapeHtml(parts.join(' · '))}</div>`;
   }
 
+  const TBC_NOTE =
+    'This booking will be forwarded as a quotation request. One of our agents will contact you within 1 to 3 hours to confirm your booking and price.';
+
+  // Any service line without a price turns the whole booking into a quotation request: no prices are shown.
+  function hasTbcLines(lines) {
+    return (lines || []).some((l) => !l.discount && (l.quoteOnly || l.price == null));
+  }
+
   function formatQuoteLinePrice(line) {
+    if (hasTbcLines(quoteLines)) return '';
     if (line.quoteOnly) return 'TBC';
     if (line.price == null || line.price === undefined) return 'TBC';
     return fmt(line.price);
@@ -1306,6 +1468,14 @@
     const finalTotal =
       quoteTotal != null && quoteTotal !== undefined ? quoteTotal : round2(grossSubtotal - discountTotal);
 
+    const tbc = hasTbcLines(serviceLines);
+    const boxEl = document.querySelector('#quote-totals .quote-totals-box');
+    const noteEl = document.getElementById('q-tbc-note');
+    if (boxEl) boxEl.classList.toggle('hidden', tbc);
+    if (noteEl) {
+      noteEl.textContent = TBC_NOTE;
+      noteEl.classList.toggle('hidden', !tbc);
+    }
     const subEl = document.getElementById('q-subtotal');
     const totalEl = document.getElementById('q-total');
     const wasEl = document.getElementById('q-was');
@@ -1761,6 +1931,14 @@
   window.buildBillingTable = function buildBillingTableApi() {
     const tbody = document.getElementById('billing-tbody');
     const lines = quoteLines;
+    const tbc = hasTbcLines(lines);
+    document.getElementById('billing-table-wrap')?.classList.toggle('billing--tbc', tbc);
+    const tbcNote = document.getElementById('summary-tbc-note');
+    if (tbcNote) {
+      tbcNote.textContent = TBC_NOTE;
+      tbcNote.classList.toggle('hidden', !tbc);
+    }
+    document.querySelector('.billing-totals')?.classList.toggle('hidden', tbc);
 
     tbody.innerHTML = lines
       .map(
@@ -1771,8 +1949,8 @@
         ${formatLineDetailsHtml(l)}
       </td>
       <td class="qty-cell" style="text-align:center">1</td>
-      <td class="price-cell" style="text-align:right">${l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
-      <td style="text-align:right">${l.quoteOnly ? 'TBC' : l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)}</td>
+      <td class="price-cell" style="text-align:right">${tbc ? '' : l.quoteOnly ? 'TBC' : fmt(l.price < 0 ? Math.abs(l.price) : l.price)}</td>
+      <td style="text-align:right">${tbc ? '' : l.quoteOnly ? 'TBC' : l.price < 0 ? '−' + fmt(Math.abs(l.price)) : fmt(l.price)}</td>
       <td>${canEditLine(l) ? `<button type="button" class="edit-btn" onclick="BN.editLine('${escapeHtml(l.serviceCode)}')">✎ Edit</button>` : ''}</td>
     </tr>
   `
@@ -1805,6 +1983,8 @@
     if (floatServices && names.length) {
       floatServices.textContent = names.join(' · ');
     }
+    const floatTotal = document.getElementById('float-total');
+    if (floatTotal && hasTbcLines(quoteLines)) floatTotal.textContent = 'Quote on request';
   };
 
   window.goToStep = async function goToStepApi(n) {
@@ -1964,8 +2144,9 @@
       const email = document.getElementById('b-email')?.value || document.getElementById('email')?.value;
       const date = document.getElementById('b-date')?.value;
       const slot = state.slot;
-      const total =
-        document.getElementById('summary-total')?.textContent || fmt(lastQuote?.total || 0);
+      const total = hasTbcLines(quoteLines)
+        ? 'To be confirmed'
+        : document.getElementById('summary-total')?.textContent || fmt(lastQuote?.total || 0);
 
       const fullName = [firstName, lastName].filter(Boolean).join(' ');
       const fullAddress = BN.fullAddress();

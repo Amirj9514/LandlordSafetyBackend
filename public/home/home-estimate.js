@@ -7,7 +7,7 @@
   const API = '/api';
   const PROPERTY_TYPE = 'residential';
   // Used only to fetch indicative "from" prices while the postcode field is empty; never shown in the field.
-  const DEFAULT_POSTCODE = 'SW1A 1AA';
+  const DEFAULT_POSTCODE = 'SE1 9SG'; // Zone 2: the lowest prices, so "from" prices match the price list
   const MOBILE_MQ = '(max-width: 47.99rem)';
   const CACHE_KEY = 'lsi-estimate-catalog-v2';
   const UK_POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;

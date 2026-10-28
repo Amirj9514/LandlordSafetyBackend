@@ -272,6 +272,14 @@ Set tier amounts per region via existing `PUT /api/regions/:id/prices`. Run `npm
 | GET | `/api/users/me` | Profile (authenticated) |
 | GET/POST/PUT/DELETE | `/api/users/*` | User management |
 
+## Coverage and pricing zones
+
+- The final postcode lists live in `src/constants/areaCoverage.js` (from `docs/Area-Coverage-Final-Zones.md` and `docs/LLSI-Final pricing-zones.md`). One file drives both:
+  - the **four price zones** (`src/constants/londonZones.js`): Zone 1 Central London (City, EC1, WC1 and the West End), Zone 2 Inner London (the rest), Zone 3 Outer London, Zone 4 M25 London
+  - the **Area Coverage page** (Inner London, Outer London, M25 London, by borough)
+- **Postcodes that are not listed are outside our coverage area.** A postcode matches its exact district, or the district without its sub-district letter (SW1A → SW1, W1K → W1), and nothing shorter, so KT11 never falls into KT1.
+- After changing the lists: `node scripts/generate-area-coverage.js` (rebuilds the Area Coverage page) then `npm run db:seed:regions` (updates the region postcodes; prices are untouched). `npm test` checks the lists agree with each other and with the page.
+
 ## Pricing rules (residential)
 
 - Prices are final and **VAT-free** (`VAT_ENABLED=false`). Source of truth: `src/scripts/seed/zonePrices.js` (the "Residential Services — Website Price List"), seeded per zone into the **region matrix** (`region_prices` + `pricing_tiers`)

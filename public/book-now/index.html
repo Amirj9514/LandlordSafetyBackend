@@ -899,6 +899,18 @@
   .quote-totals {
     margin-top: 8px;
   }
+  .quote-tbc-note {
+    background: #eef2f7;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #0a0f2e;
+  }
+  .quote-tbc-note.hidden, .billing-totals.hidden { display: none; }
+  .quote-totals-box.hidden { display: none; }
   .quote-totals-box {
     background: #eef2f7;
     border-radius: 12px;
@@ -1261,6 +1273,57 @@
   .info-tip:hover .info-tip__text,
   .info-tip:focus-visible .info-tip__text,
   .info-tip.is-open .info-tip__text { display: block; }
+
+  /* ── SERVICE MODAL: option cards, pills, tips, steppers ── */
+  .info-tip--toggle { margin-left: 8px; }
+  .q-tip { margin: 0 0 10px; }
+  .q-tip[hidden], .choice-card[hidden], .choice-more[hidden] { display: none; }
+  .choice-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+    min-width: 104px; padding: 10px 14px;
+    border: 1px solid #d5dbe5; border-radius: 8px;
+    background: #fff; color: #111827;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.35; text-align: left; text-decoration: none;
+    cursor: pointer; transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .choice-card:hover { border-color: #0571ff; }
+  .choice-card:focus-visible { outline: 2px solid #0571ff; outline-offset: 2px; }
+  .choice-card.checked { border-color: #0571ff; color: #0571ff; background: var(--gold-pale); }
+  .choice-card.field-error { border-color: #c0392b; }
+  .choice-card__label { font-weight: 600; }
+  .choice-card__sub { font-size: 12px; color: #6b7a99; }
+  .choice-card__price { font-size: 13px; color: #4b5563; }
+  .choice-card.checked .choice-card__sub, .choice-card.checked .choice-card__price { color: #0571ff; }
+  .choice-card--pill { flex-direction: row; align-items: center; min-width: 0; padding: 9px 16px; font-weight: 500; }
+  .choice-card--contact { border-style: dashed; color: #6b7a99; cursor: pointer; }
+  .choice-card--contact .choice-card__label { color: #111827; }
+  .choice-card--contact:hover { border-color: #0571ff; }
+  .choice-more {
+    margin-top: 10px; padding: 4px 12px;
+    background: transparent; color: #0571ff; border: 1px solid #0571ff; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+  }
+  .choice-more:hover { background: var(--gold-pale); }
+  .subq-row--stepper > label { order: 0; }
+  .subq-row--stepper > .stepper { order: 1; }
+  .subq-row--stepper > .q-tip { order: 2; flex: 1 1 100%; margin: 0; }
+  .subq-row--stepper > .step-price { order: 3; flex: 1 1 100%; font-size: 14px; font-weight: 600; color: #0a0f2e; }
+  .step-price:empty { display: none; }
+  .stepper__btn:disabled, .stepper__btn:disabled:hover { background: #f2f6fc; color: #9aa6bd; cursor: not-allowed; }
+  .service-modal .service-modal__field textarea { border-radius: 8px; }
+  @media (max-width: 400px) {
+    .choice-card:not(.choice-card--pill) { flex: 1 1 calc(50% - 4px); min-width: 0; }
+  }
+  .service-modal__footer .btn-primary {
+    background: #0571ff; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
+    padding: 16px; border-radius: 36px; box-shadow: none; line-height: 24px;
+  }
+  .service-modal__footer .btn-primary:hover:not(:disabled) { background: #045fd6; transform: none; box-shadow: none; }
+  .service-modal__footer .btn-secondary {
+    background: #6c757d; color: #fff; border: 0; border-radius: 6px; padding: 6px 12px;
+  }
+  .service-modal__footer .btn-secondary:hover { background: #5c636a; border: 0; }
 
   /* Preferred date calendar */
   .date-field { position: relative; }
@@ -2223,6 +2286,7 @@
             <tbody id="billing-tbody"></tbody>
           </table>
 
+          <div class="quote-tbc-note hidden" id="summary-tbc-note" role="status"></div>
           <div class="billing-totals">
             <div class="billing-row"><span>Subtotal</span><span id="summary-subtotal">£0.00</span></div>
             <div class="billing-row vat"><span>No VAT</span></div>
@@ -2302,6 +2366,7 @@
         <div id="quote-empty" class="quote-empty" style="display:none"></div>
         <div id="quote-lines" class="quote-lines"></div>
         <div id="quote-totals" class="quote-totals hidden">
+          <div class="quote-tbc-note hidden" id="q-tbc-note" role="status"></div>
           <div class="quote-totals-box">
             <div class="quote-totals-row">
               <span>Subtotal</span>
